@@ -1,4 +1,4 @@
-module statistics-service
+module vehicles-service
 
 go 1.22
 

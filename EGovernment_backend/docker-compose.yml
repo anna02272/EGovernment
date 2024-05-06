@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+
+  statistics-service:
+    build:
+      context: ./statistics-service/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: statistics-service
+    hostname: statistics-service
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - MONGO_DB_URI=mongodb://root:root@mongo:27017
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - network
+
+  mongo:
+    image: mongo:4.4.25
+    container_name: mongo-db
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=EGovernment
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - mongo_store:/data/db
+    networks:
+      - network
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express-db
+    restart: always
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    volumes:
+      - mongo_express_data:/data/db
+    networks:
+      - network
+
+volumes:
+  mongo_store:
+  mongo_express_data:
+
+networks:
+  network:
+    driver: bridge

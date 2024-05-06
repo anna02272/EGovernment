@@ -20,6 +20,24 @@ services:
     networks:
       - network
 
+  auth-service:
+    build:
+      context: ./auth-service/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: auth-service
+    hostname: auth-service
+    ports:
+      - "8085:8085"
+    environment:
+      - PORT=8085
+      - MONGO_DB_URI=mongodb://root:root@mongo:27017
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - network
+
   mongo:
     image: mongo:4.4.25
     container_name: mongo-db

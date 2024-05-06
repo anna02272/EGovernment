@@ -19,6 +19,7 @@ services:
         condition: service_healthy
     networks:
       - network
+
   vehicles-service:
     build:
       context: ./vehicles-service/

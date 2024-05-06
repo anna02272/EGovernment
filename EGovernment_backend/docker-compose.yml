@@ -19,7 +19,7 @@ services:
         condition: service_healthy
     networks:
       - network
-  vehicles-server:
+  vehicles-service:
     build:
       context: ./vehicles-service/
       dockerfile: Dockerfile

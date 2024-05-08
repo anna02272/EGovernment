@@ -4,22 +4,37 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="51b20573-9e0b-4905-816e-9aaba3b5e036" name="Changes" comment="" />
+    <list default="true" id="51b20573-9e0b-4905-816e-9aaba3b5e036" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/domain/VehicleDriver.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/domain/VehicleDriver.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/handlers/vehiclesHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/handlers/vehiclesHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleServiceImpl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleServiceImpl.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file://C:/Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2eBfR98tAEXO7usuVpIKTafogYz" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -27,17 +42,27 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "go.import.settings.migrated": "true",
-    "last_opened_file_path": "C:/Users/domon",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Users/anast",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Fax\III godina\Tehnologije i sistemi eUprave\EGovernment\EGovernment_backend\vehicles-service" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

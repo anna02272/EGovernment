@@ -16,6 +16,14 @@ type VehicleDriver struct {
 	NumberOfPenaltyPoints int64              `bson:"number_of_penalty_points" json:"number_of_penalty_points"`
 }
 
+type VehicleDriverCreate struct {
+	IdentificationNumber string    `bson:"identification_number" json:"identification_number"`
+	Name                 string    `bson:"name" json:"name"`
+	LastName             string    `bson:"last_name" json:"last_name"`
+	DateOfBirth          time.Time `bson:"date_of_birth" json:"date_of_birth"`
+	Gender               Gender    `bson:"gender" json:"gender"`
+}
+
 type Gender string
 
 const (

@@ -17,14 +17,14 @@ func NewVehicleServiceImpl(collection *mongo.Collection, ctx context.Context) Ve
 	return &VehicleServiceImpl{collection, ctx}
 }
 
-func (s *VehicleServiceImpl) InsertVehicleDriver(driver *domain.VehicleDriverCreate, ctx context.Context) (*domain.VehicleDriver, string, error) {
+func (s *VehicleServiceImpl) InsertVehicleDriver(driver *domain.VehicleDriverCreate) (*domain.VehicleDriver, string, error) {
 
 	var vehicleDriver domain.VehicleDriver
 	vehicleDriver.ID = primitive.NewObjectID()
 	vehicleDriver.IdentificationNumber = driver.IdentificationNumber
 	vehicleDriver.Name = driver.Name
 	vehicleDriver.LastName = driver.LastName
-	vehicleDriver.DateOfBirth = driver.DateOfBirth
+	vehicleDriver.DateOfBirth = driver.DateOfBirth.Date()
 	vehicleDriver.HasDelict = false
 	vehicleDriver.Gender = driver.Gender
 	vehicleDriver.NumberOfPenaltyPoints = 0

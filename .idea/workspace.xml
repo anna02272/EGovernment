@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51b20573-9e0b-4905-816e-9aaba3b5e036" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/docker commands.txt" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/docker commands.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/domain/VehicleDriver.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/domain/VehicleDriver.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/handlers/vehiclesHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/handlers/vehiclesHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/routes/vehicleRoutes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/routes/vehicleRoutes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleService.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleServiceImpl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/vehicles-service/services/VehicleServiceImpl.go" afterDir="false" />
     </list>
@@ -49,7 +51,7 @@
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "vehicles__police",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "C:/Users/anast",
@@ -66,7 +68,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-2946fb9b3188-155fe4b6e3a0-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-233.14475.38" />
+        <option value="bundled-gosdk-33c477a475b1-e0158606a674-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-241.15989.157" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-GO-241.15989.157" />
       </set>
     </attachedChunks>
   </component>

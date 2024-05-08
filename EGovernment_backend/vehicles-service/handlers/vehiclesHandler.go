@@ -2,9 +2,14 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"time"
+	"vehicles-service/data"
+	"vehicles-service/domain"
 	errorMessage "vehicles-service/error"
 	"vehicles-service/services"
 )
@@ -22,14 +27,6 @@ func NewVehicleHandler(service services.VehicleService, db *mongo.Collection) Ve
 
 }
 
-type Method string
-
-const (
-	GET    = "GET"
-	POST   = "POST"
-	DELETE = "DELETE"
-)
-
 func (s *VehicleHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
@@ -46,15 +43,18 @@ func (s *VehicleHandler) performAuthorizationRequestWithContext(method string, c
 	return resp, nil
 }
 
-func (s *VehicleHandler) CreateVehicleDriver(rw http.ResponseWriter, h *http.Request) {
+func (s *VehicleHandler) CreateVehicleDriver(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+
 	token := h.Header.Get("Authorization")
-	url := "https://auth-service:8085/api/users/currentUser"
+	url := "http://auth-service:8085/api/users/currentUser"
 
 	timeout := 5 * time.Second // Adjust the timeout duration as needed
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	resp, err := s.performAuthorizationRequestWithContext("POST", ctx, token, url)
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
 	if err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
 			errorMessage.ReturnJSONError(rw, "Authorization service is not available.", http.StatusBadRequest)
@@ -73,45 +73,51 @@ func (s *VehicleHandler) CreateVehicleDriver(rw http.ResponseWriter, h *http.Req
 		return
 	}
 
-	//decoder := json.NewDecoder(resp.Body)
-	//
-	//// Define a struct to represent the JSON structure
-	//var responseUser struct {
-	//	LoggedInUser struct {
-	//		username string        `json:"username"`
-	//		email    string        `json:"email"`
-	//		UserRole data.UserRole `json:"userRole"`
-	//	} `json:"user"`
-	//}
-	//
-	//notification, exists := c.Get("notification")
-	//if !exists {
-	//	s.logger.WithFields(logrus.Fields{"path": "notification/createNotification"}).Error("Notification not found in context")
-	//	span.SetStatus(codes.Error, "Notification not found in context")
-	//	error2.ReturnJSONError(rw, "Notification not found in context", http.StatusBadRequest)
-	//	return
-	//}
-	//
-	//notif, ok := notification.(domain.NotificationCreate)
-	//if !ok {
-	//	fmt.Println(notif)
-	//	errorMsg := map[string]string{"error": "Invalid type for notification."}
-	//	error2.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
-	//	return
-	//}
-	//
-	//insertedNotif, _, err := s.notificationService.InsertNotification(&notif, spanCtx)
-	//if err != nil {
-	//	span.SetStatus(codes.Error, err.Error())
-	//	error.ReturnJSONError(rw, err.Error(), http.StatusBadRequest)
-	//	return
-	//}
-	//rw.WriteHeader(http.StatusCreated)
-	//jsonResponse, err1 := json.Marshal(insertedNotif)
-	//if err1 != nil {
-	//	error.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err1), http.StatusInternalServerError)
-	//	return
-	//}
-	//rw.Write(jsonResponse)
+	decoder := json.NewDecoder(resp.Body)
+
+	// Define a struct to represent the JSON structure
+	var responseUser struct {
+		LoggedInUser struct {
+			username string        `json:"username"`
+			email    string        `json:"email"`
+			UserRole data.UserRole `json:"userRole"`
+		} `json:"user"`
+	}
+
+	if err := decoder.Decode(&responseUser); err != nil {
+		errorMessage.ReturnJSONError(rw, "User object was not valid", http.StatusUnauthorized)
+	}
+
+	if responseUser.LoggedInUser.UserRole != data.Policeman {
+		errorMessage.ReturnJSONError(rw, "Wrong role.", http.StatusUnauthorized)
+	}
+
+	vehicleDriver, exists := c.Get("vehicleDriver")
+	if !exists {
+		errorMessage.ReturnJSONError(rw, "vehicleDriver object was not valid", http.StatusBadRequest)
+		return
+	}
+
+	vehicleDriverInsert, ok := vehicleDriver.(domain.VehicleDriverCreate)
+	if !ok {
+		errorMsg := map[string]string{"error": "Invalid type for vehicle driver."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	vehicleDriverInsertDB, _, err := s.service.InsertVehicleDriver(&vehicleDriverInsert)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Database problem."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	rw.WriteHeader(http.StatusCreated)
+	jsonResponse, err1 := json.Marshal(vehicleDriverInsertDB)
+	if err1 != nil {
+		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err1), http.StatusInternalServerError)
+		return
+	}
+	rw.Write(jsonResponse)
 
 }

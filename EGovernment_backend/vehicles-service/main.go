@@ -9,19 +9,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"net/http"
-	//"vehicles-service/handlers"
-	//"vehicles-service/routes"
-	//"vehicles-service/services"
+	"vehicles-service/handlers"
+	"vehicles-service/routes"
+	"vehicles-service/services"
 )
 
 var (
-	server            *gin.Engine
-	ctx               context.Context
-	mongoClient       *mongo.Client
-	vehicleCollection *mongo.Collection
-	//vehicleService      services.VehicleService
-	//vehicleHandler      handlers.VehicleHandler
-	//vehicleRouteHandler routes.VehicleRouteHandler
+	server              *gin.Engine
+	ctx                 context.Context
+	mongoClient         *mongo.Client
+	vehicleCollection   *mongo.Collection
+	vehicleService      services.VehicleService
+	vehicleHandler      handlers.VehicleHandler
+	vehicleRouteHandler routes.VehicleRouteHandler
 )
 
 func init() {
@@ -41,9 +41,9 @@ func init() {
 
 	vehicleCollection = mongoClient.Database("EGovernment").Collection("vehicle")
 
-	//vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
-	//vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)
-	//vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService)
+	vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
+	vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)
+	vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService)
 
 	server = gin.Default()
 
@@ -69,7 +69,7 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Message"})
 	})
 
-	//statisticsRouteHandler.StatisticsRoute(router)
+	vehicleRouteHandler.VehicleRoute(router)
 
 	err := server.Run(":8080")
 	if err != nil {

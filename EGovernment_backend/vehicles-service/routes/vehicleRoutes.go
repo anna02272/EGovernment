@@ -19,19 +19,19 @@ func NewVehicleRouteHandler(handler handlers.VehicleHandler, service services.Ve
 
 func (vr *VehicleRouteHandler) VehicleRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/vehicle")
-	router.POST("/createDriver", MiddlewareVehicleDeserialization, vr.handler.CreateVehicleDriver)
+	router.POST("/createVehicle", MiddlewareVehicleDeserialization, vr.handler.CreateVehicle)
 
 }
 
 func MiddlewareVehicleDeserialization(c *gin.Context) {
-	var vehicleDriver domain.VehicleDriverCreate
+	var vehicle domain.VehicleCreate
 
-	if err := c.ShouldBindJSON(&vehicleDriver); err != nil {
+	if err := c.ShouldBindJSON(&vehicle); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to decode JSON"})
 		c.Abort()
 		return
 	}
 
-	c.Set("vehicleDriver", vehicleDriver)
+	c.Set("vehicle", vehicle)
 	c.Next()
 }

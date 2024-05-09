@@ -5,5 +5,5 @@ import (
 )
 
 type VehicleService interface {
-	InsertVehicleDriver(driver *domain.VehicleDriverCreate) (*domain.VehicleDriver, string, error)
+	InsertVehicle(vehicle *domain.VehicleCreate) (*domain.Vehicle, string, error)
 }

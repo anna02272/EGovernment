@@ -7,8 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
-	"regexp"
-	"strings"
 	"time"
 	"vehicles-service/data"
 	"vehicles-service/domain"
@@ -16,36 +14,20 @@ import (
 	"vehicles-service/services"
 )
 
-type VehicleHandler struct {
-	service services.VehicleService
+type VehicleDriverHandler struct {
+	service services.VehicleDriverService
 	DB      *mongo.Collection
 }
 
-func NewVehicleHandler(service services.VehicleService, db *mongo.Collection) VehicleHandler {
-	return VehicleHandler{
+func NewVehicleDriverHandler(service services.VehicleDriverService, db *mongo.Collection) VehicleDriverHandler {
+	return VehicleDriverHandler{
 		service: service,
 		DB:      db,
 	}
 
 }
 
-func (s *VehicleHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
-	req, err := http.NewRequest(method, url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", token)
-
-	client := &http.Client{}
-	resp, err := client.Do(req.WithContext(ctx))
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-}
-
-func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
+func (s *VehicleDriverHandler) CreateVehicleDriver(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
 
@@ -63,6 +45,7 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 			return
 		}
+
 		errorMsg := map[string]string{"error": "Error performing authorization request."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
@@ -95,35 +78,25 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 	}
 
 	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not policeman"}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		errorMsg := map[string]string{"Unauthorized": " You are not policeman."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
 		return
 	}
 
-	vehicle, exists := c.Get("vehicle")
+	vehicleDriver, exists := c.Get("vehicleDriver")
 	if !exists {
-		errorMsg := map[string]string{"error": "vehicle object was not valid"}
+		errorMsg := map[string]string{"Error": " vehicleDriver object was not valid."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
-
-	vehicleInsert, ok := vehicle.(domain.VehicleCreate)
-
-	registrationPlate := vehicleInsert.RegistrationPlate
-
-	if !isValidRegistrationPlate(registrationPlate) {
-		errorMsg := map[string]string{"error": "Invalid registration plate format."}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
-		return
-	}
-
+	vehicleDriverInsert, ok := vehicleDriver.(domain.VehicleDriverCreate)
 	if !ok {
-		errorMsg := map[string]string{"error": "Invalid type for vehicle."}
+		errorMsg := map[string]string{"error": "Invalid type for vehicle driver."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
 
-	vehicleDriverInsertDB, _, err := s.service.InsertVehicle(&vehicleInsert)
+	vehicleDriverInsertDB, _, err := s.service.InsertVehicleDriver(&vehicleDriverInsert)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Database problem."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
@@ -140,9 +113,18 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 
 }
 
-func isValidRegistrationPlate(registrationPlate string) bool {
-	pattern := `^(NS|BG|BP)\d{3}[A-Z]{2}$`
-	regex := regexp.MustCompile(pattern)
-	registrationPlate = strings.ToUpper(registrationPlate)
-	return regex.MatchString(registrationPlate)
+func (s *VehicleDriverHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
+	req, err := http.NewRequest(method, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }

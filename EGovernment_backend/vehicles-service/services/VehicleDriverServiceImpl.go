@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"vehicles-service/domain"
@@ -42,4 +43,40 @@ func (s *VehicleDriverServiceImpl) InsertVehicleDriver(driver *domain.VehicleDri
 	insertedID = result.InsertedID.(primitive.ObjectID)
 
 	return &vehicleDriver, insertedID.Hex(), nil
+}
+
+func (s *VehicleDriverServiceImpl) GetAllVehicleDrivers() ([]*domain.VehicleDriver, error) {
+	var vehicleDrivers []*domain.VehicleDriver
+	filter := bson.D{}
+
+	cursor, err := s.collection.Find(s.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(s.ctx)
+
+	for cursor.Next(s.ctx) {
+		var vehicleDriver domain.VehicleDriver
+		if err := cursor.Decode(&vehicleDriver); err != nil {
+			return nil, err
+		}
+		vehicleDrivers = append(vehicleDrivers, &vehicleDriver)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return vehicleDrivers, nil
+}
+
+func (s *VehicleDriverServiceImpl) GetVehicleDriverByID(identificationNumber string, ctx context.Context) (*domain.VehicleDriver, error) {
+	var vehicleDriver domain.VehicleDriver
+	filter := bson.M{"identification_number": identificationNumber}
+
+	err := s.collection.FindOne(ctx, filter).Decode(&vehicleDriver)
+	if err != nil {
+		return nil, err
+	}
+
+	return &vehicleDriver, nil
 }

@@ -20,6 +20,8 @@ func NewVehicleDriverRouteHandler(handler handlers.VehicleDriverHandler, service
 func (vr *VehicleDriverRouteHandler) VehicleDriverRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/driver")
 	router.POST("/createDriver", MiddlewareVehicleDriverDeserialization, vr.handler.CreateVehicleDriver)
+	router.GET("/all", vr.handler.GetAllVehicleDrivers)
+	router.GET("/get/:id", vr.handler.GetVehicleDriverByID)
 
 }
 

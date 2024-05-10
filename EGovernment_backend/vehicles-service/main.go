@@ -50,7 +50,7 @@ func init() {
 	vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)
 	vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService)
 
-	vehicleDriverService = services.NewVehicleDriverServiceImpl(vehicleCollection, ctx)
+	vehicleDriverService = services.NewVehicleDriverServiceImpl(vehicleDriverCollection, ctx)
 	vehicleDriverHandler = handlers.NewVehicleDriverHandler(vehicleDriverService, vehicleDriverCollection)
 	vehicleDriverRouteHandler = routes.NewVehicleDriverRouteHandler(vehicleDriverHandler, vehicleDriverService)
 

@@ -1,1 +1,29 @@
-<p>header works!</p>
+<header>
+    <h1 class="logo" >
+      <img src="assets/images/logo.jpeg" />
+    </h1>
+    <ul class="main-nav">
+        <li routerLink="/register">Register</li>
+        <li routerLink="/login">Log In</li>
+      <li>
+        <!-- <div class="dropdown" >
+          <button class="dropbtn rounded-circle"  style="width: 45px; height: 45px;">
+            <img
+              src="assets/images/avatar.png"
+              class="rounded-circle"
+              style="width: 35px; height: 35px;"
+              alt="Profile Picture"
+              loading="lazy"
+            />
+          </button>
+         
+          <div class="dropdown-content">
+            <a routerLink="/profile">Profile </a>
+            <a (click)="logout()">Logout</a>
+          </div>
+        </div> -->
+      </li>
+      <!-- <li *ngIf="getRole() === 'Guest'" routerLink="/reservations">Reservations</li>
+      <li *ngIf="hasSignedIn()" routerLink="/profile">{{ getUsername() }}</li> -->
+    </ul>
+  </header>

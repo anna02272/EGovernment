@@ -19,6 +19,23 @@ services:
         condition: service_healthy
     networks:
       - network
+  court-service:
+    build:
+      context: ./court-service/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: court-service
+    hostname: court-service
+    ports:
+      - "8083:8083"
+    environment:
+      - PORT=8083
+      - MONGO_DB_URI=mongodb://root:root@mongo:27017
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - network
 
   vehicles-service:
     build:

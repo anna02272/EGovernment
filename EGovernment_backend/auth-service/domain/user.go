@@ -28,6 +28,7 @@ type UserResponse struct {
 type UserRole string
 
 const (
-	Citizen = "Citizen"
-	Employe = "Employe"
+	Citizen   = "Citizen"
+	Employe   = "Employe"
+	Policeman = "Policeman"
 )

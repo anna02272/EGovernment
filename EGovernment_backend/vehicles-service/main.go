@@ -9,19 +9,23 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"net/http"
-	//"vehicles-service/handlers"
-	//"vehicles-service/routes"
-	//"vehicles-service/services"
+	"vehicles-service/handlers"
+	"vehicles-service/routes"
+	"vehicles-service/services"
 )
 
 var (
-	server            *gin.Engine
-	ctx               context.Context
-	mongoClient       *mongo.Client
-	vehicleCollection *mongo.Collection
-	//vehicleService      services.VehicleService
-	//vehicleHandler      handlers.VehicleHandler
-	//vehicleRouteHandler routes.VehicleRouteHandler
+	server                    *gin.Engine
+	ctx                       context.Context
+	mongoClient               *mongo.Client
+	vehicleCollection         *mongo.Collection
+	vehicleDriverCollection   *mongo.Collection
+	vehicleService            services.VehicleService
+	vehicleDriverService      services.VehicleDriverService
+	vehicleHandler            handlers.VehicleHandler
+	vehicleDriverHandler      handlers.VehicleDriverHandler
+	vehicleDriverRouteHandler routes.VehicleDriverRouteHandler
+	vehicleRouteHandler       routes.VehicleRouteHandler
 )
 
 func init() {
@@ -40,10 +44,15 @@ func init() {
 	fmt.Println("MongoDB successfully connected...")
 
 	vehicleCollection = mongoClient.Database("EGovernment").Collection("vehicle")
+	vehicleDriverCollection = mongoClient.Database("EGovernment").Collection("vehicleDriver")
 
-	//vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
-	//vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)
-	//vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService)
+	vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
+	vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)
+	vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService)
+
+	vehicleDriverService = services.NewVehicleDriverServiceImpl(vehicleDriverCollection, ctx)
+	vehicleDriverHandler = handlers.NewVehicleDriverHandler(vehicleDriverService, vehicleDriverCollection)
+	vehicleDriverRouteHandler = routes.NewVehicleDriverRouteHandler(vehicleDriverHandler, vehicleDriverService)
 
 	server = gin.Default()
 
@@ -69,7 +78,8 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Message"})
 	})
 
-	//statisticsRouteHandler.StatisticsRoute(router)
+	vehicleRouteHandler.VehicleRoute(router)
+	vehicleDriverRouteHandler.VehicleDriverRoute(router)
 
 	err := server.Run(":8080")
 	if err != nil {

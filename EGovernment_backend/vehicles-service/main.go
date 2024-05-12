@@ -20,12 +20,16 @@ var (
 	mongoClient               *mongo.Client
 	vehicleCollection         *mongo.Collection
 	vehicleDriverCollection   *mongo.Collection
+	driverLicenceCollection   *mongo.Collection
+	driverLicenceService      services.DriverLicenceService
 	vehicleService            services.VehicleService
 	vehicleDriverService      services.VehicleDriverService
 	vehicleHandler            handlers.VehicleHandler
+	driverLicenceHandler      handlers.DriverLicenceHandler
 	vehicleDriverHandler      handlers.VehicleDriverHandler
 	vehicleDriverRouteHandler routes.VehicleDriverRouteHandler
 	vehicleRouteHandler       routes.VehicleRouteHandler
+	driverLicenceRouteHandler routes.DriverLicenceRouteHandler
 )
 
 func init() {
@@ -44,6 +48,7 @@ func init() {
 	fmt.Println("MongoDB successfully connected...")
 
 	vehicleCollection = mongoClient.Database("EGovernment").Collection("vehicle")
+	driverLicenceCollection = mongoClient.Database("EGovernment").Collection("driverLicence")
 	vehicleDriverCollection = mongoClient.Database("EGovernment").Collection("vehicleDriver")
 
 	vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
@@ -53,6 +58,10 @@ func init() {
 	vehicleDriverService = services.NewVehicleDriverServiceImpl(vehicleDriverCollection, ctx)
 	vehicleDriverHandler = handlers.NewVehicleDriverHandler(vehicleDriverService, vehicleDriverCollection)
 	vehicleDriverRouteHandler = routes.NewVehicleDriverRouteHandler(vehicleDriverHandler, vehicleDriverService)
+
+	driverLicenceService = services.NewDriverLicenceServiceImpl(driverLicenceCollection, ctx)
+	driverLicenceHandler = handlers.NewDriverLicenceHandler(driverLicenceService, driverLicenceCollection)
+	driverLicenceRouteHandler = routes.NewDriverLicenceRouteHandler(driverLicenceHandler, driverLicenceService)
 
 	server = gin.Default()
 
@@ -80,6 +89,7 @@ func main() {
 
 	vehicleRouteHandler.VehicleRoute(router)
 	vehicleDriverRouteHandler.VehicleDriverRoute(router)
+	driverLicenceRouteHandler.DriverLicenceRoute(router)
 
 	err := server.Run(":8080")
 	if err != nil {

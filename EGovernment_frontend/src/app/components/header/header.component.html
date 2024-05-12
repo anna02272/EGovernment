@@ -1,29 +1,41 @@
 <header>
-    <h1 class="logo" >
-      <img src="assets/images/logo.jpeg" />
-    </h1>
-    <ul class="main-nav">
-        <li routerLink="/register">Register</li>
-        <li routerLink="/login">Log In</li>
-      <li>
-        <!-- <div class="dropdown" >
-          <button class="dropbtn rounded-circle"  style="width: 45px; height: 45px;">
-            <img
-              src="assets/images/avatar.png"
-              class="rounded-circle"
-              style="width: 35px; height: 35px;"
-              alt="Profile Picture"
-              loading="lazy"
-            />
-          </button>
-         
-          <div class="dropdown-content">
-            <a routerLink="/profile">Profile </a>
-            <a (click)="logout()">Logout</a>
-          </div>
-        </div> -->
-      </li>
-      <!-- <li *ngIf="getRole() === 'Guest'" routerLink="/reservations">Reservations</li>
-      <li *ngIf="hasSignedIn()" routerLink="/profile">{{ getUsername() }}</li> -->
-    </ul>
-  </header>
+  <!-- <h4 class="logo" routerLink="/home"> -->
+      <button
+        class="dropbtn rounded-circle"
+        style="width: 90px; height: 60px"
+        routerLink="/home"
+      >
+        <img
+          src="assets/images/logo.jpg"
+          class="rounded-circle"
+          style="width: 80px; height: 55px"
+          loading="lazy"
+        />
+      </button>
+  <!-- </h4> -->
+  <ul class="main-nav">
+    <li *ngIf="!hasSignedIn()" routerLink="/register">Register</li>
+    <li *ngIf="!hasSignedIn()" routerLink="/login">Log In</li>
+    <li>
+      <div class="dropdown" *ngIf="hasSignedIn()">
+        <button
+          class="dropbtn rounded-circle"
+          style="width: 45px; height: 45px"
+        >
+          <img
+            src="assets/images/avatar.png"
+            class="rounded-circle"
+            style="width: 35px; height: 35px"
+            loading="lazy"
+          />
+        </button>
+
+        <div class="dropdown-content">
+          <a (click)="logout()">Logout</a>
+        </div>
+      </div>
+    </li>
+
+    <li *ngIf="hasSignedIn()">{{ getUsername() }}</li>
+  </ul>
+</header>

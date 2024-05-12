@@ -9,6 +9,11 @@ import { ApiService } from './services/api.service';
 import { RefreshService } from './services/refresh.service';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { TokenInterceptor } from './interceptor/TokenInterceptor';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthService } from './services/auth.service';
+import { UserService } from './services/user.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,17 +25,21 @@ import { RegistrationComponent } from './components/registration/registration.co
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
-  // {
-    // provide: HTTP_INTERCEPTORS,
-    // useClass: TokenInterceptor,
-  //   multi: true,
-  // },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true,
+  },
   ConfigService,
   ApiService,
-  RefreshService
+  RefreshService,
+  AuthService,
+  UserService
   ],
   bootstrap: [AppComponent]
 })

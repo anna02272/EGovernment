@@ -44,9 +44,8 @@ func (ac *AuthHandler) Login(ctx *gin.Context) {
 			return
 		}
 	}
-	_, err = ac.userService.FindUserByEmail(credentials.Email)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Wrong credentials"})
+	if err := utils.VerifyPassword(user.Password, credentials.Password); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid password"})
 		return
 	}
 
@@ -85,7 +84,7 @@ func (ac *AuthHandler) Registration(ctx *gin.Context) {
 	}
 
 	if !utils.ValidatePassword(user.Password) {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid password format"})
+		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "Invalid password format"})
 		return
 	}
 

@@ -1,253 +1,132 @@
 <div class="container-fluid h-custom">
-    <div class="row">
-      <div class="col-xl-4">
-        <form
-        >
-          <div
-            class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start"
-          >
-            <p class="title">Register</p>
-            
-          </div>
-          <!-- <p class="notif" *ngIf="notification" [class]="notification.msgType">
-            {{ notification.msgBody }}
-          </p> -->
-         
-          <!-- Username input -->
-          <div class="form-outline mb-0">
-            <!-- <p
-              *ngIf="personalInfoForm.controls['username'].errors?.['minlength']"
-              class="text-danger"
-            >
-              Username is required.
-            </p> -->
-            <input
-              formControlName="username"
-              type="text"
-              id="username"
-              class="form-control form-control-lg"
-              placeholder="Enter username"
-              required
-            />
-            <label class="form-label" for="username">Username</label>
-          </div>
-  
-          <!-- Password input -->
-          <div class="form-outline mb-0">
-            <!-- <p
-              *ngIf="
-                passwordControl?.hasError('invalidPassword') &&
-                (passwordControl?.dirty || passwordControl?.touched)
-              "
-              class="text-danger"
-            >
-              Password must have at least 8 characters, one lowercase letter, one
-              uppercase letter, one number, and one special character.
-            </p> -->
-            <input
-              formControlName="password"
-              type="password"
-              id="password"
-              class="form-control form-control-lg"
-              placeholder="Enter password"
-              required
-              name="password"
-              autocomplete="password"
-            />
-            <label class="form-label" for="password">Password</label>
-        
-          </div>
-          <!-- Email input -->
-          <div class="form-outline mb-0">
-            <!-- <p
-              *ngIf="personalInfoForm.controls['email'].errors?.['email']"
-              class="text-danger"
-            >
-              Email must have valid format.
-            </p> -->
-            <input
-              formControlName="email"
-              type="email"
-              id="email"
-              class="form-control form-control-lg"
-              placeholder="Enter a valid email address"
-              required
-            />
-            <label class="form-label" for="email">Email address</label>
-          </div>
-          <!-- Name input -->
-          <div class="form-outline mb-0">
-            <div class="row">
-              <div class="col">
-                <!-- <p
-                  *ngIf="personalInfoForm.controls['name'].errors?.['minlength']"
-                  class="text-danger"
-                >
-                  Name is required.
-                </p> -->
-                <input
-                  formControlName="name"
-                  type="text"
-                  id="namee"
-                  class="form-control form-control-lg"
-                  placeholder="Enter name"
-                  required
-                />
-                <label class="form-label" for="namee">Name</label>
-              </div>
-              <!-- Lastname input -->
-              <div class="col">
-                <!-- <p
-                  *ngIf="personalInfoForm.controls['lastname'].errors?.['minlength']"
-                  class="text-danger"
-                >
-                  Lastname is required.
-                </p> -->
-                <input
-                  formControlName="lastname"
-                  type="text"
-                  id="lastname"
-                  class="form-control form-control-lg"
-                  placeholder="Enter lastname"
-                  required
-                />
-                <label class="form-label" for="lastname">Lastname</label>
-              </div>
-              </div>
-              </div>
-              </form>
-            </div>
-      
-      <div class="col-xl-4 col-md-4">
-        <form>
-           <div class="form-outline mb-0">
-              <!-- <p
-              *ngIf="personalInfoForm.controls['street'].errors?.['minlength']"
-              class="text-danger"
-            >
-              Street is required.
-            </p> -->
-            <input
-              formControlName="street"
-              type="text"
-              id="street"
-              class="form-control form-control-lg"
-              placeholder="Enter street"
-              required
-            />
-            <label class="form-label" for="street">Street</label>
-  
-            <div class="row">
-              <div class="col">
-                <!-- <p *ngIf="personalInfoForm.get('city')?.errors?.['minlength']" class="text-danger">
-                  City is required.
-                </p> -->
-                <input formControlName="city" type="text" id="city" class="form-control form-control-lg" placeholder="Enter city" required />
-                <label class="form-label" for="city">City</label>
-              </div>
-          
-              <div class="col">
-                <!-- <p *ngIf="personalInfoForm.get('country')?.errors?.['minlength']" class="text-danger">
-                  Country is required.
-                </p> -->
-                <input formControlName="country" type="text" id="country" class="form-control form-control-lg" placeholder="Enter country" required />
-                <label class="form-label" for="country">Country</label>
-              </div>
-            </div>
-          </div> 
-  
-  
-          <div class="form-outline mb-0">
-            <div class="row">
-              <div class="col">
-                <!-- Role input -->
-                <p>Role:</p>
-                 
-                <input
-                  formControlName="userRole"
-                  type="radio"
-                  id="guest"
-                  name="userRole"
-                  value="Guest"
-                  required
-                />
-                  <label for="guest">Guest</label><br />
-                 
-                <input
-                  formControlName="userRole"
-                  type="radio"
-                  id="host"
-                  name="userRole"
-                  value="Host"
-                />
-                  <label for="host">Host</label><br />
-              </div>
-              <!-- Age input -->
-              <div class="col">
-                <label class="form-label" for="Age">Age:</label>
-                <input
-                  formControlName="age"
-                  type="number"
-                  id="age"
-                  class="form-control form-control-lg"
-                  placeholder="Age"
-                />
-              </div>
-              <!-- Gender input -->
-              <div class="col">
-                <p>Gender:</p>
-                 
-                <input
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  formControlName="gender"
-                  value="Male"
-                />
-                  <label for="male">Male</label><br />
-                 
-                <input
-                  type="radio"
-                  id="female"
-                  name="gender"
-                  formControlName="gender"
-                  value="Female"
-                />
-                  <label for="female">Female</label><br />
-                 
-                <input
-                  type="radio"
-                  id="other"
-                  name="gender"
-                  formControlName="gender"
-                  value="Other"
-                />
-                 
-                <label for="other">Other</label>
-              </div>
-              <div class="text-center text-lg-start mt-2 pt-0">
-  
-                
-  
-  
-                <button
-                  class="login-btn"
-                  type="submit"
-                >
-                  Register
-                </button>
-                <p class="small fw-bold mt-2 pt-1 mb-0">
-                  Already have an account? <a routerLink="/login">Login</a>
-                </p>
-              </div>
-            </div>
-          </div>
-          <!-- </div> -->
-        </form>
-      </div>
-  
-      <div class="col-xl-1">
-        <img src="assets/images/hola.jpg" class="image" />
-      
-      </div>
+  <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="col-md-5 col-lg-2 col-xl-6">
+      <img src="assets/images/government.jpg" class="img-fluid" />
     </div>
+    <div class="col-md-8 col-lg-6 col-xl-5 offset-xl-1">
+      <form
+        #registerForm="ngForm"
+        (ngSubmit)="onSubmit()"
+        *ngIf="!submitted"
+        [formGroup]="personalInfoForm"
+      >
+        <div
+          class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start"
+        >
+          <p class="title">Register</p>
+        </div>
+        <!-- Username input -->
+        <div class="form-outline mb-0">
+          <p
+            *ngIf="personalInfoForm.controls['username'].errors?.['minlength']"
+            class="text-danger"
+          >
+            Username is required.
+          </p>
+          <input
+            formControlName="username"
+            type="text"
+            id="username"
+            class="form-control form-control-lg"
+            placeholder="Enter username"
+            required
+          />
+          <label class="form-label" for="username">Username</label>
+        </div>
+        <!-- Password input -->
+        <div class="form-outline mb-0">
+          <p
+            *ngIf="
+              personalInfoForm.controls['password'].errors?.['pattern'] &&
+              (personalInfoForm.controls['password'].dirty || personalInfoForm.controls['password'].touched)
+            "
+            class="text-danger"
+          >
+            Password must have at least 8 characters, one lowercase letter, one uppercase letter, one number, and one special character.
+          </p>
+          <input
+            formControlName="password"
+            type="password"
+            id="password"
+            class="form-control form-control-lg"
+            placeholder="Enter password"
+            required
+            name="password"
+            autocomplete="password"
+          />
+          <label class="form-label" for="password">Password</label>
+        </div>
+        <!-- Email input -->
+        <div class="form-outline mb-0">
+          <p
+            *ngIf="personalInfoForm.controls['email'].errors?.['email']"
+            class="text-danger"
+          >
+            Email must have valid format.
+          </p>
+          <input
+            formControlName="email"
+            type="email"
+            id="email"
+            class="form-control form-control-lg"
+            placeholder="Enter a valid email address"
+            required
+          />
+          <label class="form-label" for="email">Email address</label>
+        </div>
+        <!-- Name input -->
+        <div class="form-outline mb-0">
+          <div class="row">
+            <div class="col">
+              <p
+                *ngIf="personalInfoForm.controls['name'].errors?.['minlength']"
+                class="text-danger"
+              >
+                Name is required.
+              </p>
+              <input
+                formControlName="name"
+                type="text"
+                id="namee"
+                class="form-control form-control-lg"
+                placeholder="Enter name"
+                required
+              />
+              <label class="form-label" for="name">Name</label>
+            </div>
+            <!-- Lastname input -->
+            <div class="col">
+              <p
+                *ngIf="
+                  personalInfoForm.controls['lastname'].errors?.['minlength']
+                "
+                class="text-danger"
+              >
+                Lastname is required.
+              </p>
+              <input
+                formControlName="lastname"
+                type="text"
+                id="lastname"
+                class="form-control form-control-lg"
+                placeholder="Enter lastname"
+                required
+              />
+              <label class="form-label" for="lastname">Lastname</label>
+            </div>
+          </div>
+        </div>
+        <p class="notif" *ngIf="notification" [class]="notification.msgType">
+          {{ notification.msgBody }}
+        </p>
+        <div class="text-center text-lg-start mt-4 pt-1">
+          <button class="register-btn" type="submit"  [disabled]="!personalInfoForm.valid">Register</button>
+          <p class="small fw-bold mt-2 pt-1 mb-0">
+            Already have an account?
+            <a routerLink="/login" class="custom-link">Login</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

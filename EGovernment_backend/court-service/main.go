@@ -1,10 +1,10 @@
 package main
 
 import (
-	"auth-service/handlers"
-	"auth-service/routes"
-	"auth-service/services"
 	"context"
+	"court-service/handlers"
+	"court-service/routes"
+	"court-service/services"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -15,18 +15,13 @@ import (
 )
 
 var (
-	server      *gin.Engine
-	ctx         context.Context
-	mongoClient *mongo.Client
-
-	userService      services.UserService
-	UserHandler      handlers.UserHandler
-	UserRouteHandler routes.UserRouteHandler
-
-	authCollection   *mongo.Collection
-	authService      services.AuthService
-	AuthHandler      handlers.AuthHandler
-	AuthRouteHandler routes.AuthRouteHandler
+	server            *gin.Engine
+	ctx               context.Context
+	mongoClient       *mongo.Client
+	courtCollection   *mongo.Collection
+	courtService      services.CourtService
+	courtHandler      handlers.CourtHandler
+	courtRouteHandler routes.CourtRouteHandler
 )
 
 func init() {
@@ -35,26 +30,23 @@ func init() {
 	mongoClient, err := mongo.Connect(ctx, mongoConn)
 
 	if err != nil {
-		fmt.Printf("Error connecting to MongoDB: %v\n", err)
 		panic(err)
 	}
 
 	if err := mongoClient.Ping(ctx, readpref.Primary()); err != nil {
-		fmt.Printf("Error disconnecting from MongoDB: %v\n", err)
 		panic(err)
 	}
 
 	fmt.Println("MongoDB successfully connected...")
 
-	authCollection = mongoClient.Database("EGovernment").Collection("auth")
-	userService = services.NewUserServiceImpl(authCollection, ctx)
-	authService = services.NewAuthService(authCollection, ctx, userService)
-	AuthHandler = handlers.NewAuthHandler(authService, userService, authCollection)
-	AuthRouteHandler = routes.NewAuthRouteHandler(AuthHandler, authService)
-	UserHandler = handlers.NewUserHandler(userService)
-	UserRouteHandler = routes.NewRouteUserHandler(UserHandler)
+	courtCollection = mongoClient.Database("EGovernment").Collection("court")
+
+	courtService = services.NewCourtServiceImpl(courtCollection, ctx)
+	courtHandler = handlers.NewCourtHandler(courtService, courtCollection)
+	courtRouteHandler = routes.NewCourtRouteHandler(courtHandler, courtService)
 
 	server = gin.Default()
+
 }
 
 func main() {
@@ -77,13 +69,11 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Message"})
 	})
 
-	AuthRouteHandler.AuthRoute(router)
-	UserRouteHandler.UserRoute(router)
+	courtRouteHandler.CourtRoute(router)
 
-	err := server.Run(":8085")
+	err := server.Run(":8083")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
 }

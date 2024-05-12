@@ -13,7 +13,7 @@
         <div
           class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start"
         >
-          <p class="title">Register</p>
+          <p class="title">Registracija</p>
         </div>
         <!-- Username input -->
         <div class="form-outline mb-0">
@@ -21,17 +21,17 @@
             *ngIf="personalInfoForm.controls['username'].errors?.['minlength']"
             class="text-danger"
           >
-            Username is required.
+          Korisničko ime je obavezno.
           </p>
           <input
             formControlName="username"
             type="text"
             id="username"
             class="form-control form-control-lg"
-            placeholder="Enter username"
+            placeholder="Unesite korisničko ime"
             required
           />
-          <label class="form-label" for="username">Username</label>
+          <label class="form-label" for="username">Korisničko ime</label>
         </div>
         <!-- Password input -->
         <div class="form-outline mb-0">
@@ -42,19 +42,18 @@
             "
             class="text-danger"
           >
-            Password must have at least 8 characters, one lowercase letter, one uppercase letter, one number, and one special character.
-          </p>
+          Lozinka mora imati najmanje 8 znakova, jedno malo slovo, jedno veliko slovo, jedan broj i jedan specijalni znak.    </p>
           <input
             formControlName="password"
             type="password"
             id="password"
             class="form-control form-control-lg"
-            placeholder="Enter password"
+            placeholder="Unesite lozinku"
             required
             name="password"
             autocomplete="password"
           />
-          <label class="form-label" for="password">Password</label>
+          <label class="form-label" for="password">Lozinka</label>
         </div>
         <!-- Email input -->
         <div class="form-outline mb-0">
@@ -62,17 +61,17 @@
             *ngIf="personalInfoForm.controls['email'].errors?.['email']"
             class="text-danger"
           >
-            Email must have valid format.
+            Email mora imati važeći format.
           </p>
           <input
             formControlName="email"
             type="email"
             id="email"
             class="form-control form-control-lg"
-            placeholder="Enter a valid email address"
+            placeholder="Unesite ispravan email"
             required
           />
-          <label class="form-label" for="email">Email address</label>
+          <label class="form-label" for="email">Email adresa</label>
         </div>
         <!-- Name input -->
         <div class="form-outline mb-0">
@@ -82,17 +81,17 @@
                 *ngIf="personalInfoForm.controls['name'].errors?.['minlength']"
                 class="text-danger"
               >
-                Name is required.
+              Ime je obavezno.
               </p>
               <input
                 formControlName="name"
                 type="text"
                 id="namee"
                 class="form-control form-control-lg"
-                placeholder="Enter name"
+                placeholder="Unesite ime"
                 required
               />
-              <label class="form-label" for="name">Name</label>
+              <label class="form-label" for="name">Ime</label>
             </div>
             <!-- Lastname input -->
             <div class="col">
@@ -102,17 +101,17 @@
                 "
                 class="text-danger"
               >
-                Lastname is required.
+               Prezime je obavezno.
               </p>
               <input
                 formControlName="lastname"
                 type="text"
                 id="lastname"
                 class="form-control form-control-lg"
-                placeholder="Enter lastname"
+                placeholder="Unesite prezime"
                 required
               />
-              <label class="form-label" for="lastname">Lastname</label>
+              <label class="form-label" for="lastname">Prezime</label>
             </div>
           </div>
         </div>
@@ -120,10 +119,10 @@
           {{ notification.msgBody }}
         </p>
         <div class="text-center text-lg-start mt-4 pt-1">
-          <button class="register-btn" type="submit"  [disabled]="!personalInfoForm.valid">Register</button>
+          <button class="register-btn" type="submit"  [disabled]="!personalInfoForm.valid">Registrujte se</button>
           <p class="small fw-bold mt-2 pt-1 mb-0">
-            Already have an account?
-            <a routerLink="/login" class="custom-link">Login</a>
+            Već imate nalog?
+            <a routerLink="/prijava" class="custom-link">Prijavite se</a>
           </p>
         </div>
       </form>

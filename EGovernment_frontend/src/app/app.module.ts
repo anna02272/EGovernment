@@ -14,6 +14,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HomeStatisticsComponent } from './components/home-statistics/home-statistics.component';
+import { HomeCourtComponent } from './components/home-court/home-court.component';
+import { HomeVehiclesComponent } from './components/home-vehicles/home-vehicles.component';
+import { HomePoliceComponent } from './components/home-police/home-police.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     HeaderComponent,
     HomeComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    HomeStatisticsComponent,
+    HomeCourtComponent,
+    HomeVehiclesComponent,
+    HomePoliceComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +47,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ApiService,
   RefreshService,
   AuthService,
-  UserService
+  UserService,
   ],
   bootstrap: [AppComponent]
 })

@@ -7,6 +7,7 @@ import { HomeStatisticsComponent } from './components/home-statistics/home-stati
 import { HomeVehiclesComponent } from './components/home-vehicles/home-vehicles.component';
 import { HomePoliceComponent } from './components/home-police/home-police.component';
 import { HomeCourtComponent } from './components/home-court/home-court.component';
+import { AuthGuard } from './services/permission.service';
 
 const routes: Routes = [
   {
@@ -25,24 +26,29 @@ const routes: Routes = [
 {
   path: 'pocetna',
   component: HomeComponent,
- 
+  canActivate: [AuthGuard] 
 },
+
 {
   path: 'zavodZaStatistiku',
   component: HomeStatisticsComponent,
+  canActivate: [AuthGuard] 
 },
 {
   path: 'mupVozila',
   component: HomeVehiclesComponent,
+  canActivate: [AuthGuard] 
 
 },
 {
   path: 'saobracajnaPolicija',
   component: HomePoliceComponent,
+  canActivate: [AuthGuard] 
 },
 {
   path: 'prekrsajniSud',
   component: HomeCourtComponent,
+  canActivate: [AuthGuard] 
 },
  
 ];

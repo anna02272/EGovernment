@@ -13,28 +13,20 @@ export class PermissionsService  {
     private router: Router
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean {
     if (this.authService.tokenIsPresent()) {
-      const roles = route.data['roles'] as UserRole[];
-      const userRole = this.authService.getRole();
+      const roles = route.data['roles'] as string[];
+      if (roles && roles.length > 0) {
+        const userRole = this.authService.getRole();
 
-      if (roles && roles.length > 0 && roles.includes(userRole)) {
-        if (userRole === UserRole.Citizen){
-          this.router.navigate(['/pocetna']);
-        } else if (userRole === UserRole.Employee){
-          this.router.navigate(['/zavodZaStatistiku']);
-        } else if (userRole === UserRole.Policeman){
-          this.router.navigate(['/mupVozila']);
-        } else if (userRole === UserRole.TrafficPoliceman){
-          this.router.navigate(['/saobracajnaPolicija']);
-        } else if (userRole === UserRole.Judge){
-          this.router.navigate(['/prekrsajniSud']);   
+        if (roles.includes(userRole)) {
+          return true;
+        } else {
+          this.router.navigate(['/prijava']);
+          return false;
         }
-        return true;
-      } else {
-        this.router.navigate(['/prijava']);
-        return false;
       }
+      return true;
     } else {
       this.router.navigate(['/prijava']);
       return false;

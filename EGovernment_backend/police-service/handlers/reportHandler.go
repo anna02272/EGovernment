@@ -5,47 +5,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	"net/http"
-	"regexp"
-	"strings"
+	"police-service/data"
+	"police-service/domain"
+	errorMessage "police-service/error"
+	"police-service/services"
 	"time"
-	"vehicles-service/data"
-	"vehicles-service/domain"
-	errorMessage "vehicles-service/error"
-	"vehicles-service/services"
 )
 
-type VehicleHandler struct {
-	service services.VehicleService
+type ReportHandler struct {
+	service services.ReportService
 	DB      *mongo.Collection
 }
 
-func NewVehicleHandler(service services.VehicleService, db *mongo.Collection) VehicleHandler {
-	return VehicleHandler{
+func NewReportHandler(service services.ReportService, db *mongo.Collection) ReportHandler {
+	return ReportHandler{
 		service: service,
 		DB:      db,
 	}
 
 }
 
-func (s *VehicleHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
-	req, err := http.NewRequest(method, url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", token)
-
-	client := &http.Client{}
-	resp, err := client.Do(req.WithContext(ctx))
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-}
-
-func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
+func (s *ReportHandler) CreateReport(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
 
@@ -63,6 +47,7 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 			return
 		}
+
 		errorMsg := map[string]string{"error": "Error performing authorization request."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
@@ -82,9 +67,10 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 	// Define a struct to represent the JSON structure
 	var responseUser struct {
 		LoggedInUser struct {
-			username string        `json:"username"`
-			email    string        `json:"email"`
-			UserRole data.UserRole `json:"userRole"`
+			ID       primitive.ObjectID `json:"id"`
+			username string             `json:"username"`
+			email    string             `json:"email"`
+			UserRole data.UserRole      `json:"userRole"`
 		} `json:"user"`
 	}
 
@@ -94,44 +80,45 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 		return
 	}
 
-	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not policeman"}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+	if responseUser.LoggedInUser.UserRole != data.TrafficPoliceman {
+		errorMsg := map[string]string{"Unauthorized": " You are not traffic policeman."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
 		return
 	}
 
-	vehicle, exists := c.Get("vehicle")
+	/* Later for report
+	loggedInUserID := responseUser.LoggedInUser.ID*/
+
+	report, exists := c.Get("report")
 	if !exists {
-		errorMsg := map[string]string{"error": "vehicle object was not valid"}
+		errorMsg := map[string]string{"Error": " report object was not valid."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
 
-	vehicleInsert, ok := vehicle.(domain.VehicleCreate)
-
-	registrationPlate := vehicleInsert.RegistrationPlate
-
-	if !isValidRegistrationPlate(registrationPlate) {
-		errorMsg := map[string]string{"error": "Invalid registration plate format."}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
-		return
-	}
-
+	reportInsert, ok := report.(domain.ReportCreate)
 	if !ok {
-		errorMsg := map[string]string{"error": "Invalid type for vehicle."}
+		errorMsg := map[string]string{"error": "Invalid type for delict."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
 
-	vehicleDriverInsertDB, _, err := s.service.InsertVehicle(&vehicleInsert)
+	if !isValidDelictType(reportInsert.DelictType) {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Invalid delict type."}, http.StatusBadRequest)
+		return
+	}
+	log.Println("Inserting report...")
+	reportInsertDB, _, err := s.service.InsertReport(&reportInsert, responseUser.LoggedInUser.ID.Hex(), "66409febc7cbf41296293b92", "66409febc7cbf41296293b92")
 	if err != nil {
 		errorMsg := map[string]string{"error": "Database problem."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
 
+	log.Println("Report inserted successfully.")
+
 	rw.WriteHeader(http.StatusCreated)
-	jsonResponse, err1 := json.Marshal(vehicleDriverInsertDB)
+	jsonResponse, err1 := json.Marshal(reportInsertDB)
 	if err1 != nil {
 		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err1), http.StatusInternalServerError)
 		return
@@ -140,7 +127,7 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 
 }
 
-func (s *VehicleHandler) GetAllVehicles(c *gin.Context) {
+func (s *ReportHandler) GetAllReports(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
 	token := h.Header.Get("Authorization")
@@ -170,36 +157,15 @@ func (s *VehicleHandler) GetAllVehicles(c *gin.Context) {
 		return
 	}
 
-	decoder := json.NewDecoder(resp.Body)
-
-	var responseUser struct {
-		LoggedInUser struct {
-			username string        `json:"username"`
-			email    string        `json:"email"`
-			UserRole data.UserRole `json:"userRole"`
-		} `json:"user"`
-	}
-
-	if err := decoder.Decode(&responseUser); err != nil {
-		errorMsg := map[string]string{"error": "User object was not valid."}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
-		return
-	}
-
-	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not policeman"}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
-		return
-	}
-
-	vehicles, err := s.service.GetAllVehicles()
+	reports, err := s.service.GetAllReport()
 	if err != nil {
-		errorMsg := map[string]string{"error": "Failed to retrieve vehicles from the database."}
+		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
 		return
 	}
 
-	jsonResponse, err := json.Marshal(vehicles)
+	// Convert vehicles to JSON
+	jsonResponse, err := json.Marshal(reports)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Error marshaling JSON."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
@@ -211,7 +177,7 @@ func (s *VehicleHandler) GetAllVehicles(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
-func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
+func (s *ReportHandler) GetAllReportssByDelictType(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
 	token := h.Header.Get("Authorization")
@@ -241,58 +207,16 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 		return
 	}
 
-	decoder := json.NewDecoder(resp.Body)
-
-	var responseUser struct {
-		LoggedInUser struct {
-			username string        `json:"username"`
-			email    string        `json:"email"`
-			UserRole data.UserRole `json:"userRole"`
-		} `json:"user"`
-	}
-
-	if err := decoder.Decode(&responseUser); err != nil {
-		errorMsg := map[string]string{"error": "User object was not valid."}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
-		return
-	}
-
-	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not policeman"}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
-		return
-	}
-
-	vehicles, err := s.service.GetAllVehicles()
+	delictType := c.Param("delictType")
+	reports, err := s.service.GetAllReportsByDelictType(domain.DelictType(delictType))
 	if err != nil {
-		errorMsg := map[string]string{"error": "Failed to retrieve vehicles from the database."}
+		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
 		return
 	}
 
-	registeredVehicles := make([]domain.Vehicle, 0)
-	currentTime := time.Now()
-	for _, v := range vehicles {
-		diff := currentTime.Sub(v.RegistrationDate)
-		if diff.Hours() <= 365*24 {
-			registeredVehicles = append(registeredVehicles, *v)
-		}
-	}
-
-	if len(registeredVehicles) == 0 {
-		errorMsg := map[string]string{"message": "No registered vehicles found."}
-		jsonResponse, err := json.Marshal(errorMsg)
-		if err != nil {
-			errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error marshaling JSON."}, http.StatusInternalServerError)
-			return
-		}
-		rw.Header().Set("Content-Type", "application/json")
-		rw.WriteHeader(http.StatusNotFound)
-		rw.Write(jsonResponse)
-		return
-	}
-
-	jsonResponse, err := json.Marshal(registeredVehicles)
+	// Convert reports to JSON
+	jsonResponse, err := json.Marshal(reports)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Error marshaling JSON."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
@@ -304,7 +228,23 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
-func (s *VehicleHandler) GetVehicleByID(c *gin.Context) {
+func (s *ReportHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
+	req, err := http.NewRequest(method, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func (s *ReportHandler) GetReportByID(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
 
@@ -347,22 +287,22 @@ func (s *VehicleHandler) GetVehicleByID(c *gin.Context) {
 		return
 	}
 
-	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not a policeman."}
+	if responseUser.LoggedInUser.UserRole != data.TrafficPoliceman {
+		errorMsg := map[string]string{"error": "Unauthorized. You are not a traffic policeman."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
 		return
 	}
 
-	vehicleID := c.Param("id")
+	reportId := c.Param("id")
 
-	vehicle, err := s.service.GetVehicleByID(vehicleID, ctx)
+	report, err := s.service.GetReportById(reportId, ctx)
 	if err != nil {
-		errorMsg := map[string]string{"error": "Failed to retrieve vehicle from the database.No such vehicle."}
+		errorMsg := map[string]string{"error": "Failed to retrieve report from the database.No such report."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
 		return
 	}
 
-	jsonResponse, err := json.Marshal(vehicle)
+	jsonResponse, err := json.Marshal(report)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Error marshaling JSON."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
@@ -372,11 +312,4 @@ func (s *VehicleHandler) GetVehicleByID(c *gin.Context) {
 	rw.Header().Set("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(jsonResponse)
-}
-
-func isValidRegistrationPlate(registrationPlate string) bool {
-	pattern := `^(NS|BG|BP)\d{3}[A-Z]{2}$`
-	regex := regexp.MustCompile(pattern)
-	registrationPlate = strings.ToUpper(registrationPlate)
-	return regex.MatchString(registrationPlate)
 }

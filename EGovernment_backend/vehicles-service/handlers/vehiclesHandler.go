@@ -263,23 +263,14 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 		return
 	}
 
-	vehicles, err := s.service.GetAllVehicles()
+	vehicles, err := s.service.GetAllRegisteedVehicles()
 	if err != nil {
-		errorMsg := map[string]string{"error": "Failed to retrieve vehicles from the database."}
+		errorMsg := map[string]string{"error": "Failed to retrieve registered vehicles from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
 		return
 	}
 
-	registeredVehicles := make([]domain.Vehicle, 0)
-	currentTime := time.Now()
-	for _, v := range vehicles {
-		diff := currentTime.Sub(v.RegistrationDate)
-		if diff.Hours() <= 365*24 {
-			registeredVehicles = append(registeredVehicles, *v)
-		}
-	}
-
-	if len(registeredVehicles) == 0 {
+	if len(vehicles) == 0 {
 		errorMsg := map[string]string{"message": "No registered vehicles found."}
 		jsonResponse, err := json.Marshal(errorMsg)
 		if err != nil {
@@ -292,7 +283,7 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 		return
 	}
 
-	jsonResponse, err := json.Marshal(registeredVehicles)
+	jsonResponse, err := json.Marshal(vehicles)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Error marshaling JSON."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)

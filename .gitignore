@@ -20,3 +20,10 @@
 # Go workspace file
 go.work
 .idea
+.vscode
+
+EGovernment_backend/.idea/
+EGovernment_backend/.vscode/
+
+EGovernment_frontend/.idea/
+EGovernment_frontend/.vscode/

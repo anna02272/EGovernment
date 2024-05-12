@@ -61,7 +61,7 @@ export class AuthService {
   logout() {
     this.userService.currentUser = null;
     this.access_token = null;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/prijava']);
   }
 
   tokenIsPresent() {
@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   getRole() {
-    return this.userService.currentUser.user.userRole;
+    return this.userService.currentUser?.user.userRole;
   }
  
 }

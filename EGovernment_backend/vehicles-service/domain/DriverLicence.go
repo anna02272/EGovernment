@@ -4,10 +4,17 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type DriverLicence struct {
 	ID               primitive.ObjectID `bson:"_id" json:"id"`
-	VehicleDriver    VehicleDriver      `bson:"vehicle_driver" json:"vehicle_driver"`
+	VehicleDriver    string             `bson:"vehicle_driver" json:"vehicle_driver"`
 	LicenceNumber    string             `bson:"licence_number" json:"licence_number"`
-	LocationLicenced Location           `bson:"licence_number" json:"licence_number"`
+	LocationLicenced Location           `bson:"location_licenced" json:"location_licenced"`
 	Categories       []Category         `bson:"categories" json:"categories"`
+}
+
+type DriverLicenceCreate struct {
+	VehicleDriver    string     `bson:"vehicle_driver" json:"vehicle_driver"`
+	LicenceNumber    string     `bson:"licence_number" json:"licence_number"`
+	LocationLicenced Location   `bson:"location_licenced" json:"location_licenced"`
+	Categories       []Category `bson:"categories" json:"categories"`
 }
 
 type Location string

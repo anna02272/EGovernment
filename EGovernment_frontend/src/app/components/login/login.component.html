@@ -9,7 +9,7 @@
           <div
             class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start"
           >
-            <p class="title">Log in</p>
+            <p class="title">Prijava</p>
           </div>
           <!-- Email input -->
           <div class="form-outline mb-4">
@@ -17,13 +17,13 @@
             *ngIf="form.controls['email'].errors?.['email']"
             class="text-danger"
           >
-            Email must have valid format.
+           Email mora imati važeći format.
           </p>
             <input
               type="email"
               id="email"
               class="form-control form-control-lg"
-              placeholder="Enter valid email"
+              placeholder="Unesite ispravan email"
               formControlName="email"
               name="email "
               required
@@ -39,27 +39,26 @@
             "
             class="text-danger"
           >
-            Password must have at least 8 characters, one lowercase letter, one uppercase letter, one number, and one special character.
-          </p>
+          Lozinka mora imati najmanje 8 znakova, jedno malo slovo, jedno veliko slovo, jedan broj i jedan specijalni znak.  </p>
             <input
               type="password"
               id="password"
               class="form-control form-control-lg"
-              placeholder="Enter password"
+              placeholder="Unesite lozinku"
               formControlName="password"
               name="password"
               required
             />
-            <label class="form-label" for="password">Password</label>
+            <label class="form-label" for="password">Lozinka</label>
           </div>
 
           <p class="error" *ngIf="notification" [class]="notification.msgType">
             {{ notification.msgBody }}
           </p>
           <div class="text-center text-lg-start mt-4 pt-1">
-            <button class="login-btn" type="submit"  [disabled]="!form.valid">Login</button>
+            <button class="login-btn" type="submit"  [disabled]="!form.valid">Prijavite se</button>
             <p class="small fw-bold mt-2 pt-1 mb-0 ms-lg-2">
-              Don't have an account? <a routerLink="/register" class="custom-link">Register</a>
+             Nemate nalog? <a routerLink="/registracija" class="custom-link">Registrujte se</a>
             </p>
           </div>
         </form>

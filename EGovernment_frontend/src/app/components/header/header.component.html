@@ -1,9 +1,8 @@
 <header>
-  <!-- <h4 class="logo" routerLink="/home"> -->
       <button
         class="dropbtn rounded-circle"
         style="width: 90px; height: 60px"
-        routerLink="/home"
+        routerLink="/pocetna"
       >
         <img
           src="assets/images/logo.jpg"
@@ -12,10 +11,9 @@
           loading="lazy"
         />
       </button>
-  <!-- </h4> -->
   <ul class="main-nav">
-    <li *ngIf="!hasSignedIn()" routerLink="/register">Register</li>
-    <li *ngIf="!hasSignedIn()" routerLink="/login">Log In</li>
+    <li *ngIf="!hasSignedIn()" routerLink="/registracija">Registrujte se</li>
+    <li *ngIf="!hasSignedIn()" routerLink="/prijava">Prijavite se</li>
     <li>
       <div class="dropdown" *ngIf="hasSignedIn()">
         <button
@@ -31,7 +29,7 @@
         </button>
 
         <div class="dropdown-content">
-          <a (click)="logout()">Logout</a>
+          <a (click)="logout()">Odjava</a>
         </div>
       </div>
     </li>

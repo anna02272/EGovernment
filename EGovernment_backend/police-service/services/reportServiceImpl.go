@@ -68,9 +68,6 @@ func (r *ReportServiceImpl) InsertReport(report *domain.ReportCreate, policemanI
 	// Log the inserted report
 	log.Printf("Inserted traffic report: %+v\n", trafficReport)
 
-	// Log the inserted report
-	log.Printf("Inserted report: %+v\n", report)
-
 	return &trafficReport, insertedID.Hex(), nil
 }
 

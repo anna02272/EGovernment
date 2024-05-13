@@ -11,6 +11,7 @@ type Vehicle struct {
 	VehicleModel      VehicleModel       `bson:"vehicle_model" json:"vehicle_model"`
 	VehicleOwner      string             `bson:"vehicle_owner" json:"vehicle_owner"`
 	RegistrationDate  time.Time          `bson:"registration_date" json:"registration_date"`
+	Category          Category           `bson:"category" json:"category"`
 }
 
 type VehicleCreate struct {
@@ -18,12 +19,14 @@ type VehicleCreate struct {
 	VehicleModel      VehicleModel `bson:"vehicle_model" json:"vehicle_model"`
 	VehicleOwner      string       `bson:"vehicle_owner" json:"vehicle_owner"`
 	RegistrationDate  time.Time    `bson:"registration_date" json:"registration_date"`
+	Category          Category     `bson:"category" json:"category"`
 }
 
 type VehicleModel string
 
 const (
-	CarBMW    = "CarBMW"
-	MotorOPEL = "EngineOPEL"
-	Truck     = "Truck"
+	Fiat   = "Opel"
+	Yugo   = "Yugo"
+	BMW    = "BMW"
+	Nissan = "Nissan"
 )

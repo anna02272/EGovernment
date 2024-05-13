@@ -49,8 +49,7 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 
 	token := h.Header.Get("Authorization")
 	url := "http://auth-service:8085/api/users/currentUser"
-
-	timeout := 5 * time.Second // Adjust the timeout duration as needed
+	timeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -64,7 +63,6 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 		errorMsg := map[string]string{"error": "Error performing authorization request."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
-
 	}
 	defer resp.Body.Close()
 
@@ -77,7 +75,6 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 
 	decoder := json.NewDecoder(resp.Body)
 
-	// Define a struct to represent the JSON structure
 	var responseUser struct {
 		LoggedInUser struct {
 			username string        `json:"username"`
@@ -93,8 +90,8 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 	}
 
 	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not policeman"}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		errorMsg := map[string]string{"error": "Unauthorized. You are not a policeman."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
 		return
 	}
 
@@ -106,11 +103,40 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 	}
 
 	driverLicenceInsert, ok := driverLicence.(domain.DriverLicenceCreate)
-
 	if !ok {
 		errorMsg := map[string]string{"error": "Invalid type for driver licence."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
+	}
+
+	delictURL := "http://police-service:8084/api/delict/get/delictType/DrivingUnderAlchocolism"
+	delictResp, err := http.Get(delictURL)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to check delicts."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	defer delictResp.Body.Close()
+
+	if delictResp.StatusCode == http.StatusOK {
+		var delicts []map[string]interface{}
+		if err := json.NewDecoder(delictResp.Body).Decode(&delicts); err != nil {
+			errorMsg := map[string]string{"error": "Failed to decode delicts."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+			return
+		}
+
+		for _, delict := range delicts {
+			driverID, ok := delict["driver_identification_number"].(string)
+			if !ok {
+				continue
+			}
+			if driverID == driverLicenceInsert.VehicleDriver {
+				errorMsg := map[string]string{"error": "Driver has a delict related to driving under alcoholism. Cannot issue driver licence."}
+				errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+				return
+			}
+		}
 	}
 
 	driverLicenceInsertDB, _, err := s.service.InsertDriverLicence(&driverLicenceInsert)
@@ -127,7 +153,6 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 		return
 	}
 	rw.Write(jsonResponse)
-
 }
 
 func (s *DriverLicenceHandler) GetLicenceByID(c *gin.Context) {

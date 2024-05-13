@@ -20,6 +20,7 @@ type Delict struct {
 type DelictType string
 
 const (
+	DrivingUnderAlchocolism                   = "DrivingUnderAlchocolism"
 	Speeding                                  = "Speeding"
 	DrivingUnderTheInfluence                  = "DrivingUnderTheInfluence"
 	ImproperOvertaking                        = "ImproperOvertaking"

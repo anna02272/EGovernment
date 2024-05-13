@@ -109,7 +109,7 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 		return
 	}
 
-	url = "http://police-service:8084/api/delict/get/delictType/DrivingUnderAlchocolism"
+	url = "http://police-service:8084/api/delict/get/delictType/DrivingUnderTheInfluenceOfAlcohol"
 	delictResp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
 	if err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
@@ -117,6 +117,7 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 			return
 		}
+		fmt.Println(err)
 		errorMsg := map[string]string{"error": "Failed to check delicts."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return

@@ -109,7 +109,7 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 		return
 	}
 
-	url = " http://police-service:8084/api/delict/get/delictType/DrivingUnderAlchocolism"
+	url = "http://police-service:8084/api/delict/get/delictType/DrivingUnderAlchocolism"
 	delictResp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
 	if err != nil {
 		if ctx.Err() == context.DeadlineExceeded {

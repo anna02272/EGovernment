@@ -22,6 +22,8 @@ func (d *CarAccidentRouteHandler) CarAccidentRoute(rg *gin.RouterGroup) {
 	router.POST("/createCarAccident", MiddlewareCarAccidentDeserialization, d.handler.CreateCarAccident)
 	router.GET("/all", d.handler.GetAllCarAccidents)
 	router.GET("/get/:id", d.handler.GetCarAccidentByID)
+	router.GET("/getPolicemanCarAccident", d.handler.GetCarAccidentsByPolicemanID)
+	router.GET("/getDriverCarAccident", d.handler.GetCarAccidentsByDriver)
 	router.GET("/get/carAccidentType/:carAccidentType", d.handler.GetAllCarAccidentsByType)
 	router.GET("/get/degreeOfAccident/:degreeOfAccident", d.handler.GetAllCarAccidentsByDegree)
 }

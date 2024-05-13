@@ -66,26 +66,12 @@ export class RegistrationComponent {
 
     this.authService.register(this.new).subscribe({
       next: () => {
-      this.authService.login(this.new).subscribe({
-        next: () => {
+        this.authService.login(this.new).subscribe(() => {
           this.submitted = true;
-          this.userService.getMyInfo().subscribe(() => {    
-            const role = this.userService.currentUser.user.userRole;
-            console.log(role);
-            if (role === UserRole.Citizen){
-              this.router.navigate(['/pocetna']);
-            } else if (role === UserRole.Employee){
-              this.router.navigate(['/zavodZaStatistiku']);
-            } else if (role === UserRole.Policeman){
-              this.router.navigate(['/mupVozila']);
-            } else if (role === UserRole.TrafficPoliceman){
-              this.router.navigate(['/saobracajnaPolicija']);
-            } else if (role === UserRole.Judge){
-              this.router.navigate(['/prekrsajniSud']);   
-            }
-          });
-        
-        },
+          this.userService.getMyInfo().subscribe();
+          this.router.navigate(['/pocetna']);
+        });
+      },
       error: (error) => {
         if (error.status === 409) {
           if (error.error.message === 'Username already exists') {
@@ -104,8 +90,6 @@ export class RegistrationComponent {
         this.submitted = false;
       }
       });
-    }
-   });
   }  
   
 

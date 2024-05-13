@@ -22,7 +22,7 @@ type DelictType string
 const (
 	DrivingUnderAlchocolism                   = "DrivingUnderAlchocolism"
 	Speeding                                  = "Speeding"
-	DrivingUnderTheInfluence                  = "DrivingUnderTheInfluence"
+	DrivingUnderTheInfluenceOfAlcohol         = "DrivingUnderTheInfluenceOfAlcohol"
 	ImproperOvertaking                        = "ImproperOvertaking"
 	ImproperParking                           = "ImproperParking"
 	FailureTooComplyWithTrafficLightsAndSigns = "FailureTooComplyWithTrafficLightsAndSigns"

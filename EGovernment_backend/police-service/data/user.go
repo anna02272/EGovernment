@@ -13,6 +13,7 @@ const (
 	Policeman        = "Policeman"
 	TrafficPoliceman = "TrafficPoliceman"
 	Judge            = "Judge"
+	Citizen          = "Citizen"
 )
 
 func (u User) Equals(user User) bool {

@@ -15,6 +15,33 @@ type DelictServiceImpl struct {
 	ctx        context.Context
 }
 
+func (d *DelictServiceImpl) GetAllDelictsForDriverByDelictType(driverID string) ([]*domain.Delict, error) {
+	var delicts []*domain.Delict
+	filter := bson.M{
+		"driver_identification_number": driverID,
+		"delict_type":                  domain.DrivingUnderTheInfluenceOfAlcohol,
+	}
+
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+
+	for cursor.Next(d.ctx) {
+		var delict domain.Delict
+		if err := cursor.Decode(&delict); err != nil {
+			return nil, err
+		}
+		delicts = append(delicts, &delict)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return delicts, nil
+}
+
 func NewDelictServiceImpl(collection *mongo.Collection, ctx context.Context) DelictService {
 	return &DelictServiceImpl{collection, ctx}
 }
@@ -87,6 +114,48 @@ func (d DelictServiceImpl) GetDelictById(delictId string, ctx context.Context) (
 		return nil, err
 	}
 	return &delict, nil
+}
+
+func (d *DelictServiceImpl) GetAllDelictsByPolicemanID(policemanID string) ([]*domain.Delict, error) {
+	var delicts []*domain.Delict
+	filter := bson.M{"policeman_id": policemanID}
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+	for cursor.Next(d.ctx) {
+		var delict domain.Delict
+		if err := cursor.Decode(&delict); err != nil {
+			return nil, err
+		}
+		delicts = append(delicts, &delict)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+	return delicts, nil
+}
+
+func (d *DelictServiceImpl) GetAllDelictsByDriver(driverEmail string) ([]*domain.Delict, error) {
+	var delicts []*domain.Delict
+	filter := bson.M{"driver_email": driverEmail}
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+	for cursor.Next(d.ctx) {
+		var delict domain.Delict
+		if err := cursor.Decode(&delict); err != nil {
+			return nil, err
+		}
+		delicts = append(delicts, &delict)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+	return delicts, nil
 }
 
 func (d *DelictServiceImpl) GetAllDelictsByDelictType(delictType domain.DelictType) ([]*domain.Delict, error) {

@@ -11,4 +11,6 @@ type CarAccidentService interface {
 	GetCarAccidentById(carAccidentId string, ctx context.Context) (*domain.CarAccident, error)
 	GetAllCarAccidentsByType(carAccidentType domain.CarAccidentType) ([]*domain.CarAccident, error)
 	GetAllCarAccidentsByDegree(degreeOfAccident domain.DegreeOfAccident) ([]*domain.CarAccident, error)
+	GetAllCarAccidentsByPolicemanID(policemanID string) ([]*domain.CarAccident, error)
+	GetAllCarAccidentsByDriver(driverEmail string) ([]*domain.CarAccident, error)
 }

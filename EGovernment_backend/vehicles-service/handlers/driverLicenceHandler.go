@@ -109,24 +109,41 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 		return
 	}
 
-	delictURL := "http://police-service:8084/api/delict/get/delictType/DrivingUnderAlchocolism"
-	delictResp, err := http.Get(delictURL)
+	url = " http://police-service:8084/api/delict/get/delictType/DrivingUnderAlchocolism"
+	delictResp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
 	if err != nil {
+		if ctx.Err() == context.DeadlineExceeded {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
 		errorMsg := map[string]string{"error": "Failed to check delicts."}
-		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
 	defer delictResp.Body.Close()
 
+	statusCode = delictResp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Wrong delict type data."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	decoderDelict := json.NewDecoder(delictResp.Body)
+
 	if delictResp.StatusCode == http.StatusOK {
 		var delicts []map[string]interface{}
-		if err := json.NewDecoder(delictResp.Body).Decode(&delicts); err != nil {
+		if err := decoderDelict.Decode(&delicts); err != nil {
 			errorMsg := map[string]string{"error": "Failed to decode delicts."}
 			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
 			return
 		}
 
 		for _, delict := range delicts {
+			fmt.Println(delicts)
+			fmt.Println("Delicts")
+
 			driverID, ok := delict["driver_identification_number"].(string)
 			if !ok {
 				continue

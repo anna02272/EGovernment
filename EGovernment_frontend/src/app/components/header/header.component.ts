@@ -24,6 +24,6 @@ export class HeaderComponent {
     this.authService.logout();
   }
   getRole() {
-    return this.userService.currentUser?.user.userRole;
+    return this.userService.currentUser.user.userRole;
   }
 }

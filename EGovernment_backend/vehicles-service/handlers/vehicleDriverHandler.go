@@ -222,8 +222,15 @@ func (s *VehicleDriverHandler) GetVehicleDriverByID(c *gin.Context) {
 		return
 	}
 
-	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not a policeman."}
+	allowedRoles := map[data.UserRole]bool{
+		data.TrafficPoliceman: true,
+		data.Policeman:        true,
+		data.Employee:         false,
+		data.Judge:            false,
+	}
+
+	if !allowedRoles[responseUser.LoggedInUser.UserRole] {
+		errorMsg := map[string]string{"error": "Unauthorized. You do not have access to this resource."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
 		return
 	}

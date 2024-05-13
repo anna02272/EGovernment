@@ -211,6 +211,90 @@ func (s *VehicleHandler) GetAllVehicles(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
+func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if ctx.Err() == context.DeadlineExceeded {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	decoder := json.NewDecoder(resp.Body)
+
+	var responseUser struct {
+		LoggedInUser struct {
+			username string        `json:"username"`
+			email    string        `json:"email"`
+			UserRole data.UserRole `json:"userRole"`
+		} `json:"user"`
+	}
+
+	if err := decoder.Decode(&responseUser); err != nil {
+		errorMsg := map[string]string{"error": "User object was not valid."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	if responseUser.LoggedInUser.UserRole != data.Policeman {
+		errorMsg := map[string]string{"error": "Unauthorized. You are not policeman"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	vehicles, err := s.service.GetAllRegisteedVehicles()
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve registered vehicles from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	if len(vehicles) == 0 {
+		errorMsg := map[string]string{"message": "No registered vehicles found."}
+		jsonResponse, err := json.Marshal(errorMsg)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error marshaling JSON."}, http.StatusInternalServerError)
+			return
+		}
+		rw.Header().Set("Content-Type", "application/json")
+		rw.WriteHeader(http.StatusNotFound)
+		rw.Write(jsonResponse)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(vehicles)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
 func (s *VehicleHandler) GetVehicleByID(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
@@ -254,8 +338,15 @@ func (s *VehicleHandler) GetVehicleByID(c *gin.Context) {
 		return
 	}
 
-	if responseUser.LoggedInUser.UserRole != data.Policeman {
-		errorMsg := map[string]string{"error": "Unauthorized. You are not a policeman."}
+	allowedRoles := map[data.UserRole]bool{
+		data.TrafficPoliceman: true,
+		data.Policeman:        true,
+		data.Employee:         false,
+		data.Judge:            false,
+	}
+
+	if !allowedRoles[responseUser.LoggedInUser.UserRole] {
+		errorMsg := map[string]string{"error": "Unauthorized. You do not have access to this resource."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
 		return
 	}

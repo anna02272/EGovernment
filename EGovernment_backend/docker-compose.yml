@@ -55,6 +55,24 @@ services:
     networks:
       - network
 
+  police-service:
+    build:
+      context: ./police-service/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: police-service
+    hostname: police-service
+    ports:
+      - "8084:8084"
+    environment:
+      - PORT=8084
+      - MONGO_DB_URI=mongodb://root:root@mongo:27017
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - network
+
   auth-service:
     build:
       context: ./auth-service/

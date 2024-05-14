@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"gopkg.in/gomail.v2"
 	"log"
 	"net/http"
 	"police-service/data"
@@ -118,6 +119,12 @@ func (s *CarAccidentHandler) CreateCarAccident(c *gin.Context) {
 		return
 	}
 
+	/*err = s.sendCarAccidentMail(carAccidentInsertDB.Description, carAccidentInsertDB.DriverEmail)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
+		return
+	}*/
+
 	rw.WriteHeader(http.StatusCreated)
 	jsonResponse, err1 := json.Marshal(carAccidentInsertDB)
 	if err1 != nil {
@@ -135,6 +142,25 @@ func isValidCarAccidentType(carAccidentType domain.CarAccidentType) bool {
 	default:
 		return false
 	}
+}
+
+func (s *CarAccidentHandler) sendCarAccidentMail(Description, email string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", smtpEmail)
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "EUprava obavestenje")
+
+	bodyString := fmt.Sprintf("Za Vas je kreirana saobracajna nesreca sa opisom:\n %s \nStanje vase saobracajne nesrece mozete pratiti na portalu EUprave https://localhost:4200/", Description)
+	m.SetBody("text", bodyString)
+
+	client := gomail.NewDialer(smtpServer, smtpServerPort, smtpEmail, smtpPassword)
+
+	if err := client.DialAndSend(m); err != nil {
+		log.Fatalf("Failed to send mail because of: %s", err)
+		return err
+	}
+
+	return nil
 }
 
 func isValidCarAccidentDegreeOfAccident(degreeOfAccident domain.DegreeOfAccident) bool {

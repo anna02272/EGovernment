@@ -72,6 +72,8 @@ services:
         condition: service_healthy
     networks:
       - network
+    dns:
+      - 8.8.8.8
 
   auth-service:
     build:

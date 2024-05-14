@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"gopkg.in/gomail.v2"
 	"log"
 	"net/http"
 	"police-service/data"
@@ -16,6 +17,13 @@ import (
 	"police-service/services"
 	"strconv"
 	"time"
+)
+
+var (
+	smtpServer     = "smtp.office365.com"
+	smtpServerPort = 587
+	smtpEmail      = "EGovernmentPolice@outlook.com"
+	smtpPassword   = "amhrxqinoamvtcss"
 )
 
 type DelictHandler struct {
@@ -100,6 +108,13 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
+
+	/*err = s.sendDelictMail(delictInsertDB.Description, delictInsertDB.DriverEmail)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
+		return
+	}*/
+
 	rw.WriteHeader(http.StatusCreated)
 	jsonResponse, err1 := json.Marshal(delictInsertDB)
 	if err1 != nil {
@@ -117,6 +132,26 @@ func isValidDelictType(delictType domain.DelictType) bool {
 		return false
 	}
 }
+
+func (s *DelictHandler) sendDelictMail(Description, email string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", smtpEmail)
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "EUprava obavestenje")
+
+	bodyString := fmt.Sprintf("Za Vas je kreiran prekrsaj sa opisom:\n %s \nStanje vaseg prekrsaja mozete pratiti na portalu EUprave https://localhost:4200/", Description)
+	m.SetBody("text", bodyString)
+
+	client := gomail.NewDialer(smtpServer, smtpServerPort, smtpEmail, smtpPassword)
+
+	if err := client.DialAndSend(m); err != nil {
+		log.Fatalf("Failed to send mail because of: %s", err)
+		return err
+	}
+
+	return nil
+}
+
 func (s *DelictHandler) GetAllDelicts(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request

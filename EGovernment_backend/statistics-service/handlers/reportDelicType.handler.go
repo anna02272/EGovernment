@@ -43,17 +43,17 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 		return
 	}
 	var requestBody struct {
-		Title       string `json:"title" binding:"required"`
-		TotalNumber int    `json:"total_number" binding:"required"`
+		Title string `json:"title" binding:"required"`
 	}
+
 	if err := c.BindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse request body"})
 		return
 	}
 
-	delict, err := r.getDelictsByTypeFromPoliceService(token, domain.DelictType(delictType), c)
+	totalNumber, err := r.GetDelictsCountPoliceService(token, domain.DelictType(delictType))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to obtain delicts information.Try again later."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to obtain delicts information. Try again later."})
 		return
 	}
 
@@ -61,10 +61,10 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 	id := primitive.NewObjectID()
 	newReport := &domain.ReportDelict{
 		ID:          id,
-		Type:        delict.DelictType,
+		Type:        domain.DelictType(delictType),
 		Title:       requestBody.Title,
 		Date:        currentDateTime,
-		TotalNumber: requestBody.TotalNumber,
+		TotalNumber: totalNumber,
 	}
 
 	err, _ = r.service.Create(newReport)
@@ -74,6 +74,68 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Report successfully saved", "report": newReport})
+}
+
+func (r *ReportDelicTypeHandler) GetAll(c *gin.Context) {
+	rw := c.Writer
+
+	reports, err := r.service.GetAll()
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	jsonResponse, err := json.Marshal(reports)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
+func (r *ReportDelicTypeHandler) GetByID(c *gin.Context) {
+	rw := c.Writer
+	id := c.Param("id")
+	report, err := r.service.GetById(id)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve report from the database.No such report."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	jsonResponse, err := json.Marshal(report)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
+func (r *ReportDelicTypeHandler) GetAllByDelictType(c *gin.Context) {
+	rw := c.Writer
+	delictType := c.Param("delictType")
+
+	reports, err := r.service.GetAllByDelictType(domain.DelictType(delictType))
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(reports)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
 }
 
 func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw http.ResponseWriter) (*domain.User, error) {
@@ -114,33 +176,65 @@ func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw 
 	return &domain.User{UserRole: responseUser.LoggedInUser.UserRole}, nil
 }
 
-func (r *ReportDelicTypeHandler) getDelictsByTypeFromPoliceService(token string, delictType domain.DelictType, ctx context.Context) (*domain.Delict, error) {
-	baseUrl := "http://police-service:8084/api/delict/get/delictType/"
-	url := baseUrl + url.QueryEscape(string(delictType))
+func (r *ReportDelicTypeHandler) GetDelictsCountPoliceService(token string, delictType domain.DelictType) (int, error) {
+	baseURL := "http://police-service:8084/api/delict/get/delictType/"
+	url := baseURL + url.QueryEscape(string(delictType))
 
-	timeout := 2000 * time.Second
+	timeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	resp, err := r.performAuthorizationRequestWithContext("GET", ctx, token, string(url))
+	resp, err := r.performAuthorizationRequestWithContext("GET", ctx, token, url)
 	if err != nil {
-		return nil, errors.New("police service is not available")
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			return 0, errors.New("police service is not available")
+		}
+		return 0, errors.New("error performing request")
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("delict not found")
+	var delicts []domain.Delict
+	if err := json.NewDecoder(resp.Body).Decode(&delicts); err != nil {
+		return 0, errors.New("failed to retrieve delicts")
 	}
 
-	var delict domain.Delict
-	if err := json.NewDecoder(resp.Body).Decode(&delict); err != nil {
-		return nil, err
-	}
-
-	return &delict, nil
+	return len(delicts), nil
 }
 
-func (s *ReportDelicTypeHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
+func (r *ReportDelicTypeHandler) GetDelictsByTypeFromPoliceService(token string, delictType domain.DelictType) (*domain.Delict, error) {
+	baseURL := "http://police-service:8084/api/delict/get/delictType/"
+	url := baseURL + url.QueryEscape(string(delictType))
+
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := r.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			return nil, errors.New("police service is not available")
+		}
+		return nil, errors.New("error performing request")
+	}
+	defer resp.Body.Close()
+
+	//if statusCode != http.StatusOK {
+	//	return nil, errors.New("unauthorized")
+	//}	statusCode := resp.StatusCode
+
+	var delicts []domain.Delict
+	if err := json.NewDecoder(resp.Body).Decode(&delicts); err != nil {
+		return nil, errors.New("failed to retrieve delicts.")
+	}
+
+	if len(delicts) == 0 {
+		return nil, errors.New("No delicts found for the specified type.")
+	}
+
+	return &delicts[0], nil
+}
+
+func (r *ReportDelicTypeHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return nil, err

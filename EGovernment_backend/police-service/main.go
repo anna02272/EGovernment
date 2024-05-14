@@ -47,11 +47,11 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	delictCollection = mongoClient.Database("EGovernment").Collection("delict")
+	delictCollection = mongoClient.Database("Police").Collection("delict")
 	//log.Println("Delict Collection:", delictCollection)
-	reportCollection = mongoClient.Database("EGovernment").Collection("report")
+	reportCollection = mongoClient.Database("Police").Collection("report")
 	//log.Println("Report Collection:", reportCollection)
-	carAccidentCollection = mongoClient.Database("EGovernment").Collection("carAccident")
+	carAccidentCollection = mongoClient.Database("Police").Collection("carAccident")
 
 	reportService = services.NewReportServiceImpl(reportCollection, ctx)
 	reportHandler = handlers.NewReportHandler(reportService, reportCollection)

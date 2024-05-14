@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"statistics-service/domain"
-	"time"
 )
 
 type ReportDelicTypeServiceImpl struct {
@@ -19,11 +19,7 @@ func NewReportDelicTypeImpl(collection *mongo.Collection, ctx context.Context) R
 }
 
 func (r *ReportDelicTypeServiceImpl) Create(report *domain.ReportDelict) (error, bool) {
-	timeObj := report.Date.Time()
-	year := timeObj.Year()
-
 	filter := bson.M{
-		"date": bson.M{"$gte": time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC), "$lt": time.Date(year+1, 1, 1, 0, 0, 0, 0, time.UTC)},
 		"type": report.Type,
 	}
 
@@ -54,4 +50,66 @@ func (r *ReportDelicTypeServiceImpl) Create(report *domain.ReportDelict) (error,
 	}
 
 	return nil, true
+}
+
+func (r *ReportDelicTypeServiceImpl) GetAll() ([]*domain.ReportDelict, error) {
+	var reports []*domain.ReportDelict
+	filter := bson.D{}
+
+	cursor, err := r.collection.Find(r.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(r.ctx)
+
+	for cursor.Next(r.ctx) {
+		var report domain.ReportDelict
+		if err := cursor.Decode(&report); err != nil {
+			return nil, err
+		}
+		reports = append(reports, &report)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return reports, nil
+}
+
+func (r *ReportDelicTypeServiceImpl) GetById(id string) (*domain.ReportDelict, error) {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var report domain.ReportDelict
+	err = r.collection.FindOne(r.ctx, bson.M{"_id": objID}).Decode(&report)
+	if err != nil {
+		return nil, err
+	}
+	return &report, nil
+}
+
+func (r *ReportDelicTypeServiceImpl) GetAllByDelictType(delictType domain.DelictType) ([]*domain.ReportDelict, error) {
+	var reports []*domain.ReportDelict
+	filter := bson.M{"type": delictType}
+
+	cursor, err := r.collection.Find(r.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(r.ctx)
+
+	for cursor.Next(r.ctx) {
+		var report domain.ReportDelict
+		if err := cursor.Decode(&report); err != nil {
+			return nil, err
+		}
+		reports = append(reports, &report)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return reports, nil
 }

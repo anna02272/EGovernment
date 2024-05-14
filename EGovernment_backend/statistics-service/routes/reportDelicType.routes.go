@@ -16,6 +16,9 @@ func NewReportDelicTypeRouteHandler(handler handlers.ReportDelicTypeHandler, ser
 }
 
 func (rc *ReportDelicTypeRouteHandler) Route(rg *gin.RouterGroup) {
-	router := rg.Group("/statistics")
-	router.POST("/create/delictReport/:delictType", rc.handler.CreateDelictsReport)
+	router := rg.Group("/delictReport")
+	router.POST("/create/:delictType", rc.handler.CreateDelictsReport)
+	router.GET("/all", rc.handler.GetAll)
+	router.GET("/get/:id", rc.handler.GetByID)
+	router.GET("/get/delictType/:delictType", rc.handler.GetAllByDelictType)
 }

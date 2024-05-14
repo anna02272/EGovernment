@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,6 +13,7 @@ import (
 	"statistics-service/domain"
 	errorMessage "statistics-service/error"
 	"statistics-service/services"
+	"strconv"
 	"time"
 )
 
@@ -28,9 +30,17 @@ func NewReportDelicTypeHandler(service services.ReportDelicTypeService, db *mong
 }
 
 func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
-	delictType := c.Param("delictType")
 	rw := c.Writer
 	h := c.Request
+
+	delictType := c.Param("delictType")
+	yearStr := c.Param("year")
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
 
 	token := h.Header.Get("Authorization")
 	user, err := r.GetCurrentUserFromAuthService(token, rw)
@@ -51,7 +61,7 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 		return
 	}
 
-	totalNumber, err := r.GetDelictsCountPoliceService(token, domain.DelictType(delictType))
+	totalNumber, yearFromService, err := r.GetDelictsCountAndYearPoliceService(token, domain.DelictType(delictType), year)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to obtain delicts information. Try again later."})
 		return
@@ -65,6 +75,7 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 		Title:       requestBody.Title,
 		Date:        currentDateTime,
 		TotalNumber: totalNumber,
+		Year:        yearFromService,
 	}
 
 	err, _ = r.service.Create(newReport)
@@ -138,6 +149,36 @@ func (r *ReportDelicTypeHandler) GetAllByDelictType(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
+func (r *ReportDelicTypeHandler) GetAllByDelictTypeAndYear(c *gin.Context) {
+	rw := c.Writer
+	delictType := c.Param("delictType")
+
+	yearStr := c.Param("year")
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	reports, err := r.service.GetAllByDelictTypeAndYear(domain.DelictType(delictType), year)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(reports)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
 func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw http.ResponseWriter) (*domain.User, error) {
 	url := "http://auth-service:8085/api/users/currentUser"
 
@@ -176,62 +217,28 @@ func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw 
 	return &domain.User{UserRole: responseUser.LoggedInUser.UserRole}, nil
 }
 
-func (r *ReportDelicTypeHandler) GetDelictsCountPoliceService(token string, delictType domain.DelictType) (int, error) {
-	baseURL := "http://police-service:8084/api/delict/get/delictType/"
-	url := baseURL + url.QueryEscape(string(delictType))
+func (r *ReportDelicTypeHandler) GetDelictsCountAndYearPoliceService(token string, delictType domain.DelictType, year int) (int, int, error) {
+	baseURL := fmt.Sprintf("http://police-service:8084/api/delict/get/delictType/%s/year/%d", url.QueryEscape(string(delictType)), year)
 
 	timeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	resp, err := r.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	resp, err := r.performAuthorizationRequestWithContext("GET", ctx, token, baseURL)
 	if err != nil {
 		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
-			return 0, errors.New("police service is not available")
+			return 0, 0, errors.New("police service is not available")
 		}
-		return 0, errors.New("error performing request")
+		return 0, 0, errors.New("error performing request")
 	}
 	defer resp.Body.Close()
 
 	var delicts []domain.Delict
 	if err := json.NewDecoder(resp.Body).Decode(&delicts); err != nil {
-		return 0, errors.New("failed to retrieve delicts")
+		return 0, 0, errors.New("failed to retrieve delicts")
 	}
 
-	return len(delicts), nil
-}
-
-func (r *ReportDelicTypeHandler) GetDelictsByTypeFromPoliceService(token string, delictType domain.DelictType) (*domain.Delict, error) {
-	baseURL := "http://police-service:8084/api/delict/get/delictType/"
-	url := baseURL + url.QueryEscape(string(delictType))
-
-	timeout := 5 * time.Second
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	resp, err := r.performAuthorizationRequestWithContext("GET", ctx, token, url)
-	if err != nil {
-		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
-			return nil, errors.New("police service is not available")
-		}
-		return nil, errors.New("error performing request")
-	}
-	defer resp.Body.Close()
-
-	//if statusCode != http.StatusOK {
-	//	return nil, errors.New("unauthorized")
-	//}	statusCode := resp.StatusCode
-
-	var delicts []domain.Delict
-	if err := json.NewDecoder(resp.Body).Decode(&delicts); err != nil {
-		return nil, errors.New("failed to retrieve delicts.")
-	}
-
-	if len(delicts) == 0 {
-		return nil, errors.New("No delicts found for the specified type.")
-	}
-
-	return &delicts[0], nil
+	return len(delicts), year, nil
 }
 
 func (r *ReportDelicTypeHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {

@@ -181,3 +181,36 @@ func (d *DelictServiceImpl) GetAllDelictsByDelictType(delictType domain.DelictTy
 
 	return delicts, nil
 }
+
+func (d *DelictServiceImpl) GetAllDelictsByDelictTypeAndYear(delictType domain.DelictType, year int) ([]*domain.Delict, error) {
+	var delicts []*domain.Delict
+	startOfYear := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	endOfYear := startOfYear.AddDate(1, 0, 0)
+
+	filter := bson.M{
+		"delict_type": delictType,
+		"date": bson.M{
+			"$gte": startOfYear,
+			"$lt":  endOfYear,
+		},
+	}
+
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+
+	for cursor.Next(d.ctx) {
+		var delict domain.Delict
+		if err := cursor.Decode(&delict); err != nil {
+			return nil, err
+		}
+		delicts = append(delicts, &delict)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return delicts, nil
+}

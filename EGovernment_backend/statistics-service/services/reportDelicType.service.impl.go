@@ -21,6 +21,7 @@ func NewReportDelicTypeImpl(collection *mongo.Collection, ctx context.Context) R
 func (r *ReportDelicTypeServiceImpl) Create(report *domain.ReportDelict) (error, bool) {
 	filter := bson.M{
 		"type": report.Type,
+		"year": report.Year,
 	}
 
 	existing := &domain.ReportDelict{}
@@ -93,6 +94,30 @@ func (r *ReportDelicTypeServiceImpl) GetById(id string) (*domain.ReportDelict, e
 func (r *ReportDelicTypeServiceImpl) GetAllByDelictType(delictType domain.DelictType) ([]*domain.ReportDelict, error) {
 	var reports []*domain.ReportDelict
 	filter := bson.M{"type": delictType}
+
+	cursor, err := r.collection.Find(r.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(r.ctx)
+
+	for cursor.Next(r.ctx) {
+		var report domain.ReportDelict
+		if err := cursor.Decode(&report); err != nil {
+			return nil, err
+		}
+		reports = append(reports, &report)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return reports, nil
+}
+
+func (r *ReportDelicTypeServiceImpl) GetAllByDelictTypeAndYear(delictType domain.DelictType, year int) ([]*domain.ReportDelict, error) {
+	var reports []*domain.ReportDelict
+	filter := bson.M{"type": delictType, "year": year}
 
 	cursor, err := r.collection.Find(r.ctx, filter)
 	if err != nil {

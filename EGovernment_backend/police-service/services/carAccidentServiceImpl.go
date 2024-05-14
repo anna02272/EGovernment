@@ -139,3 +139,51 @@ func (c CarAccidentServiceImpl) GetAllCarAccidentsByDegree(degreeOfAccident doma
 
 	return carAccidents, nil
 }
+
+func (c CarAccidentServiceImpl) GetAllCarAccidentsByPolicemanID(policemanID string) ([]*domain.CarAccident, error) {
+	var carAccidents []*domain.CarAccident
+	filter := bson.M{"policeman_id": policemanID}
+
+	cursor, err := c.collection.Find(c.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(c.ctx)
+
+	for cursor.Next(c.ctx) {
+		var carAccident domain.CarAccident
+		if err := cursor.Decode(&carAccident); err != nil {
+			return nil, err
+		}
+		carAccidents = append(carAccidents, &carAccident)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return carAccidents, nil
+}
+
+func (c CarAccidentServiceImpl) GetAllCarAccidentsByDriver(driverEmail string) ([]*domain.CarAccident, error) {
+	var carAccidents []*domain.CarAccident
+	filter := bson.M{"driver_email": driverEmail}
+
+	cursor, err := c.collection.Find(c.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(c.ctx)
+
+	for cursor.Next(c.ctx) {
+		var carAccident domain.CarAccident
+		if err := cursor.Decode(&carAccident); err != nil {
+			return nil, err
+		}
+		carAccidents = append(carAccidents, &carAccident)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return carAccidents, nil
+}

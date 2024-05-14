@@ -9,7 +9,10 @@ type User struct {
 type UserRole string
 
 const (
-	Policeman UserRole = "Policeman"
+	Employee         = "Employee"
+	Policeman        = "Policeman"
+	TrafficPoliceman = "TrafficPoliceman"
+	Judge            = "Judge"
 )
 
 func (u User) Equals(user User) bool {

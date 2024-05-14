@@ -26,6 +26,7 @@ func (s *VehicleServiceImpl) InsertVehicle(vehicle *domain.VehicleCreate) (*doma
 	vehicleToInsert.VehicleModel = vehicle.VehicleModel
 	vehicleToInsert.VehicleOwner = vehicle.VehicleOwner
 	vehicleToInsert.RegistrationDate = vehicle.RegistrationDate
+	vehicleToInsert.Category = vehicle.Category
 	result, err := s.collection.InsertOne(context.Background(), vehicle)
 	if err != nil {
 		return nil, "", err

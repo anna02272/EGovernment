@@ -16,12 +16,12 @@ type Delict struct {
 	DelictType                 DelictType         `bson:"delict_type" json:"delict_type"`
 	NumberOfPenaltyPoints      int64              `bson:"number_of_penalty_points" json:"number_of_penalty_points"`
 }
-
 type DelictType string
 
 const (
 	Speeding                                  = "Speeding"
 	DrivingUnderTheInfluence                  = "DrivingUnderTheInfluence"
+	DrivingUnderTheInfluenceOfAlcohol         = "DrivingUnderTheInfluenceOfAlcohol"
 	ImproperOvertaking                        = "ImproperOvertaking"
 	ImproperParking                           = "ImproperParking"
 	FailureTooComplyWithTrafficLightsAndSigns = "FailureTooComplyWithTrafficLightsAndSigns"

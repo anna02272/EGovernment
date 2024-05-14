@@ -15,13 +15,13 @@ import (
 )
 
 var (
-	server                 *gin.Engine
-	ctx                    context.Context
-	mongoClient            *mongo.Client
-	statisticsCollection   *mongo.Collection
-	statisticsService      services.StatisticsService
-	statisticsHandler      handlers.StatisticsHandler
-	statisticsRouteHandler routes.StatisticsRouteHandler
+	server                      *gin.Engine
+	ctx                         context.Context
+	mongoClient                 *mongo.Client
+	reportDelicTypeCollection   *mongo.Collection
+	reportDelicTypeService      services.ReportDelicTypeService
+	reportDelicTypeHandler      handlers.ReportDelicTypeHandler
+	reportDelicTypeRouteHandler routes.ReportDelicTypeRouteHandler
 )
 
 func init() {
@@ -39,11 +39,11 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	statisticsCollection = mongoClient.Database("EGovernment").Collection("statistics")
+	reportDelicTypeCollection = mongoClient.Database("Statistics").Collection("reportDelicType")
 
-	statisticsService = services.NewStatisticsServiceImpl(statisticsCollection, ctx)
-	statisticsHandler = handlers.NewStatisticsHandler(statisticsService, statisticsCollection)
-	statisticsRouteHandler = routes.NewStatisticsRouteHandler(statisticsHandler, statisticsService)
+	reportDelicTypeService = services.NewReportDelicTypeImpl(reportDelicTypeCollection, ctx)
+	reportDelicTypeHandler = handlers.NewReportDelicTypeHandler(reportDelicTypeService, reportDelicTypeCollection)
+	reportDelicTypeRouteHandler = routes.NewReportDelicTypeRouteHandler(reportDelicTypeHandler, reportDelicTypeService)
 
 	server = gin.Default()
 
@@ -69,7 +69,7 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Message"})
 	})
 
-	statisticsRouteHandler.StatisticsRoute(router)
+	reportDelicTypeRouteHandler.Route(router)
 
 	err := server.Run(":8082")
 	if err != nil {

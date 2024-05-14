@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -13,6 +14,7 @@ import (
 	"police-service/domain"
 	errorMessage "police-service/error"
 	"police-service/services"
+	"strconv"
 	"time"
 )
 
@@ -468,6 +470,59 @@ func (s *DelictHandler) GetDelictByID(c *gin.Context) {
 		return
 	}
 	jsonResponse, err := json.Marshal(delict)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
+func (s *DelictHandler) GetAllDelictsByDelictTypeAndYear(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+	delictType := c.Param("delictType")
+	yearStr := c.Param("year")
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	delicts, err := s.service.GetAllDelictsByDelictTypeAndYear(domain.DelictType(delictType), year)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve delicts from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	// Convert delicts to JSON
+	jsonResponse, err := json.Marshal(delicts)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Error marshaling JSON."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)

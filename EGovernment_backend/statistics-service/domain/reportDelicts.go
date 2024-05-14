@@ -8,6 +8,7 @@ type ReportDelict struct {
 	Date        primitive.DateTime `bson:"date" json:"date"`
 	TotalNumber int                `bson:"total_number" json:"total_number"`
 	Type        DelictType         `bson:"type" json:"type"`
+	Year        int                `bson:"year" json:"year"`
 }
 
 type Delict struct {

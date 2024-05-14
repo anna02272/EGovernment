@@ -3,10 +3,11 @@ package services
 import (
 	"context"
 	"errors"
+	"statistics-service/domain"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"statistics-service/domain"
 )
 
 type ReportDelicTypeServiceImpl struct {

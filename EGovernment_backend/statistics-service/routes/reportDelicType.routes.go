@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"statistics-service/handlers"
 	"statistics-service/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ReportDelicTypeRouteHandler struct {
@@ -20,5 +21,6 @@ func (rc *ReportDelicTypeRouteHandler) Route(rg *gin.RouterGroup) {
 	router.POST("/create/delictType/:delictType/year/:year", rc.handler.CreateDelictsReport)
 	router.GET("/all", rc.handler.GetAll)
 	router.GET("/get/:id", rc.handler.GetByID)
+	router.GET("/get/delictType/:delictType", rc.handler.GetAllByDelictType)
 	router.GET("/get/delictType/:delictType/year/:year", rc.handler.GetAllByDelictTypeAndYear)
 }

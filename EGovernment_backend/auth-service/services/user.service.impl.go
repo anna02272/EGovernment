@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	_ "io/ioutil"
 	"regexp"
-	"strings"
 )
 
 type UserServiceImpl struct {
@@ -46,7 +45,7 @@ func (us *UserServiceImpl) FindUserByEmail(email string) (*domain.User, error) {
 		return nil, errors.New("invalid email format")
 	}
 
-	query := bson.M{"email": strings.ToLower(email)}
+	query := bson.M{"email": email}
 	err := us.collection.FindOne(us.ctx, query).Decode(&user)
 
 	if err != nil {
@@ -62,7 +61,7 @@ func (us *UserServiceImpl) FindUserByEmail(email string) (*domain.User, error) {
 func (us *UserServiceImpl) FindUserByUsername(username string) (*domain.User, error) {
 	var user *domain.User
 
-	query := bson.M{"username": strings.ToLower(username)}
+	query := bson.M{"username": username}
 	err := us.collection.FindOne(us.ctx, query).Decode(&user)
 
 	if err != nil {

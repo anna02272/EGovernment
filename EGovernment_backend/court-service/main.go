@@ -47,19 +47,19 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	courtCollection = mongoClient.Database("EGovernment").Collection("court")
+	courtCollection = mongoClient.Database("Court").Collection("court")
 
 	courtService = services.NewCourtServiceImpl(courtCollection, ctx)
 	courtHandler = handlers.NewCourtHandler(courtService, courtCollection)
 	courtRouteHandler = routes.NewCourtRouteHandler(courtHandler, courtService)
 
-	citizenCollection = mongoClient.Database("EGovernment").Collection("citizen")
+	citizenCollection = mongoClient.Database("Court").Collection("citizen")
 
 	citizenService = services.NewCitizenServiceImpl(citizenCollection, ctx)
 	citizenHandler = handlers.NewCitizenHandler(citizenService, citizenCollection)
 	citizenRouteHandler = routes.NewCitizenRouteHandler(citizenHandler, citizenService)
 
-	subjectCollection = mongoClient.Database("EGovernment").Collection("subject")
+	subjectCollection = mongoClient.Database("Court").Collection("subject")
 
 	subjectService = services.NewSubjectServiceImpl(subjectCollection, ctx)
 	subjectHandler = handlers.NewSubjectHandler(subjectService, subjectCollection)

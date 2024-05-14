@@ -44,6 +44,10 @@ func (ac *AuthHandler) Login(ctx *gin.Context) {
 			return
 		}
 	}
+	if user == nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "User not found"})
+		return
+	}
 	if err := utils.VerifyPassword(user.Password, credentials.Password); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid password"})
 		return

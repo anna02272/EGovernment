@@ -46,7 +46,7 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	authCollection = mongoClient.Database("EGovernment").Collection("auth")
+	authCollection = mongoClient.Database("Auth").Collection("auth")
 	userService = services.NewUserServiceImpl(authCollection, ctx)
 	authService = services.NewAuthService(authCollection, ctx, userService)
 	AuthHandler = handlers.NewAuthHandler(authService, userService, authCollection)

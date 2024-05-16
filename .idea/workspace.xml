@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51b20573-9e0b-4905-816e-9aaba3b5e036" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/domain/court.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/domain/Court.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/auth-service/services/user.service.impl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/auth-service/services/user.service.impl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/subjectHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/subjectHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/subject.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/subject.routes.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +26,9 @@
   <component name="GOROOT" url="file:///usr/lib/go-1.18" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/go/pkg/mod/go.opentelemetry.io/otel@v1.21.0/propagation.go" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -54,14 +55,11 @@
     "git-widget-placeholder": "vehicles__police",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-<<<<<<< HEAD
     "last_opened_file_path": "C:/Users/Tina/Desktop/EUprava/EGovernment/EGovernment_backend/court-service/data",
-=======
-    "last_opened_file_path": "/home/flower",
->>>>>>> a697628a53f2c93623e467ba8df582ec759a234e
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">

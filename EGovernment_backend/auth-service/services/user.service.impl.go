@@ -46,7 +46,7 @@ func (us *UserServiceImpl) FindUserByEmail(email string) (*domain.User, error) {
 		return nil, errors.New("invalid email format")
 	}
 
-	query := bson.M{"email": strings.ToLower(email)}
+	query := bson.M{"email": email}
 	err := us.collection.FindOne(us.ctx, query).Decode(&user)
 
 	if err != nil {

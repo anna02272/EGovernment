@@ -18,4 +18,6 @@ func NewSubjectRouteHandler(handler handlers.SubjectHandler, service services.Su
 func (sr *SubjectRouteHandler) SubjectRoutes(rg *gin.RouterGroup) {
 	router := rg.Group("/subject")
 	router.POST("/create", sr.handler.CreateSubject)
+	router.GET("/get/:id", sr.handler.GetDelict)
+
 }

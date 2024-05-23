@@ -17,23 +17,23 @@ import (
 	"time"
 )
 
-type ReportDelicTypeHandler struct {
-	service services.ReportDelicTypeService
+type ReportCarAccidentTypeHandler struct {
+	service services.ReportCarAccidentTypeService
 	DB      *mongo.Collection
 }
 
-func NewReportDelicTypeHandler(service services.ReportDelicTypeService, db *mongo.Collection) ReportDelicTypeHandler {
-	return ReportDelicTypeHandler{
+func NewReportCarAccidentTypeHandler(service services.ReportCarAccidentTypeService, db *mongo.Collection) ReportCarAccidentTypeHandler {
+	return ReportCarAccidentTypeHandler{
 		service: service,
 		DB:      db,
 	}
 }
 
-func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
+func (r *ReportCarAccidentTypeHandler) CreateReport(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
 
-	delictType := c.Param("delictType")
+	carAccidentType := c.Param("carAccidentType")
 	yearStr := c.Param("year")
 	year, err := strconv.Atoi(yearStr)
 	if err != nil {
@@ -61,17 +61,17 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 		return
 	}
 
-	totalNumber, err := r.GetDelictsCountAndYearPoliceService(token, domain.DelictType(delictType), year)
+	totalNumber, err := r.GetCarAccidentCountAndYearPoliceService(token, domain.CarAccidentType(carAccidentType), year)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to obtain delicts information. Try again later."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to obtain car accident information. Try again later."})
 		return
 	}
 
 	currentDateTime := primitive.NewDateTimeFromTime(time.Now())
 	id := primitive.NewObjectID()
-	newReport := &domain.ReportDelict{
+	newReport := &domain.ReportCarAccidentType{
 		ID:          id,
-		Type:        domain.DelictType(delictType),
+		Type:        domain.CarAccidentType(carAccidentType),
 		Title:       requestBody.Title,
 		Date:        currentDateTime,
 		TotalNumber: totalNumber,
@@ -87,7 +87,7 @@ func (r *ReportDelicTypeHandler) CreateDelictsReport(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Report successfully saved", "report": newReport})
 }
 
-func (r *ReportDelicTypeHandler) GetAll(c *gin.Context) {
+func (r *ReportCarAccidentTypeHandler) GetAll(c *gin.Context) {
 	rw := c.Writer
 
 	reports, err := r.service.GetAll()
@@ -107,7 +107,7 @@ func (r *ReportDelicTypeHandler) GetAll(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
-func (r *ReportDelicTypeHandler) GetByID(c *gin.Context) {
+func (r *ReportCarAccidentTypeHandler) GetByID(c *gin.Context) {
 	rw := c.Writer
 	id := c.Param("id")
 	report, err := r.service.GetById(id)
@@ -127,11 +127,11 @@ func (r *ReportDelicTypeHandler) GetByID(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
-func (r *ReportDelicTypeHandler) GetAllByDelictType(c *gin.Context) {
+func (r *ReportCarAccidentTypeHandler) GetAllByCarAccidentType(c *gin.Context) {
 	rw := c.Writer
-	delictType := c.Param("delictType")
+	carAccidentType := c.Param("carAccidentType")
 
-	reports, err := r.service.GetAllByDelictType(domain.DelictType(delictType))
+	reports, err := r.service.GetAllByCarAccidentType(domain.CarAccidentType(carAccidentType))
 	if err != nil {
 		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
@@ -149,9 +149,9 @@ func (r *ReportDelicTypeHandler) GetAllByDelictType(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
-func (r *ReportDelicTypeHandler) GetAllByDelictTypeAndYear(c *gin.Context) {
+func (r *ReportCarAccidentTypeHandler) GetAllByCarAccidentTypeAndYear(c *gin.Context) {
 	rw := c.Writer
-	delictType := c.Param("delictType")
+	carAccidentType := c.Param("carAccidentType")
 
 	yearStr := c.Param("year")
 	year, err := strconv.Atoi(yearStr)
@@ -161,7 +161,7 @@ func (r *ReportDelicTypeHandler) GetAllByDelictTypeAndYear(c *gin.Context) {
 		return
 	}
 
-	reports, err := r.service.GetAllByDelictTypeAndYear(domain.DelictType(delictType), year)
+	reports, err := r.service.GetAllByCarAccidentTypeAndYear(domain.CarAccidentType(carAccidentType), year)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Failed to retrieve reports from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
@@ -179,7 +179,7 @@ func (r *ReportDelicTypeHandler) GetAllByDelictTypeAndYear(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
-func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw http.ResponseWriter) (*domain.User, error) {
+func (r *ReportCarAccidentTypeHandler) GetCurrentUserFromAuthService(token string, rw http.ResponseWriter) (*domain.User, error) {
 	url := "http://auth-service:8085/api/users/currentUser"
 
 	timeout := 5 * time.Second
@@ -217,8 +217,8 @@ func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw 
 	return &domain.User{UserRole: responseUser.LoggedInUser.UserRole}, nil
 }
 
-func (r *ReportDelicTypeHandler) GetDelictsCountAndYearPoliceService(token string, delictType domain.DelictType, year int) (int, error) {
-	baseURL := fmt.Sprintf("http://police-service:8084/api/delict/get/delictType/%s/year/%d", url.QueryEscape(string(delictType)), year)
+func (r *ReportCarAccidentTypeHandler) GetCarAccidentCountAndYearPoliceService(token string, carAccidentType domain.CarAccidentType, year int) (int, error) {
+	baseURL := fmt.Sprintf("http://police-service:8084/api/carAccident/get/carAccidentType/%s/year/%d", url.QueryEscape(string(carAccidentType)), year)
 
 	timeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -233,15 +233,15 @@ func (r *ReportDelicTypeHandler) GetDelictsCountAndYearPoliceService(token strin
 	}
 	defer resp.Body.Close()
 
-	var delicts []domain.Delict
-	if err := json.NewDecoder(resp.Body).Decode(&delicts); err != nil {
-		return 0, errors.New("failed to retrieve delicts")
+	var carAccidents []domain.CarAccident
+	if err := json.NewDecoder(resp.Body).Decode(&carAccidents); err != nil {
+		return 0, errors.New("failed to retrieve car accidents")
 	}
 
-	return len(delicts), nil
+	return len(carAccidents), nil
 }
 
-func (r *ReportDelicTypeHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
+func (r *ReportCarAccidentTypeHandler) performAuthorizationRequestWithContext(method string, ctx context.Context, token string, url string) (*http.Response, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return nil, err

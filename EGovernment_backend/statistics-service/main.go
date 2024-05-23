@@ -15,13 +15,29 @@ import (
 )
 
 var (
-	server                      *gin.Engine
-	ctx                         context.Context
-	mongoClient                 *mongo.Client
+	server      *gin.Engine
+	ctx         context.Context
+	mongoClient *mongo.Client
+
 	reportDelicTypeCollection   *mongo.Collection
 	reportDelicTypeService      services.ReportDelicTypeService
 	reportDelicTypeHandler      handlers.ReportDelicTypeHandler
 	reportDelicTypeRouteHandler routes.ReportDelicTypeRouteHandler
+
+	reportCarAccidentTypeCollection   *mongo.Collection
+	reportCarAccidentTypeService      services.ReportCarAccidentTypeService
+	reportCarAccidentTypeHandler      handlers.ReportCarAccidentTypeHandler
+	reportCarAccidentTypeRouteHandler routes.ReportCarAccidentTypeRouteHandler
+
+	reportCarAccidentDegreeCollection   *mongo.Collection
+	reportCarAccidentDegreeService      services.ReportCarAccidentDegreeService
+	reportCarAccidentDegreeHandler      handlers.ReportCarAccidentDegreeHandler
+	reportCarAccidentDegreeRouteHandler routes.ReportCarAccidentDegreeRouteHandler
+
+	reportRegisteredVehiclesCollection   *mongo.Collection
+	reportRegisteredVehiclesService      services.ReportRegisteredVehiclesService
+	reportRegisteredVehiclesHandler      handlers.ReportRegisteredVehiclesHandler
+	reportRegisteredVehiclesRouteHandler routes.ReportRegisteredVehiclesRouteHandler
 )
 
 func init() {
@@ -40,10 +56,25 @@ func init() {
 	fmt.Println("MongoDB successfully connected...")
 
 	reportDelicTypeCollection = mongoClient.Database("Statistics").Collection("reportDelicType")
+	reportCarAccidentTypeCollection = mongoClient.Database("Statistics").Collection("reportCarAccidentType")
+	reportCarAccidentDegreeCollection = mongoClient.Database("Statistics").Collection("reportCarAccidentDegree")
+	reportRegisteredVehiclesCollection = mongoClient.Database("Statistics").Collection("reportRegisteredVehicles")
 
 	reportDelicTypeService = services.NewReportDelicTypeImpl(reportDelicTypeCollection, ctx)
 	reportDelicTypeHandler = handlers.NewReportDelicTypeHandler(reportDelicTypeService, reportDelicTypeCollection)
 	reportDelicTypeRouteHandler = routes.NewReportDelicTypeRouteHandler(reportDelicTypeHandler, reportDelicTypeService)
+
+	reportCarAccidentTypeService = services.NewReportCarAccidentTypeImpl(reportCarAccidentTypeCollection, ctx)
+	reportCarAccidentTypeHandler = handlers.NewReportCarAccidentTypeHandler(reportCarAccidentTypeService, reportCarAccidentTypeCollection)
+	reportCarAccidentTypeRouteHandler = routes.NewReportCarAccidentTypeRouteHandler(reportCarAccidentTypeHandler, reportCarAccidentTypeService)
+
+	reportCarAccidentDegreeService = services.NewReportCarAccidentDegreeImpl(reportCarAccidentDegreeCollection, ctx)
+	reportCarAccidentDegreeHandler = handlers.NewReportCarAccidentDegreeHandler(reportCarAccidentDegreeService, reportCarAccidentDegreeCollection)
+	reportCarAccidentDegreeRouteHandler = routes.NewReportCarAccidentDegreeRouteHandler(reportCarAccidentDegreeHandler, reportCarAccidentDegreeService)
+
+	reportRegisteredVehiclesService = services.NewReportRegisteredVehiclesServiceImpl(reportRegisteredVehiclesCollection, ctx)
+	reportRegisteredVehiclesHandler = handlers.NewReportRegisteredVehiclesHandler(reportRegisteredVehiclesService, reportRegisteredVehiclesCollection)
+	reportRegisteredVehiclesRouteHandler = routes.NewReportRegisteredVehiclesRouteHandler(reportRegisteredVehiclesHandler, reportRegisteredVehiclesService)
 
 	server = gin.Default()
 
@@ -70,6 +101,9 @@ func main() {
 	})
 
 	reportDelicTypeRouteHandler.Route(router)
+	reportCarAccidentTypeRouteHandler.Route(router)
+	reportCarAccidentDegreeRouteHandler.Route(router)
+	reportRegisteredVehiclesRouteHandler.Route(router)
 
 	err := server.Run(":8082")
 	if err != nil {

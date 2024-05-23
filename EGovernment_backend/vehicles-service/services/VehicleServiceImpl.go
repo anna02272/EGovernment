@@ -64,7 +64,7 @@ func (s *VehicleServiceImpl) GetAllVehicles() ([]*domain.Vehicle, error) {
 	return vehicles, nil
 }
 
-func (s *VehicleServiceImpl) GetAllRegisteedVehicles() ([]*domain.Vehicle, error) {
+func (s *VehicleServiceImpl) GetAllRegisteredVehicles() ([]*domain.Vehicle, error) {
 	var vehicles []*domain.Vehicle
 
 	cutoffDate := time.Now().AddDate(-1, 0, 0)
@@ -72,6 +72,39 @@ func (s *VehicleServiceImpl) GetAllRegisteedVehicles() ([]*domain.Vehicle, error
 	filter := bson.M{
 		"registration_date": bson.M{
 			"$gte": cutoffDate,
+		},
+	}
+
+	cursor, err := s.collection.Find(s.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(s.ctx)
+
+	for cursor.Next(s.ctx) {
+		var vehicle domain.Vehicle
+		if err := cursor.Decode(&vehicle); err != nil {
+			return nil, err
+		}
+		vehicles = append(vehicles, &vehicle)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return vehicles, nil
+}
+
+func (s *VehicleServiceImpl) GetAllVehiclesByCategoryAndYear(category domain.Category, year int) ([]*domain.Vehicle, error) {
+	var vehicles []*domain.Vehicle
+	startOfYear := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	endOfYear := startOfYear.AddDate(1, 0, 0)
+
+	filter := bson.M{
+		"category": category,
+		"registration_date": bson.M{
+			"$gte": startOfYear,
+			"$lt":  endOfYear,
 		},
 	}
 

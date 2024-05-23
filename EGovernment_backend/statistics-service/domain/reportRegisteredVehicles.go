@@ -8,6 +8,7 @@ type ReportRegisteredVehicle struct {
 	Date        primitive.DateTime `bson:"date" json:"date"`
 	TotalNumber int                `bson:"total_number" json:"total_number"`
 	Category    Category           `bson:"category" json:"category"`
+	Year        int                `bson:"year" json:"year"`
 }
 
 type Category string

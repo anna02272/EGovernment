@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators ,AbstractControl} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators ,AbstractControl, ValidatorFn} from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -38,6 +38,7 @@ export class RegistrationComponent {
       username: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(32)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/)]],
       email: ['', [Validators.required, Validators.email, Validators.minLength(6), Validators.maxLength(64)]],
+      jmbg: ['', [Validators.required, this.jmbgLengthValidator()]],
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(32)]],
       lastname: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(32)]],
     });
@@ -56,14 +57,14 @@ export class RegistrationComponent {
   onSubmit() {
     this.notification = { msgType: '', msgBody: '' };
     this.submitted = true;
-    this.name= this.personalInfoForm.get('name')
-    this.new = {}
-    this.new.username= this.personalInfoForm.get('username')?.value
-    this.new.password= this.personalInfoForm.get('password')?.value
-    this.new.email= this.personalInfoForm.get('email')?.value
-    this.new.name= this.personalInfoForm.get('name')?.value
-    this.new.lastname= this.personalInfoForm.get('lastname')?.value
-
+    this.new = {
+      username: this.personalInfoForm.get('username')?.value,
+      password: this.personalInfoForm.get('password')?.value,
+      email: this.personalInfoForm.get('email')?.value,
+      jmbg: this.personalInfoForm.get('jmbg')?.value,
+      name: this.personalInfoForm.get('name')?.value,
+      lastname: this.personalInfoForm.get('lastname')?.value
+    };
     this.authService.register(this.new).subscribe({
       next: () => {
         this.authService.login(this.new).subscribe(() => {
@@ -80,7 +81,9 @@ export class RegistrationComponent {
             this.notification = { msgType: 'error', msgBody: 'Nevažeći format lozinke' };
         } else if (error.error.message === 'Email already exists') {
           this.notification = { msgType: 'error', msgBody: 'Email već postoji' };
-        }
+        } else if (error.error.message === 'User with that JMBG already exists') {
+        this.notification = { msgType: 'error', msgBody: 'Korisnik sa tim JMBG već postoji' };
+      }
           else {
             this.notification = { msgType: 'error', msgBody: 'Registracija nije uspela. Molimo Vas, pokušajte ponovo.' };
           }
@@ -96,5 +99,12 @@ export class RegistrationComponent {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  jmbgLengthValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const jmbg = control.value;
+      return jmbg && jmbg.toString().length !== 13 ? { 'jmbgLength': true } : null;
+    };
   }
 }

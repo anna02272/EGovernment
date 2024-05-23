@@ -9,6 +9,7 @@ type User struct {
 	Username string             `bson:"username" json:"username"`
 	Password string             `bson:"password" json:"password"`
 	Email    string             `bson:"email" json:"email" validate:"required,email"`
+	JMBG     int                `bson:"jmbg" json:"jmbg" validate:"required,jmbg"`
 	Name     string             `bson:"name" json:"name"`
 	Lastname string             `bson:"lastname" json:"lastname"`
 	UserRole UserRole           `bson:"userRole" json:"userRole"`

@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -67,6 +68,13 @@ func (ac *AuthHandler) Registration(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
+
+	jmbgStr := strconv.Itoa(user.JMBG)
+	if len(jmbgStr) != 13 {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "JMBG must have 13 characters"})
+		return
+	}
+
 	existingUser, err := ac.userService.FindUserByUsername(user.Username)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Internal Server Error"})
@@ -84,6 +92,16 @@ func (ac *AuthHandler) Registration(ctx *gin.Context) {
 	}
 	if existingUser1 != nil {
 		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "Email already exists"})
+		return
+	}
+
+	existingUser2, err := ac.userService.FindUserByJMBG(user.JMBG)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Internal Server Error"})
+		return
+	}
+	if existingUser2 != nil {
+		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "User with that JMBG already exists"})
 		return
 	}
 

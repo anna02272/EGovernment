@@ -48,6 +48,7 @@ export class AuthService {
       'username': user.username,
       'password': user.password,
       'email' : user.email,
+      'jmbg': user.jmbg,
       'name' : user.name,
       'lastname' : user.lastname,
       'userRole' :  UserRole.Citizen

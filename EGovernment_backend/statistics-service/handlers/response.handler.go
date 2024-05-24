@@ -4,14 +4,25 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"gopkg.in/gomail.v2"
+	"log"
 	"net/http"
+	"path/filepath"
 	"statistics-service/domain"
 	errorMessage "statistics-service/error"
 	"statistics-service/services"
 	"time"
+)
+
+var (
+	smtpServer     = "smtp.office365.com"
+	smtpServerPort = 587
+	smtpEmail      = "EGovernmentPolice@outlook.com"
+	smtpPassword   = "amhrxqinoamvtcss"
 )
 
 type ResponseHandler struct {
@@ -40,32 +51,40 @@ func (r *ResponseHandler) Create(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Unauthorized. You are not an employee."}, http.StatusUnauthorized)
 		return
 	}
-	var requestBody struct {
-		Text       string `json:"text" binding:"required"`
-		Attachment string `json:"attachment"`
-		Accepted   bool   `json:"accepted" binding:"required"`
-		SendTo     string `json:"send_to" binding:"required"`
-	}
 
-	if err := c.BindJSON(&requestBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse request body"})
-		return
+	text := c.PostForm("text")
+	accepted := c.PostForm("accepted") == "true"
+	sendTo := c.PostForm("send_to")
+	file, err := c.FormFile("attachment")
+	var attachmentPath string
+	if err == nil {
+		attachmentPath = filepath.Join("/tmp", file.Filename)
+		if err := c.SaveUploadedFile(file, attachmentPath); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save attachment"})
+			return
+		}
 	}
 
 	currentDateTime := primitive.NewDateTimeFromTime(time.Now())
 	id := primitive.NewObjectID()
 	newResponse := &domain.Response{
 		ID:         id,
-		Text:       requestBody.Text,
-		Attachment: requestBody.Attachment,
-		Accepted:   requestBody.Accepted,
-		SendTo:     requestBody.SendTo,
+		Text:       text,
+		Attachment: attachmentPath,
+		Accepted:   accepted,
+		SendTo:     sendTo,
 		Date:       currentDateTime,
 	}
 
 	err, _ = r.service.Create(newResponse)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create response"})
+		return
+	}
+
+	err = r.sendEmail(newResponse.Text, newResponse.Attachment, newResponse.SendTo)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
 		return
 	}
 
@@ -135,6 +154,28 @@ func (r *ResponseHandler) GetByID(c *gin.Context) {
 	rw.Header().Set("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(jsonResponse)
+}
+
+func (r *ResponseHandler) sendEmail(text string, attachment string, email string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", smtpEmail)
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "Odgovor na zahtev - Institut za statistiku")
+
+	m.SetBody("text/plain", text)
+
+	if attachment != "" {
+		m.Attach(attachment)
+	}
+
+	client := gomail.NewDialer(smtpServer, smtpServerPort, smtpEmail, smtpPassword)
+
+	if err := client.DialAndSend(m); err != nil {
+		log.Fatalf("Failed to send mail because of: %s", err)
+		return err
+	}
+
+	return nil
 }
 
 func (r *ResponseHandler) GetCurrentUserFromAuthService(token string, rw http.ResponseWriter) (*domain.User, error) {

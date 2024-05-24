@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { ApiService } from './api.service';
-import { ConfigService } from './config.service';
+import { ApiService } from '../api.service';
+import { ConfigService } from '../config.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { UserService } from './user.service';
-import { UserRole } from '../models/userRole';
+import { UserRole } from 'src/app/models/auth/userRole';
 
 @Injectable()
 export class AuthService {

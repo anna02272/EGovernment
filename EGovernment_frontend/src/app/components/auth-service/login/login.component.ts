@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service'; 
-import { Subject,  lastValueFrom } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserService } from 'src/app/services/user.service';
-import { UserRole } from 'src/app/models/userRole';
-import { User } from 'src/app/models/user';
+import { UserRole } from 'src/app/models/auth/userRole';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/auth/user.service';
 
 interface DisplayMessage {
   msgType: string;

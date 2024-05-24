@@ -3,9 +3,8 @@ import { FormBuilder, FormGroup, Validators ,AbstractControl, ValidatorFn} from 
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserRole } from 'src/app/models/userRole';
-import { AuthService } from 'src/app/services/auth.service'; 
-import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/auth/user.service';
 
 interface DisplayMessage {
   msgType: string;

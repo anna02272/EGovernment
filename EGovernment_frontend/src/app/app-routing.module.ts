@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { RegistrationComponent } from './components/registration/registration.component';
+import { LoginComponent } from './components/auth-service/login/login.component';
+import { RegistrationComponent } from './components/auth-service/registration/registration.component';
 import { HomeComponent } from './components/home/home.component';
-import { HomeStatisticsComponent } from './components/home-statistics/home-statistics.component';
-import { HomeVehiclesComponent } from './components/home-vehicles/home-vehicles.component';
-import { HomePoliceComponent } from './components/home-police/home-police.component';
-import { HomeCourtComponent } from './components/home-court/home-court.component';
+import { HomeStatisticsComponent } from './components/statistics-service/home-statistics/home-statistics.component';
+import { HomeVehiclesComponent } from './components/vehicles-service/home-vehicles/home-vehicles.component';
+import { HomePoliceComponent } from './components/police-service/home-police/home-police.component';
+import { HomeCourtComponent } from './components/court-service/home-court/home-court.component';
 import { AuthGuard } from './services/permission.service';
 
 const routes: Routes = [

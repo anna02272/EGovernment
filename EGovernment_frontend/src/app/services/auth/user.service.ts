@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ApiService} from './api.service';
-import {ConfigService} from './config.service';
+import {ApiService} from '../api.service';
+import {ConfigService} from '../config.service';
 import {map} from 'rxjs/operators';
-import { User } from '../models/user';
+import { User } from 'src/app/models/auth/user';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

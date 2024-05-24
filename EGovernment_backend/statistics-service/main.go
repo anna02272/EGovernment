@@ -38,6 +38,16 @@ var (
 	reportRegisteredVehiclesService      services.ReportRegisteredVehiclesService
 	reportRegisteredVehiclesHandler      handlers.ReportRegisteredVehiclesHandler
 	reportRegisteredVehiclesRouteHandler routes.ReportRegisteredVehiclesRouteHandler
+
+	responseCollection   *mongo.Collection
+	responseService      services.ResponseService
+	responseHandler      handlers.ResponseHandler
+	responseRouteHandler routes.ResponseRouteHandler
+
+	requestCollection   *mongo.Collection
+	requestService      services.RequestService
+	requestHandler      handlers.RequestHandler
+	requestRouteHandler routes.RequestRouteHandler
 )
 
 func init() {
@@ -59,6 +69,8 @@ func init() {
 	reportCarAccidentTypeCollection = mongoClient.Database("Statistics").Collection("reportCarAccidentType")
 	reportCarAccidentDegreeCollection = mongoClient.Database("Statistics").Collection("reportCarAccidentDegree")
 	reportRegisteredVehiclesCollection = mongoClient.Database("Statistics").Collection("reportRegisteredVehicles")
+	responseCollection = mongoClient.Database("Statistics").Collection("response")
+	requestCollection = mongoClient.Database("Statistics").Collection("request")
 
 	reportDelicTypeService = services.NewReportDelicTypeImpl(reportDelicTypeCollection, ctx)
 	reportDelicTypeHandler = handlers.NewReportDelicTypeHandler(reportDelicTypeService, reportDelicTypeCollection)
@@ -75,6 +87,14 @@ func init() {
 	reportRegisteredVehiclesService = services.NewReportRegisteredVehiclesServiceImpl(reportRegisteredVehiclesCollection, ctx)
 	reportRegisteredVehiclesHandler = handlers.NewReportRegisteredVehiclesHandler(reportRegisteredVehiclesService, reportRegisteredVehiclesCollection)
 	reportRegisteredVehiclesRouteHandler = routes.NewReportRegisteredVehiclesRouteHandler(reportRegisteredVehiclesHandler, reportRegisteredVehiclesService)
+
+	responseService = services.NewResponseServiceImpl(responseCollection, ctx)
+	responseHandler = handlers.NewResponseHandler(responseService, responseCollection)
+	responseRouteHandler = routes.NewResponseRouteHandler(responseHandler, responseService)
+
+	requestService = services.NewRequestServiceImpl(requestCollection, ctx)
+	requestHandler = handlers.NewRequestHandler(requestService, requestCollection)
+	requestRouteHandler = routes.NewRequestRouteHandler(requestHandler, requestService)
 
 	server = gin.Default()
 
@@ -104,6 +124,8 @@ func main() {
 	reportCarAccidentTypeRouteHandler.Route(router)
 	reportCarAccidentDegreeRouteHandler.Route(router)
 	reportRegisteredVehiclesRouteHandler.Route(router)
+	responseRouteHandler.Route(router)
+	requestRouteHandler.Route(router)
 
 	err := server.Run(":8082")
 	if err != nil {

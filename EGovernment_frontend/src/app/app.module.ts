@@ -27,6 +27,11 @@ import { RequestsComponent } from './components/statistics-service/requests/requ
 import { ResponseComponent } from './components/statistics-service/response/response.component';
 import { RequestService } from './services/statistics/request.service';
 import { StatisticsHeaderComponent } from './components/statistics-service/statistics-header/statistics-header.component';
+import { ResponseService } from './services/statistics/response.service';
+import { ReportRegisteredVehicles, ReportRegisteredVehiclesService } from './services/statistics/reportRegisteredVehicles.service';
+import { ReportDelicTypeService } from './services/statistics/reportDelicType.service';
+import { ReportCarAccidentTypeService } from './services/statistics/reportCarAccidentTypeService.service';
+import { ReportCarAccidentDegreeService } from './services/statistics/reportCarAccidentDegree.service';
 
 @NgModule({
   declarations: [
@@ -66,7 +71,12 @@ import { StatisticsHeaderComponent } from './components/statistics-service/stati
   RefreshService,
   AuthService,
   UserService,
-  RequestService
+  RequestService,
+  ResponseService,
+  ReportRegisteredVehiclesService,
+  ReportDelicTypeService,
+  ReportCarAccidentTypeService,
+  ReportCarAccidentDegreeService
   ],
   bootstrap: [AppComponent]
 })

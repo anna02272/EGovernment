@@ -19,6 +19,14 @@ import { HomePoliceComponent } from './components/police-service/home-police/hom
 import { HeaderComponent } from './components/header/header.component';
 import { AuthService } from './services/auth/auth.service';
 import { RequestComponent } from './components/statistics-service/request/request.component';
+import { ReportRegisteredVehiclesComponent } from './components/statistics-service/report-registered-vehicles/report-registered-vehicles.component';
+import { ReportCarAccidentDegreeComponent } from './components/statistics-service/report-car-accident-degree/report-car-accident-degree.component';
+import { ReportCarAccidentTypeComponent } from './components/statistics-service/report-car-accident-type/report-car-accident-type.component';
+import { ReportDelictsComponent } from './components/statistics-service/report-delicts/report-delicts.component';
+import { RequestsComponent } from './components/statistics-service/requests/requests.component';
+import { ResponseComponent } from './components/statistics-service/response/response.component';
+import { RequestService } from './services/statistics/request.service';
+import { StatisticsHeaderComponent } from './components/statistics-service/statistics-header/statistics-header.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +39,14 @@ import { RequestComponent } from './components/statistics-service/request/reques
     HomeCourtComponent,
     HomeVehiclesComponent,
     HomePoliceComponent,
-    RequestComponent
+    RequestComponent,
+    ReportRegisteredVehiclesComponent,
+    ReportCarAccidentDegreeComponent,
+    ReportCarAccidentTypeComponent,
+    ReportDelictsComponent,
+    RequestsComponent,
+    ResponseComponent,
+    StatisticsHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +66,7 @@ import { RequestComponent } from './components/statistics-service/request/reques
   RefreshService,
   AuthService,
   UserService,
+  RequestService
   ],
   bootstrap: [AppComponent]
 })

@@ -8,6 +8,7 @@ import { HomeVehiclesComponent } from './components/vehicles-service/home-vehicl
 import { HomePoliceComponent } from './components/police-service/home-police/home-police.component';
 import { HomeCourtComponent } from './components/court-service/home-court/home-court.component';
 import { AuthGuard } from './services/permission.service';
+import { RequestsComponent } from './components/statistics-service/requests/requests.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,11 @@ const routes: Routes = [
 {
   path: 'zavodZaStatistiku',
   component: HomeStatisticsComponent,
+  // canActivate: [AuthGuard] 
+},
+{
+  path: 'zahtevi',
+  component: RequestsComponent,
   canActivate: [AuthGuard] 
 },
 {

@@ -1,7 +1,2 @@
-<div class="content">
-  <div class="title">
-    <h1>Zavod za statistiku<span>e-Uprava</span></h1>
-  </div>
-  <!-- <app-request *ngIf="getRole() === 'Employee'"></app-request> -->
-  <app-request></app-request>
-</div>
+  <app-statistics-header></app-statistics-header>
+  <app-request *ngIf="getRole() === 'Citizen'"></app-request>

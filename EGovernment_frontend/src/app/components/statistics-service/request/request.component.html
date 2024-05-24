@@ -24,21 +24,23 @@
               </div>
           </div>
           <div class="screen-body-item">
+            <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
             <div class="app-form">
               <div class="app-form-group">
-                <input class="app-form-control" placeholder="IME" required>
+                <input class="app-form-control" placeholder="IME" formControlName="name" required>
               </div>
               <div class="app-form-group">
-                <input class="app-form-control" placeholder="PREZIME" required>
+                <input class="app-form-control" placeholder="PREZIME" formControlName="lastname" required>
               </div>
               <div class="app-form-group">
-                <input class="app-form-control" placeholder="EMAIL" required>
+                <input class="app-form-control" placeholder="EMAIL" formControlName="email" required>
               </div>
               <div class="app-form-group">
-                <input class="app-form-control" placeholder="BROJ TELEFONA" required>
+                <input type="number" class="app-form-control" placeholder="BROJ TELEFONA" formControlName="phone_number" required>
               </div>
               <div class="app-form-group">
                 <select class="app-form-control"
+                formControlName="category" required
                 id="categoryPerson"
                 name="categoryPerson"
                 [(ngModel)]="selectedCategoryPerson"
@@ -52,13 +54,14 @@
               </select>
               </div>
               <div class="app-form-group message">
-                <input class="app-form-control" placeholder="PITANJE" required>
+                <input class="app-form-control" placeholder="PITANJE"  formControlName="question"  required>
               </div>
               <div class="app-form-group buttons">
-                <button class="app-form-button">ODUSTANI</button>
-                <button class="app-form-button" >POŠALJI</button>
+                <button  type="button" class="app-form-button" (click)="onCancel()">ODUSTANI</button>
+                <button  type="submit" class="app-form-button" [disabled]="requestForm.invalid">POŠALJI</button>
               </div>
             </div>
+          </form>
           </div>
         </div>
       </div>

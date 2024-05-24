@@ -9,6 +9,6 @@ type Response struct {
 	Text       string             `bson:"text" json:"text"`
 	Attachment string             `bson:"attachment" json:"attachment"`
 	Accepted   bool               `bson:"accepted" json:"accepted" `
-	SendTo     User               `bson:"send_to" json:"send_to"`
+	SendTo     string             `bson:"send_to" json:"send_to"`
 	Date       primitive.DateTime `bson:"date" json:"date"`
 }

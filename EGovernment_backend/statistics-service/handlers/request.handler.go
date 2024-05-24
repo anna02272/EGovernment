@@ -87,8 +87,8 @@ func (r *RequestHandler) GetAll(c *gin.Context) {
 		return
 	}
 
-	if user.UserRole != domain.Citizen {
-		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Unauthorized. You are not an citizen."}, http.StatusUnauthorized)
+	if user.UserRole != domain.Employee {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Unauthorized. You are not an employee."}, http.StatusUnauthorized)
 		return
 	}
 
@@ -120,8 +120,8 @@ func (r *RequestHandler) GetByID(c *gin.Context) {
 		return
 	}
 
-	if user.UserRole != domain.Citizen {
-		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Unauthorized. You are not an citizen."}, http.StatusUnauthorized)
+	if user.UserRole != domain.Employee {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Unauthorized. You are not an employee."}, http.StatusUnauthorized)
 		return
 	}
 

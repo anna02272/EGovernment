@@ -15,6 +15,7 @@ import (
 	"statistics-service/domain"
 	errorMessage "statistics-service/error"
 	"statistics-service/services"
+	"strconv"
 	"time"
 )
 
@@ -53,8 +54,16 @@ func (r *ResponseHandler) Create(c *gin.Context) {
 	}
 
 	text := c.PostForm("text")
-	accepted := c.PostForm("accepted") == "true"
+
+	acceptedStr := c.PostForm("accepted")
+	accepted, err := strconv.ParseBool(acceptedStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid value for accepted"})
+		return
+	}
+
 	sendTo := c.PostForm("send_to")
+
 	file, err := c.FormFile("attachment")
 	var attachmentPath string
 	if err == nil {

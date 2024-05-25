@@ -21,4 +21,5 @@ func (rc *RequestRouteHandler) Route(rg *gin.RouterGroup) {
 	router.POST("/create", rc.handler.Create)
 	router.GET("/all", rc.handler.GetAll)
 	router.GET("/get/:id", rc.handler.GetByID)
+	router.DELETE("/delete/:id", rc.handler.Delete)
 }

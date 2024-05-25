@@ -23,4 +23,8 @@ export class RequestService {
    getById(id : number) {
     return this.apiService.get(this.config.request_url + "/get/" + id );
    }
+
+   delete(id : number) {
+    return this.apiService.get(this.config.request_url + "/delete/" + id );
+   }
 }

@@ -19,7 +19,7 @@ export class RequestService {
   getAll() {
     return this.apiService.get(this.config.request_url + "/all");
    }
-  
+
    getById(id : string) {
     return this.apiService.get(this.config.request_url + "/get/" + id );
    }

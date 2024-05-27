@@ -218,7 +218,6 @@
     --mat-mdc-snack-bar-button-color: #fff;
     --mdc-snackbar-supporting-text-color: #fff;
   }
-
   
   @media screen and (max-width: 520px) {
     .screen-body {

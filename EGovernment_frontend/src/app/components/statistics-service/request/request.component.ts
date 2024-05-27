@@ -4,7 +4,6 @@ import { CategoryPerson } from 'src/app/models/statisics/categoryPerson';
 import { Request } from 'src/app/models/statisics/request';
 import { RequestService } from 'src/app/services/statistics/request.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserService } from 'src/app/services/auth/user.service';
 
 @Component({
   selector: 'app-request',
@@ -18,7 +17,6 @@ export class RequestComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private requestService: RequestService,
-    private userService: UserService,
     private snackBar: MatSnackBar
   ) {
     this.requestForm = this.fb.group({

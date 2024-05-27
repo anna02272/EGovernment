@@ -35,6 +35,7 @@ import { ReportRegisteredVehiclesService } from './services/statistics/reportReg
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+
 @NgModule({
   declarations: [
     AppComponent,

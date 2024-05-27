@@ -67,3 +67,13 @@ func (r *RequestServiceImpl) GetById(id string) (*domain.Request, error) {
 	}
 	return &request, nil
 }
+
+func (r *RequestServiceImpl) Delete(id string) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	_, err = r.collection.DeleteOne(r.ctx, bson.M{"_id": objID})
+	return err
+}

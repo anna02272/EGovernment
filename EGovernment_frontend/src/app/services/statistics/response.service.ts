@@ -20,7 +20,7 @@ export class ResponseService {
     return this.apiService.get(this.config.response_url + "/all");
    }
   
-   getById(id : number) {
+   getById(id : string) {
     return this.apiService.get(this.config.response_url + "/get/" + id );
    }
 }

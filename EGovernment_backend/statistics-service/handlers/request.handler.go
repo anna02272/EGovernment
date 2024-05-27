@@ -142,6 +142,31 @@ func (r *RequestHandler) GetByID(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
+func (r *RequestHandler) Delete(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	id := c.Param("id")
+
+	token := h.Header.Get("Authorization")
+	user, err := r.GetCurrentUserFromAuthService(token, rw)
+	if err != nil {
+		return
+	}
+
+	if user.UserRole != domain.Employee {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Unauthorized. You are not an employee."}, http.StatusUnauthorized)
+		return
+	}
+
+	err = r.service.Delete(id)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Failed to delete request."}, http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Request successfully deleted"})
+}
+
 func (r *RequestHandler) GetCurrentUserFromAuthService(token string, rw http.ResponseWriter) (*domain.User, error) {
 	url := "http://auth-service:8085/api/users/currentUser"
 

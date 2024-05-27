@@ -23,40 +23,40 @@ const routes: Routes = [
   {
     path: 'registracija',
     component: RegistrationComponent
-},
-{
-  path: 'pocetna',
-  component: HomeComponent,
-  canActivate: [AuthGuard] 
-},
+  },
+  {
+    path: 'pocetna',
+    component: HomeComponent,
+    canActivate: [AuthGuard] 
+  },
 
-{
-  path: 'zavodZaStatistiku',
-  component: HomeStatisticsComponent,
-  // canActivate: [AuthGuard] 
-},
-{
-  path: 'zahtevi',
-  component: RequestsComponent,
-  canActivate: [AuthGuard] 
-},
-{
-  path: 'mupVozila',
-  component: HomeVehiclesComponent,
-  canActivate: [AuthGuard] 
+  {
+    path: 'zavodZaStatistiku',
+    component: HomeStatisticsComponent,
+    canActivate: [AuthGuard] 
+  },
+  {
+    path: 'zahtevi',
+    component: RequestsComponent,
+    canActivate: [AuthGuard] 
+  },
+  {
+    path: 'mupVozila',
+    component: HomeVehiclesComponent,
+    canActivate: [AuthGuard] 
 
-},
-{
-  path: 'saobracajnaPolicija',
-  component: HomePoliceComponent,
-  canActivate: [AuthGuard] 
-},
-{
-  path: 'prekrsajniSud',
-  component: HomeCourtComponent,
-  canActivate: [AuthGuard] 
-},
- 
+  },
+  {
+    path: 'saobracajnaPolicija',
+    component: HomePoliceComponent,
+    canActivate: [AuthGuard] 
+  },
+  {
+    path: 'prekrsajniSud',
+    component: HomeCourtComponent,
+    canActivate: [AuthGuard] 
+  },
+  
 ];
 
 @NgModule({

@@ -28,10 +28,13 @@ import { ResponseComponent } from './components/statistics-service/response/resp
 import { RequestService } from './services/statistics/request.service';
 import { StatisticsHeaderComponent } from './components/statistics-service/statistics-header/statistics-header.component';
 import { ResponseService } from './services/statistics/response.service';
-import { ReportRegisteredVehicles, ReportRegisteredVehiclesService } from './services/statistics/reportRegisteredVehicles.service';
 import { ReportDelicTypeService } from './services/statistics/reportDelicType.service';
 import { ReportCarAccidentTypeService } from './services/statistics/reportCarAccidentTypeService.service';
 import { ReportCarAccidentDegreeService } from './services/statistics/reportCarAccidentDegree.service';
+import { ReportRegisteredVehiclesService } from './services/statistics/reportRegisteredVehicles.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
@@ -58,7 +61,9 @@ import { ReportCarAccidentDegreeService } from './services/statistics/reportCarA
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [
   {

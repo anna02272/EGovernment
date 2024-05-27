@@ -52,10 +52,23 @@ export class ReportRegisteredVehiclesComponent implements OnInit {
     this.reportData = groupedData;
   }
 
-
-
   getTotalNumberByCategory(item: any, category: string): number {
     const categoryData = item.categories.find((cat: { category: string }) => cat.category === category);
     return categoryData ? categoryData.total_number : "-";
+  }
+  
+  getTotalRegisteredVehicles(): number {
+    return this.reportData.reduce((total, item) => total + item.categories.reduce((subTotal: any, cat: { total_number: any; }) => subTotal + cat.total_number, 0), 0);
+  }
+
+  getCategoryWithMostRegisteredVehicles(): string {
+    const categories = this.reportData.flatMap(item => item.categories);
+    const maxCategory = categories.reduce((max, cat) => (max.total_number > cat.total_number ? max : cat), { total_number: 0 });
+    return maxCategory.category;
+  }
+
+  getYearWithMostRegisteredVehicles(): number {
+    const maxYear = this.reportData.reduce((max, item) => (max.categories?.reduce((subMax: { total_number: number; }, cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), { total_number: 0 }).total_number > item.categories.reduce((subMax: { total_number: number; }, cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), { total_number: 0 }).total_number ? max : item), { year: 0 });
+    return maxYear.year;
   }
 }

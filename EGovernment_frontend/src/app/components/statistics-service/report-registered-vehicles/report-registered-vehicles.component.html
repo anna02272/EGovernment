@@ -26,16 +26,98 @@
         <tr>
           <td class="row-header">{{ item.title }}</td>
           <td class="period-column">{{ item.year }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'A') }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'B') }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'B1') }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'A1') }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'C') }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'AM') }}</td>
-          <td>{{ getTotalNumberByCategory(item, 'A2') }}</td>
+          <td>{{ getTotalNumberByCategory(item, "A") }}</td>
+          <td>{{ getTotalNumberByCategory(item, "B") }}</td>
+          <td>{{ getTotalNumberByCategory(item, "B1") }}</td>
+          <td>{{ getTotalNumberByCategory(item, "A1") }}</td>
+          <td>{{ getTotalNumberByCategory(item, "C") }}</td>
+          <td>{{ getTotalNumberByCategory(item, "AM") }}</td>
+          <td>{{ getTotalNumberByCategory(item, "A2") }}</td>
           <td class="date-column">{{ item.date | date }}</td>
         </tr>
       </ng-container>
     </tbody>
   </table>
 </div>
+
+<body>
+  <div class="container">
+    <div class="main-container">
+      <div class="year-stats">
+        <ng-container *ngFor="let item of reportData" class="data-row">
+          <div class="month-group">
+            <div class="bar h-100"></div>
+            <p class="month">{{ item.year }}</p>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="stats-info">
+        <div class="graph-container">
+          <div class="percent">
+            <svg viewBox="0 0 36 36" class="circular-chart">
+              <path
+                class="circle"
+                stroke-dasharray="100, 100"
+                d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+          </div>
+          <p>Ukupno registrovanih: {{ getTotalRegisteredVehicles() }}</p>
+        </div>
+
+        <div class="info">
+          <p>
+            Godina sa najvise registrovanih vozila:
+            <span> {{ getYearWithMostRegisteredVehicles() }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container2">
+      <div class="year-stats2">
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">A</p>
+        </div>
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">B</p>
+        </div>
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">B1</p>
+        </div>
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">A1</p>
+        </div>
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">C</p>
+        </div>
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">AM</p>
+        </div>
+        <div class="month-group">
+          <div class="bar h-100"></div>
+          <p class="month">A2</p>
+        </div>
+      </div>
+
+      <div class="stats-info2">
+        <div class="info">
+          <p>
+            Kategorija sa najvise registrovanih vozila:<span>
+              {{ getCategoryWithMostRegisteredVehicles() }}</span
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

@@ -32,6 +32,8 @@ import { ReportDelicTypeService } from './services/statistics/reportDelicType.se
 import { ReportCarAccidentTypeService } from './services/statistics/reportCarAccidentTypeService.service';
 import { ReportCarAccidentDegreeService } from './services/statistics/reportCarAccidentDegree.service';
 import { ReportRegisteredVehiclesService } from './services/statistics/reportRegisteredVehicles.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { ReportRegisteredVehiclesService } from './services/statistics/reportReg
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [
   {

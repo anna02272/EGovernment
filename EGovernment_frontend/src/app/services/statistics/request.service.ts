@@ -20,11 +20,11 @@ export class RequestService {
     return this.apiService.get(this.config.request_url + "/all");
    }
   
-   getById(id : number) {
+   getById(id : string) {
     return this.apiService.get(this.config.request_url + "/get/" + id );
    }
 
-   delete(id : number) {
-    return this.apiService.get(this.config.request_url + "/delete/" + id );
+   delete(id : string) {
+    return this.apiService.delete(this.config.request_url + "/delete/" + id );
    }
 }

@@ -207,6 +207,18 @@
     margin: 0 5px;
   }
 
+  ::ng-deep .mat-mdc-snack-bar-container.success-snackbar {
+    --mdc-snackbar-container-color: #4caf50;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  ::ng-deep .mat-mdc-snack-bar-container.error-snackbar {
+    --mdc-snackbar-container-color: #f44336;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
   
   @media screen and (max-width: 520px) {
     .screen-body {

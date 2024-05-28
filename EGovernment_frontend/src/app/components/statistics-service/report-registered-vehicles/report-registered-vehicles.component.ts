@@ -8,12 +8,24 @@ import { ReportRegisteredVehiclesService } from 'src/app/services/statistics/rep
 })
 export class ReportRegisteredVehiclesComponent implements OnInit {
   reportData: any[] = [];
+  categories = [
+    { name: 'A', total_number: 0 },
+    { name: 'B', total_number: 0 },
+    { name: 'B1', total_number: 0 },
+    { name: 'A1', total_number: 0 },
+    { name: 'C', total_number: 0 },
+    { name: 'AM', total_number: 0 },
+    { name: 'A2', total_number: 0 }
+  ];
+  maxRegisteredVehicles: number = 0;
 
   constructor(private reportService: ReportRegisteredVehiclesService) {}
 
   ngOnInit(): void {
     this.reportService.getAll().subscribe((data: any[]) => {
       this.groupDataByYear(data);
+      this.calculateMaxRegisteredVehicles();
+      this.calculateMaxRegisteredVehiclesByYear();
     });
   }
 
@@ -50,6 +62,7 @@ export class ReportRegisteredVehiclesComponent implements OnInit {
     groupedData.sort((a, b) => b.year - a.year);
 
     this.reportData = groupedData;
+    this.aggregateCategoryData();
   }
 
   getTotalNumberByCategory(item: any, category: string): number {
@@ -70,5 +83,45 @@ export class ReportRegisteredVehiclesComponent implements OnInit {
   getYearWithMostRegisteredVehicles(): number {
     const maxYear = this.reportData.reduce((max, item) => (max.categories?.reduce((subMax: { total_number: number; }, cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), { total_number: 0 }).total_number > item.categories.reduce((subMax: { total_number: number; }, cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), { total_number: 0 }).total_number ? max : item), { year: 0 });
     return maxYear.year;
+  }
+
+  aggregateCategoryData(): void {
+    const categoryMap: { [name: string]: number } = {};
+    
+    this.reportData.forEach(item => {
+      item.categories.forEach((cat: { category: string, total_number: number }) => {
+        if (categoryMap[cat.category]) {
+          categoryMap[cat.category] += cat.total_number;
+        } else {
+          categoryMap[cat.category] = cat.total_number;
+        }
+      });
+    });
+
+    this.categories = this.categories.map(cat => ({
+      ...cat,
+      total_number: categoryMap[cat.name] || 0
+    }));
+  }
+
+  calculateMaxRegisteredVehicles(): void {
+    this.maxRegisteredVehicles = Math.max(...this.categories.map(cat => cat.total_number));
+  }
+
+  calculateMaxRegisteredVehiclesByYear(): void {
+    this.maxRegisteredVehicles = Math.max(...this.reportData.map(item => this.getTotalNumberForYear(item)));
+  }
+
+  getBarHeight(category: { name: string, total_number: number }): number {
+    return this.maxRegisteredVehicles ? (category.total_number / this.maxRegisteredVehicles) * 100 : 0;
+  }
+
+  getTotalNumberForYear(item: any): number {
+    return item.categories.reduce((total: number, cat: { total_number: number }) => total + cat.total_number, 0);
+  }
+
+  getBarHeightForYear(item: any): number {
+    const totalNumber = this.getTotalNumberForYear(item);
+    return this.maxRegisteredVehicles ? (totalNumber / this.maxRegisteredVehicles) * 100 : 0;
   }
 }

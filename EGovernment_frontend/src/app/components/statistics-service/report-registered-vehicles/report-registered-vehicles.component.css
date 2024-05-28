@@ -1,5 +1,5 @@
 .table-container {
-    margin: 20px;
+	margin-bottom: 40px;
 }
 
 .styled-table {
@@ -84,39 +84,18 @@ body {
 	border-radius: 5px;
 	padding: 20px;
 	width: 420px;
-	height: 320px;
+	height: auto;
 	align-items: center; 
     justify-content: center;
+	margin-top: 10%;
+	margin-bottom: 10px;
 	
 }
 
-.main-container2 {
-    background: #F26B68;
-    color: white;
-    border-radius: 5px;
-    padding: 20px;
-    width: 400px;
-    height: 230px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center; 
-}
-
 .year-stats {
+	display: block;
+	align-items: flex-end;
 	white-space: nowrap;
-	max-height: 170px;
-	overflow-x: auto;
-}
-
-.year-stats2 {
-    white-space: nowrap;
-    max-height: 170px;
-    overflow-x: visible; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
 }
 
 .year-stats:hover {
@@ -129,7 +108,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-	background: #444e80;
+	background: #43D2D7;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -138,15 +117,14 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #5397d6;
+	background: #C0DFE9;
 }
 
 .month-group {
 	cursor: pointer;
 	max-width: 400px;
-	height: 110px;
+	height: 70px;
 	margin: 10px;
-	margin-bottom: 30px;
 	display: inline-block;
 }
 
@@ -154,6 +132,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+	text-align: center;
     gap: 40px; 
 }
 
@@ -162,6 +141,7 @@ body {
 	width: 20px;
 	border-radius: 5px;
 	margin-bottom: 10px;
+	height: auto;
 }
 
 .month-group:hover .bar,
@@ -174,28 +154,7 @@ body {
 	color: #fff;
 }
 
-.h-25 {
-	height: 25%;
-}
-.h-50 {
-	height: 50%;
-}
-.h-75 {
-	height: 75%;
-}
-.h-100 {
-	height: 100%;
-}
-
 .stats-info {
-	margin-top: 15px;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-	position: relative;
-}
-
-.stats-info2 {
 	margin-top: 15px;
 	display: flex;
 	align-items: center;
@@ -244,17 +203,17 @@ body {
         width: 100%;
     }
 
-    .main-container, .main-container2 {
+    .main-container {
         width: 100%;
         height: auto;
     }
 
-    .stats-info, .stats-info2 {
+    .stats-info{
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .year-stats, .year-stats2 {
+    .year-stats{
         white-space: normal;
     }
 }

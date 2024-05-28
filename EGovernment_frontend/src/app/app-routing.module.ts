@@ -42,11 +42,6 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   {
-    path: 'izvestaj_o_tipu_saobracajne_nesrece',
-    component: ReportRegisteredVehiclesComponent,
-    // canActivate: [AuthGuard] 
-  },
-  {
     path: 'mupVozila',
     component: HomeVehiclesComponent,
     canActivate: [AuthGuard] 

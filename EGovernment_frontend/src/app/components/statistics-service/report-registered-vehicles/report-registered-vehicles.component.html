@@ -1,4 +1,3 @@
-<app-statistics-header></app-statistics-header>
 <div class="table-container">
   <table class="styled-table">
     <thead>
@@ -46,7 +45,7 @@
       <div class="year-stats">
         <ng-container *ngFor="let item of reportData" class="data-row">
           <div class="month-group">
-            <div class="bar h-100"></div>
+            <div class="bar" [ngStyle]="{'height': getBarHeightForYear(item) + '%'}"></div>
             <p class="month">{{ item.year }}</p>
           </div>
         </ng-container>
@@ -77,39 +76,15 @@
       </div>
     </div>
 
-    <div class="main-container2">
-      <div class="year-stats2">
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">A</p>
-        </div>
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">B</p>
-        </div>
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">B1</p>
-        </div>
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">A1</p>
-        </div>
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">C</p>
-        </div>
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">AM</p>
-        </div>
-        <div class="month-group">
-          <div class="bar h-100"></div>
-          <p class="month">A2</p>
+    <div class="main-container">
+      <div class="year-stats">
+        <div *ngFor="let category of categories" class="month-group">
+          <div class="bar" [ngStyle]="{'height': getBarHeight(category) + '%'}"></div>
+          <p class="month">{{ category.name }}</p>
         </div>
       </div>
 
-      <div class="stats-info2">
+      <div class="stats-info">
         <div class="info">
           <p>
             Kategorija sa najvise registrovanih vozila:<span>

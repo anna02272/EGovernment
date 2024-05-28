@@ -81,7 +81,11 @@ export class ReportRegisteredVehiclesComponent implements OnInit {
   }
 
   getYearWithMostRegisteredVehicles(): number {
-    const maxYear = this.reportData.reduce((max, item) => (max.categories?.reduce((subMax: { total_number: number; }, cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), { total_number: 0 }).total_number > item.categories.reduce((subMax: { total_number: number; }, cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), { total_number: 0 }).total_number ? max : item), { year: 0 });
+    const maxYear = this.reportData.reduce((max, item) => (max.categories?.reduce((subMax: { total_number: number; }, 
+      cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), 
+      { total_number: 0 }).total_number > item.categories.reduce((subMax: { total_number: number; }, 
+        cat: { total_number: number; }) => (subMax.total_number > cat.total_number ? subMax : cat), 
+        { total_number: 0 }).total_number ? max : item), { year: 0 });
     return maxYear.year;
   }
 

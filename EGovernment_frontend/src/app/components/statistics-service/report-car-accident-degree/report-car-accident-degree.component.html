@@ -1,1 +1,93 @@
-<p>report-car-accident-degree works!</p>
+<div class="table-container">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th class="indicator-header">Naslov</th>
+          <th class="period-column">Period</th>
+          <th colspan="4" class="colspan-header">Stepen nesreće</th>
+          <th class="date-column">Datum ažuriranja</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Bez štete</th>
+          <th>Sa materijalnom štetom </th>
+          <th>Sa povređenim licima</th>
+          <th>Sa poginulim licima</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of reportData" class="data-row">
+          <tr>
+            <td class="row-header">{{ item.title }}</td>
+            <td class="period-column">{{ item.year }}</td>
+            <td>{{ getTotalNumberByDegree(item, "NoHarm") }}</td>
+            <td>{{ getTotalNumberByDegree(item, "WithMaterialDamage") }}</td>
+            <td>{{ getTotalNumberByDegree(item, "WithInjuredPersons") }}</td>
+            <td>{{ getTotalNumberByDegree(item, "WithDeadBodies") }}</td>
+            <td class="date-column">{{ item.date | date }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  
+  <body>
+    <div class="container">
+      <div class="main-container">
+        <div class="year-stats">
+          <ng-container *ngFor="let item of reportData" class="data-row">
+            <div class="month-group">
+              <div class="bar" [ngStyle]="{'height': getBarHeightForYear(item) + '%'}"></div>
+              <p class="month">{{ item.year }}</p>
+            </div>
+          </ng-container>
+        </div>
+  
+        <div class="stats-info">
+          <div class="graph-container">
+            <div class="percent">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path
+                  class="circle"
+                  stroke-dasharray="100, 100"
+                  d="M18 2.0845
+                      a 15.9155 15.9155 0 0 1 0 31.831
+                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+              </svg>
+            </div>
+            <p>Ukupno saobraćajnih nesreća: {{ getTotalCarAccidents() }}</p>
+          </div>
+  
+          <div class="info">
+            <p>
+              Godina sa najvise saobraćajnih nesreća:
+              <span> {{ getYearWithMostCarAccidents() }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="main-container">
+        <div class="year-stats">
+          <div *ngFor="let degree of degrees" class="month-group">
+            <div class="bar2" [ngStyle]="{'height': getBarHeight(degree) + '%'}"></div>
+            <p class="month">{{ degreeTranslation[degree.name] }}</p>
+          </div>
+        </div>
+  
+        <div class="stats-info">
+          <div class="info">
+            <p>
+              Stepen sa najvise saobraćajnih nesreća:<span>
+                {{ degreeTranslation[getDegreeWithMostCarAccidents()] }}</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  

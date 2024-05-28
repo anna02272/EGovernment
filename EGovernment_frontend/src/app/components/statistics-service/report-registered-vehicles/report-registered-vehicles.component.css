@@ -1,136 +1,157 @@
-body {
-    font-family: Arial, sans-serif;
-}
 .table-container {
-    margin: 20px;
-    border-collapse: collapse;
+	margin-bottom: 40px;
 }
+
 .styled-table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+	margin: 0 auto; 
 }
+
 .styled-table th, .styled-table td {
-    padding: 10px;
-    border: 1px solid #444D63;
+    padding: 12px 15px;
+    text-align: center;
 }
-.styled-table th {
+
+.styled-table thead tr {
     background-color: #6EB4D4;
-    color: #444D63;
+    color: #ffffff;
     text-align: center;
+    font-weight: bold;
 }
-.styled-table th.colspan-header {
+
+.styled-table thead tr .colspan-header {
     background-color: #C0DFE9;
+    color: #444D63;
 }
+
+.styled-table th,
 .styled-table td {
-    background-color: #F2F2F2;
-    text-align: center;
+    border: 1px solid #c9c9c9;
+	
 }
+
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #6EB4D4;
+}
+
+
 .indicator-header {
     background-color: #C0DFE9;
     font-weight: bold;
+    color: #444D63;
 }
+
 .row-header {
     background-color: #6EB4D4;
+    color: #444D63;
 }
+
 .period-column {
     background-color: #C0DFE9;
+    color: #444D63;
 }
+
+.date-column {
+    background-color: #C0DFE9;
+    color: #444D63;
+}
+
 .data-row {
     background-color: #43D2D7;
-}
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
-
-* {
-	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
+    color: #444D63;
 }
 
 body {
 	font-family: "Roboto", sans-serif;
-	height: 100vh;
+	height: 55%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
 .main-container {
-	background: #444e80;
-	color: #abafc6;
+	background: #F26B68;
+	color: white;
 	border-radius: 5px;
 	padding: 20px;
-	width: 440px;
-	height: 350px;
+	width: 420px;
+	height: auto;
+	align-items: center; 
+    justify-content: center;
+	margin-top: 10%;
+	margin-bottom: 10px;
+	
 }
 
 .year-stats {
+	display: block;
+	align-items: flex-end;
 	white-space: nowrap;
-	max-height: 170px;
-	overflow: hidden;
 }
 
 .year-stats:hover {
 	overflow-x: auto;
 }
 
-/* SCROLL BAR STYLE (ONLY WORKS IN CHROME) */
-/* Width */
 ::-webkit-scrollbar {
 	height: 5px;
 	width: 100%;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
-	background: #444e80;
+	background: #43D2D7;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #abafc6;
+	background: white;
 	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #5397d6;
+	background: #C0DFE9;
 }
 
 .month-group {
 	cursor: pointer;
 	max-width: 400px;
-	height: 110px;
+	height: 70px;
 	margin: 10px;
 	display: inline-block;
 }
 
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	text-align: center;
+    gap: 40px; 
+}
+
 .bar {
-	background-color: #abafc6;
+	background-color: white;
 	width: 20px;
 	border-radius: 5px;
 	margin-bottom: 10px;
+	height: auto;
 }
 
 .month-group:hover .bar,
 .selected .bar {
-	background: #5397d6;
+	background: #c3ced8;
 }
 
 .month-group:hover p,
 .selected p {
 	color: #fff;
-}
-
-.h-25 {
-	height: 25%;
-}
-.h-50 {
-	height: 50%;
-}
-.h-75 {
-	height: 75%;
-}
-.h-100 {
-	height: 100%;
 }
 
 .stats-info {
@@ -152,22 +173,11 @@ body {
 }
 
 .circle {
-	stroke: #915db1;
+	stroke: white;
 	fill: none;
 	stroke-width: 3;
 }
 
-.circle:nth-child(2) {
-	stroke: #e59f3c;
-}
-
-.circle:nth-child(3) {
-	stroke: #5397d6;
-}
-
-.circle:nth-child(4) {
-	stroke: #4cc790;
-}
 
 .graph-container p {
 	position: absolute;
@@ -181,8 +191,29 @@ body {
 
 .info p {
 	margin-bottom: 10px;
+	margin-left: 10px;
 }
 
 .info span {
 	color: #fff;
+}
+
+@media (max-width: 768px) {
+    .styled-table {
+        width: 100%;
+    }
+
+    .main-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .stats-info{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .year-stats{
+        white-space: normal;
+    }
 }

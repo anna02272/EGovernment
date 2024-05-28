@@ -39,14 +39,14 @@ export class RequestComponent implements OnInit {
 
     const newRequest: Request = this.requestForm.value;
     this.requestService.create(newRequest).subscribe({
-      next: response => {
+      next: () => {
         this.snackBar.open('Request created successfully.', 'Close', {
           duration: 3000,
           panelClass: ['success-snackbar']
         });
         this.onCancel();
       },
-      error: err => {
+      error: () => {
         this.snackBar.open('Failed to create request. Please try again later.', 'Close', {
           duration: 3000,
           panelClass: ['error-snackbar']

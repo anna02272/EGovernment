@@ -41,7 +41,7 @@ export class RequestsComponent {
         });
         this.refreshService.refresh();
       },
-      error: (error) => {
+      error: () => {
         this.snackBar.open('Failed to delete request. Please try again later.', 'Close', {
           duration: 3000,
           panelClass: ['error-snackbar']

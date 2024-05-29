@@ -1,1 +1,101 @@
-<p>report-car-accident-type works!</p>
+<div class="title">
+  <h1>Izveštaj o tipu saobraćajne nesreće</h1>
+</div>
+
+<div class="table-container">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th class="indicator-header">Naslov</th>
+          <th class="period-column">Period</th>
+          <th colspan="6" class="colspan-header">Tip nesreće</th>
+          <th class="date-column">Datum ažuriranja</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Obaranje pešaka</th>
+          <th>Sletanje vozila sa puta </th>
+          <th>Sudar iz suprotnog smera</th>
+          <th>Sudar u istom smeru</th>
+          <th>Bočni sudar</th>
+          <th>Prevrtanje</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of reportData" class="data-row">
+          <tr>
+            <td class="row-header">{{ item.title }}</td>
+            <td class="period-column">{{ item.year }}</td>
+            <td>{{ getTotalNumberByType(item, "KnockingDownPedestrians") }}</td>
+            <td>{{ getTotalNumberByType(item, "VehicleLandingFromRoad") }}</td>
+            <td>{{ getTotalNumberByType(item, "CollisionFromOppositeDirection") }}</td>
+            <td>{{ getTotalNumberByType(item, "CollisionInSameDirection") }}</td>
+            <td>{{ getTotalNumberByType(item, "SideCollision") }}</td>
+            <td>{{ getTotalNumberByType(item, "Rollover") }}</td>
+            <td class="date-column">{{ item.date | date }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  
+  <body>
+    <div class="container">
+      <div class="main-container">
+        <div class="year-stats">
+          <ng-container *ngFor="let item of reportData" class="data-row">
+            <div class="month-group">
+              <div class="bar" [ngStyle]="{'height': getBarHeightForYear(item) + '%'}"></div>
+              <p class="month">{{ item.year }}</p>
+            </div>
+          </ng-container>
+        </div>
+  
+        <div class="stats-info">
+          <div class="graph-container">
+            <div class="percent">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path
+                  class="circle"
+                  stroke-dasharray="100, 100"
+                  d="M18 2.0845
+                      a 15.9155 15.9155 0 0 1 0 31.831
+                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+              </svg>
+            </div>
+            <p>Ukupno saobraćajnih nesreća: {{ getTotalCarAccidents() }}</p>
+          </div>
+  
+          <div class="info">
+            <p>
+              Godina sa najvise saobraćajnih nesreća:
+              <span> {{ getYearWithMostCarAccidents() }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="main-container">
+        <div class="year-stats">
+          <div *ngFor="let type of types" class="month-group">
+            <div class="bar2" [ngStyle]="{'height': getBarHeight(type) + '%'}"></div>
+            <p class="month">{{ typeTranslation[type.name] }}</p>
+          </div>
+        </div>
+  
+        <div class="stats-info">
+          <div class="info">
+            <p>
+              Tip sa najvise saobraćajnih nesreća:<span>
+                {{ typeTranslation[getTypeWithMostCarAccidents()] }}</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  

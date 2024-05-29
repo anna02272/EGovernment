@@ -9,7 +9,6 @@ import { HomePoliceComponent } from './components/police-service/home-police/hom
 import { HomeCourtComponent } from './components/court-service/home-court/home-court.component';
 import { AuthGuard } from './services/permission.service';
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
-import { ReportCarAccidentTypeComponent } from './components/statistics-service/report-car-accident-type/report-car-accident-type.component';
 
 const routes: Routes = [
   {
@@ -40,10 +39,6 @@ const routes: Routes = [
     path: 'zahtevi',
     component: RequestsComponent,
     canActivate: [AuthGuard] 
-  },
-  {
-    path: 'izvestaj_o_tipu_saobracajne_nesrece',
-    component: ReportCarAccidentTypeComponent,
   },
   {
     path: 'mupVozila',

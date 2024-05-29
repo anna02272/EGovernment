@@ -126,7 +126,7 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 
 func isValidDelictType(delictType domain.DelictType) bool {
 	switch delictType {
-	case domain.Speeding, domain.DrivingUnderTheInfluenceOfAlcohol, domain.ImproperOvertaking, domain.ImproperParking, domain.FailureTooComplyWithTrafficLightsAndSigns, domain.ImproperUseOfSeatBeltsAndChildSeats, domain.UsingMobilePhoneWhileDriving, domain.ImproperUseOfMotorVehicle:
+	case domain.Speeding, domain.DrivingUnderTheInfluenceOfAlcohol, domain.DrivingUnderTheInfluence, domain.ImproperOvertaking, domain.ImproperParking, domain.FailureTooComplyWithTrafficLightsAndSigns, domain.ImproperUseOfSeatBeltsAndChildSeats, domain.UsingMobilePhoneWhileDriving, domain.ImproperUseOfMotorVehicle:
 		return true
 	default:
 		return false

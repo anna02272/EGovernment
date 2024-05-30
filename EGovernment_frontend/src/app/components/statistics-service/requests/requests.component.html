@@ -25,7 +25,7 @@
                   <div class="confirm-click-btn">
                     <a class="me-3 btn" (click)="delete(request)">Obriši</a>
                   </div>
-                  <a class="btn" data-extra-toggle="delete" data-closest-elem=".item">Odgovori</a>
+                  <a class="btn"  (click)="openResponseDialog(request)" data-extra-toggle="delete" data-closest-elem=".item">Odgovori</a>
                 </div>
               </li>
             </ul>

@@ -13,8 +13,8 @@ export class ReportCarAccidentDegreeService {
     private config: ConfigService
   ) {
   }
-  create(report: ReportCarAccidentDegree, degree: DegreeOfAccident, year: number){
-    const url = `${this.config.carAccidentDegreeReport_url}/create/degree/${degree}/year/${year}`;
+  create(report: ReportCarAccidentDegree){
+    const url = `${this.config.carAccidentDegreeReport_url}/create/degree/${report.degree}/year/${report.year}`;
     return this.apiService.post(url, report);
    }
   

@@ -12,8 +12,8 @@ export class ReportCarAccidentTypeService {
     private config: ConfigService
   ) {
   }
-  create(report: ReportCarAccidentType, carAccidentType: CarAccidentType, year: number){
-    const url = `${this.config.carAccidentTypeReport_url}/create/carAccidentType/${carAccidentType}/year/${year}`;
+  create(report: ReportCarAccidentType){
+    const url = `${this.config.carAccidentTypeReport_url}/create/carAccidentType/${report.type}/year/${report.year}`;
     return this.apiService.post(url, report);
    }
   

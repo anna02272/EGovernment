@@ -9,7 +9,7 @@ import { HomePoliceComponent } from './components/police-service/home-police/hom
 import { HomeCourtComponent } from './components/court-service/home-court/home-court.component';
 import { AuthGuard } from './services/permission.service';
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
-import { ReportRegisteredVehiclesComponent } from './components/statistics-service/report-registered-vehicles/report-registered-vehicles.component';
+import { ResponseComponent } from './components/statistics-service/response/response.component';
 
 const routes: Routes = [
   {
@@ -57,7 +57,6 @@ const routes: Routes = [
     component: HomeCourtComponent,
     canActivate: [AuthGuard] 
   },
-  
 ];
 
 @NgModule({

@@ -38,8 +38,19 @@ export class ApiService {
       .pipe(catchError(this.checkError.bind(this)));
   }
 
-  post(path: string, body: any, customHeaders?: HttpHeaders): Observable<any> {
-    return this.request(path, body, RequestMethod.Post, customHeaders);
+  post(url: string, data: any, customHeaders?: HttpHeaders): Observable<any> {
+    let headers = new HttpHeaders();
+    if (!(data instanceof FormData)) {
+      headers = headers.set('Content-Type', 'application/json');
+    }
+    
+    if (customHeaders) {
+      customHeaders.keys().forEach(key => {
+        headers = headers.set(key, customHeaders.get(key) || '');
+      });
+    }
+
+    return this.http.post(url, data, { headers });
   }
 
   put(path: string, body?: any): Observable<any> {

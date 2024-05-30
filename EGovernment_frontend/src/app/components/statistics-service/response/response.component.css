@@ -1,0 +1,121 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: #C0DFE9;
+    --mdc-dialog-supporting-text-color: #494949;
+  }
+
+
+::ng-deep .mat-mdc-snack-bar-container.success-snackbar {
+    --mdc-snackbar-container-color: #4caf50;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+}
+
+::ng-deep .mat-mdc-snack-bar-container.error-snackbar {
+    --mdc-snackbar-container-color: #f44336;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+}
+
+
+.app-form {
+    display: flex;
+    flex-direction: column;
+    background: #C0DFE9;
+    border-radius: 15px;
+    padding: 20px;     
+}
+
+.app-form-group {
+    margin-bottom: 15px;
+}
+
+.app-form-group.message .app-form-control {
+    width: 100%; 
+}
+
+.app-form-group.buttons {
+    text-align: right;
+}
+
+.app-form-control {
+    width: 100%;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #666;
+    color: #F26B68;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+}
+
+.app-form-control::placeholder {
+    color: #666;
+    transform: translateY(2px); 
+}
+
+.app-form-control:focus {
+    border-bottom-color: #494949;
+}
+
+input[type="file"].app-form-control {
+    padding: 10px ;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+input[type="file"].app-form-control::file-selector-button {
+    background: #F26B68;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="file"].app-form-control::file-selector-button:hover {
+    background: #e05c59;
+}
+
+input[type="checkbox"].app-form-control {
+    width: auto;
+    height: auto;
+    margin: 10px;
+    padding: 10px;
+}
+
+.app-form-group.accepted {
+    display: flex;
+    align-items: center;
+}
+
+.app-form-group.accepted label {
+    color: grey;
+    margin-left: 5px;
+}
+
+.app-form-button {
+    background: none;
+    border: none;
+    color: #F26B68;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    margin-left: 10px;
+}
+
+.app-form-button:hover {
+    color: #e05c59;
+}
+
+
+
+  

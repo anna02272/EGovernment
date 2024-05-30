@@ -13,8 +13,8 @@ export class ReportDelicTypeService {
     private config: ConfigService
   ) {
   }
-  create(report: ReportDelict, delictType: DelictType, year: number){
-    const url = `${this.config.delictReport_url}/create/delictType/${delictType}/year/${year}`;
+  create(report: ReportDelict){
+    const url = `${this.config.delictReport_url}/create/delictType/${report.type}/year/${report.year}`;
     return this.apiService.post(url, report);
    }
   

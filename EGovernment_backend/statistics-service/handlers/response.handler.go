@@ -169,7 +169,7 @@ func (r *ResponseHandler) sendEmail(text string, attachment string, email string
 	m := gomail.NewMessage()
 	m.SetHeader("From", smtpEmail)
 	m.SetHeader("To", email)
-	m.SetHeader("Subject", "Odgovor na zahtev - Institut za statistiku")
+	m.SetHeader("Subject", "Odgovor na zahtev - Institut za statistiku.")
 
 	m.SetBody("text/plain", text)
 

@@ -1,0 +1,80 @@
+<div class="title">
+    <h1>Generiši izveštaj o stepenu saobraćajne nesreće</h1>
+  </div>
+<div class="app-form">
+  <form (ngSubmit)="onSubmit()" [formGroup]="reportForm">
+    <div class="app-form-group">
+      <label for="title">Naslov</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        class="app-form-control"
+        required
+      />
+      <div
+        *ngIf="
+          reportForm.controls['title'].invalid &&
+          reportForm.controls['title'].touched
+        "
+        class="text-danger"
+      >
+        Naslov je obavezan.
+      </div>
+    </div>
+
+    <div class="app-form-row">
+      <div class="app-form-group">
+        <label for="type">Stepen saobraćajne nesreće</label>
+        <select
+          class="app-form-control"
+          formControlName="type"
+          required
+          id="type"
+          name="type"
+          class="form-select"
+        >
+          <option value="" disabled>TIP</option>
+          <option *ngFor="let type of types" [value]="type">
+            {{ typeTranslation[type] }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            reportForm.controls['type'].invalid &&
+            reportForm.controls['type'].touched
+          "
+          class="text-danger"
+        >
+          Tip nesreće je obavezan.
+        </div>
+      </div>
+
+      <div class="app-form-group">
+        <label for="year">Godina</label>
+        <input
+          type="number"
+          id="year"
+          formControlName="year"
+          class="app-form-control"
+        />
+        <div
+          *ngIf="
+            reportForm.controls['year'].invalid &&
+            reportForm.controls['year'].touched
+          "
+          class="text-danger"
+        >
+          Godina je obavezna i mora imati tačno 4 cifre.
+        </div>
+      </div>
+    </div>
+
+    <div class="app-form-group buttons">
+      <button type="button" class="app-form-button" (click)="onCancel()">
+        ODUSTANI
+      </button>
+      <button type="submit" class="app-form-button">KREIRAJ</button>
+    </div>
+  </form>
+</div>

@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Request } from 'src/app/models/statisics/request';
 import { RefreshService } from 'src/app/services/refresh.service';
 import { RequestService } from 'src/app/services/statistics/request.service';
+import { ResponseComponent } from '../response/response.component';
 
 @Component({
   selector: 'app-requests',
@@ -18,7 +20,8 @@ export class RequestsComponent {
     private requestService: RequestService,
     private datePipe: DatePipe,
     private refreshService: RefreshService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -55,6 +58,20 @@ export class RequestsComponent {
       this.load();
     });
   }
+
+  openResponseDialog(request: Request): void {
+    const dialogRef = this.dialog.open(ResponseComponent, {
+      width: '550px',
+      data: { email: request.email }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refreshService.refresh();
+      }
+    });
+  }
+
 
   formatDate(date: string): string {
     const formattedDate = new Date(date);

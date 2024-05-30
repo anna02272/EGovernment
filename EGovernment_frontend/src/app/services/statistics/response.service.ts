@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "../api.service";
 import { ConfigService } from "../config.service";
-import { Response } from "src/app/models/statisics/response";
 
 @Injectable()
 export class ResponseService {
@@ -11,9 +10,9 @@ export class ResponseService {
     private config: ConfigService
   ) {
   }
-  create(response: Response){
+  create(formData: FormData){
     const url = `${this.config.response_url}/create`;
-    return this.apiService.post(url, response);
+    return this.apiService.post(url, formData);
    }
   
   getAll() {

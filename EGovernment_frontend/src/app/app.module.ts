@@ -36,6 +36,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { CreateReportCarAccidentDegreeComponent } from './components/statistics-service/create-report-car-accident-degree/create-report-car-accident-degree.component';
+import { CreateReportCarAccidentTypeComponent } from './components/statistics-service/create-report-car-accident-type/create-report-car-accident-type.component';
+import { CreateReportDelictComponent } from './components/statistics-service/create-report-delict/create-report-delict.component';
+import { CreateReportRegisteredVehiclesComponent } from './components/statistics-service/create-report-registered-vehicles/create-report-registered-vehicles.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,11 @@ import { MatButtonModule } from '@angular/material/button';
     ReportDelictsComponent,
     RequestsComponent,
     ResponseComponent,
-    StatisticsHeaderComponent
+    StatisticsHeaderComponent,
+    CreateReportCarAccidentDegreeComponent,
+    CreateReportCarAccidentTypeComponent,
+    CreateReportDelictComponent,
+    CreateReportRegisteredVehiclesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/auth/user.service';
+import { RefreshService } from 'src/app/services/refresh.service';
 import { ReportDelicTypeService } from 'src/app/services/statistics/reportDelicType.service';
 
 @Component({
@@ -33,15 +35,27 @@ export class ReportDelictsComponent implements OnInit {
   };
   maxDelicts: number = 0;
 
-  constructor(private reportService: ReportDelicTypeService) {}
+  constructor(private reportService: ReportDelicTypeService,
+    private userService: UserService,
+    private refreshService: RefreshService
+  ) {}
 
   ngOnInit(): void {
+    this.loadReports();
+
+    this.refreshService.getRefreshObservable().subscribe(() => {
+      this.loadReports();
+    });
+  }
+
+  loadReports(): void {
     this.reportService.getAll().subscribe((data: any[]) => {
       this.groupDataByYear(data);
       this.calculateMaxDelicts();
       this.calculateMaxDelictsByYear();
     });
   }
+
 
   groupDataByYear(data: any[]): void {
     const groupedData: any[] = [];
@@ -141,5 +155,9 @@ export class ReportDelictsComponent implements OnInit {
   getBarHeightForYear(item: any): number {
     const totalNumber = this.getTotalNumberForYear(item);
     return this.maxDelicts ? (totalNumber / this.maxDelicts) * 100 : 0;
+  }
+
+  getRole() {
+    return this.userService.currentUser?.user.userRole;
   }
 }

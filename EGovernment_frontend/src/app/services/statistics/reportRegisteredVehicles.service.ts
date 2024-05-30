@@ -12,8 +12,8 @@ export class ReportRegisteredVehiclesService {
     private config: ConfigService
   ) {
   }
-  create(report: ReportRegisteredVehicle, category: Category, year: number){
-    const url = `${this.config.registeredVehiclesReport_url}/create/category/${category}/year/${year}`;
+  create(report: ReportRegisteredVehicle){
+    const url = `${this.config.registeredVehiclesReport_url}/create/category/${report.category}/year/${report.year}`;
     return this.apiService.post(url, report);
    }
   

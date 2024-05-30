@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/auth/user.service';
+import { RefreshService } from 'src/app/services/refresh.service';
 import { ReportRegisteredVehiclesService } from 'src/app/services/statistics/reportRegisteredVehicles.service';
 
 @Component({
@@ -19,9 +21,21 @@ export class ReportRegisteredVehiclesComponent implements OnInit {
   ];
   maxRegisteredVehicles: number = 0;
 
-  constructor(private reportService: ReportRegisteredVehiclesService) {}
+  constructor(
+    private reportService: ReportRegisteredVehiclesService,
+    private userService: UserService,
+    private refreshService: RefreshService
+  ) {}
 
   ngOnInit(): void {
+    this.loadReports();
+
+    this.refreshService.getRefreshObservable().subscribe(() => {
+      this.loadReports();
+    });
+  }
+
+  loadReports(): void {
     this.reportService.getAll().subscribe((data: any[]) => {
       this.groupDataByYear(data);
       this.calculateMaxRegisteredVehicles();
@@ -127,5 +141,9 @@ export class ReportRegisteredVehiclesComponent implements OnInit {
   getBarHeightForYear(item: any): number {
     const totalNumber = this.getTotalNumberForYear(item);
     return this.maxRegisteredVehicles ? (totalNumber / this.maxRegisteredVehicles) * 100 : 0;
+  }
+
+  getRole() {
+    return this.userService.currentUser?.user.userRole;
   }
 }

@@ -56,7 +56,6 @@ export class ReportDelictsComponent implements OnInit {
     });
   }
 
-
   groupDataByYear(data: any[]): void {
     const groupedData: any[] = [];
     const latestDataByYear: { [year: number]: { date: Date, title: string } } = {};

@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	"police-service/domain"
 	"time"
 )
@@ -63,7 +64,7 @@ func (d *DelictServiceImpl) InsertDelict(delict *domain.DelictCreate, policemanI
 	trafficDelict.DelictType = delict.DelictType
 	trafficDelict.NumberOfPenaltyPoints = delict.NumberOfPenaltyPoints
 
-	result, err := d.collection.InsertOne(context.Background(), delict)
+	result, err := d.collection.InsertOne(context.Background(), trafficDelict)
 	if err != nil {
 		return nil, "", err
 	}
@@ -74,6 +75,10 @@ func (d *DelictServiceImpl) InsertDelict(delict *domain.DelictCreate, policemanI
 	}
 
 	insertedID = result.InsertedID.(primitive.ObjectID)
+
+	log.Printf("Inserted Delict DB : %+v\n", &trafficDelict)
+
+	log.Printf("Inserted insertedID DB : %+v\n", insertedID)
 
 	return &trafficDelict, insertedID.Hex(), nil
 }

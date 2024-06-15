@@ -16,6 +16,7 @@ func NewCourtRouteHandler(handler handlers.CourtHandler, service services.CourtS
 }
 
 func (rc *CourtRouteHandler) CourtRoute(rg *gin.RouterGroup) {
-	_ = rg.Group("/court")
-
+	router := rg.Group("/court")
+	router.POST("/courts", rc.handler.CreateCourt)
+	router.GET("/courts/:id", rc.handler.GetCourtByID)
 }

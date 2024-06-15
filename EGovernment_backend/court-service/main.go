@@ -15,21 +15,29 @@ import (
 )
 
 var (
-	server              *gin.Engine
-	ctx                 context.Context
-	mongoClient         *mongo.Client
-	courtCollection     *mongo.Collection
-	subjectCollection   *mongo.Collection
-	citizenCollection   *mongo.Collection
-	courtService        services.CourtService
-	courtHandler        handlers.CourtHandler
-	courtRouteHandler   routes.CourtRouteHandler
-	citizenHandler      handlers.CitizenHandler
-	citizenService      services.CitizenService
-	citizenRouteHandler routes.CitizenRouteHandler
-	subjectHandler      handlers.SubjectHandler
-	subjectService      services.SubjectService
-	subjectRouteHandler routes.SubjectRouteHandler
+	server               *gin.Engine
+	ctx                  context.Context
+	mongoClient          *mongo.Client
+	courtCollection      *mongo.Collection
+	subjectCollection    *mongo.Collection
+	citizenCollection    *mongo.Collection
+	hearingCollection    *mongo.Collection
+	scheduleCollection   *mongo.Collection
+	courtService         services.CourtService
+	courtHandler         handlers.CourtHandler
+	courtRouteHandler    routes.CourtRouteHandler
+	citizenHandler       handlers.CitizenHandler
+	citizenService       services.CitizenService
+	citizenRouteHandler  routes.CitizenRouteHandler
+	subjectHandler       handlers.SubjectHandler
+	subjectService       services.SubjectService
+	subjectRouteHandler  routes.SubjectRouteHandler
+	hearingHandler       handlers.HearingHandler
+	hearingService       services.HearingService
+	hearingRouteHandler  routes.HearingRouteHandler
+	scheduleHandler      handlers.ScheduleHandler
+	scheduleService      services.ScheduleService
+	scheduleRouteHandler routes.ScheduleRouteHandler
 )
 
 func init() {
@@ -58,6 +66,18 @@ func init() {
 	citizenService = services.NewCitizenServiceImpl(citizenCollection, ctx)
 	citizenHandler = handlers.NewCitizenHandler(citizenService, citizenCollection)
 	citizenRouteHandler = routes.NewCitizenRouteHandler(citizenHandler, citizenService)
+
+	hearingCollection = mongoClient.Database("EGovernment").Collection("hearing")
+
+	hearingService = services.NewHearingServiceImpl(hearingCollection, ctx)
+	hearingHandler = handlers.NewHearingHandler(hearingService, hearingCollection)
+	hearingRouteHandler = routes.NewHearingRouteHandler(hearingHandler, hearingService)
+
+	scheduleCollection = mongoClient.Database("EGovernment").Collection("schedule")
+
+	scheduleService = services.NewScheduleServiceImpl(scheduleCollection, ctx)
+	scheduleHandler = handlers.NewScheduleHandler(scheduleService, scheduleCollection)
+	scheduleRouteHandler = routes.NewScheduleRouteHandler(scheduleHandler, scheduleService)
 
 	subjectCollection = mongoClient.Database("EGovernment").Collection("subject")
 
@@ -92,6 +112,8 @@ func main() {
 	courtRouteHandler.CourtRoute(router)
 	citizenRouteHandler.CitizenRoute(router)
 	subjectRouteHandler.SubjectRoutes(router)
+	hearingRouteHandler.HearingRoute(router)
+	scheduleRouteHandler.ScheduleRoute(router)
 
 	err := server.Run(":8083")
 	if err != nil {

@@ -15,13 +15,39 @@ import (
 )
 
 var (
-	server                 *gin.Engine
-	ctx                    context.Context
-	mongoClient            *mongo.Client
-	statisticsCollection   *mongo.Collection
-	statisticsService      services.StatisticsService
-	statisticsHandler      handlers.StatisticsHandler
-	statisticsRouteHandler routes.StatisticsRouteHandler
+	server      *gin.Engine
+	ctx         context.Context
+	mongoClient *mongo.Client
+
+	reportDelicTypeCollection   *mongo.Collection
+	reportDelicTypeService      services.ReportDelicTypeService
+	reportDelicTypeHandler      handlers.ReportDelicTypeHandler
+	reportDelicTypeRouteHandler routes.ReportDelicTypeRouteHandler
+
+	reportCarAccidentTypeCollection   *mongo.Collection
+	reportCarAccidentTypeService      services.ReportCarAccidentTypeService
+	reportCarAccidentTypeHandler      handlers.ReportCarAccidentTypeHandler
+	reportCarAccidentTypeRouteHandler routes.ReportCarAccidentTypeRouteHandler
+
+	reportCarAccidentDegreeCollection   *mongo.Collection
+	reportCarAccidentDegreeService      services.ReportCarAccidentDegreeService
+	reportCarAccidentDegreeHandler      handlers.ReportCarAccidentDegreeHandler
+	reportCarAccidentDegreeRouteHandler routes.ReportCarAccidentDegreeRouteHandler
+
+	reportRegisteredVehiclesCollection   *mongo.Collection
+	reportRegisteredVehiclesService      services.ReportRegisteredVehiclesService
+	reportRegisteredVehiclesHandler      handlers.ReportRegisteredVehiclesHandler
+	reportRegisteredVehiclesRouteHandler routes.ReportRegisteredVehiclesRouteHandler
+
+	responseCollection   *mongo.Collection
+	responseService      services.ResponseService
+	responseHandler      handlers.ResponseHandler
+	responseRouteHandler routes.ResponseRouteHandler
+
+	requestCollection   *mongo.Collection
+	requestService      services.RequestService
+	requestHandler      handlers.RequestHandler
+	requestRouteHandler routes.RequestRouteHandler
 )
 
 func init() {
@@ -39,11 +65,36 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	statisticsCollection = mongoClient.Database("EGovernment").Collection("statistics")
+	reportDelicTypeCollection = mongoClient.Database("Statistics").Collection("reportDelicType")
+	reportCarAccidentTypeCollection = mongoClient.Database("Statistics").Collection("reportCarAccidentType")
+	reportCarAccidentDegreeCollection = mongoClient.Database("Statistics").Collection("reportCarAccidentDegree")
+	reportRegisteredVehiclesCollection = mongoClient.Database("Statistics").Collection("reportRegisteredVehicles")
+	responseCollection = mongoClient.Database("Statistics").Collection("response")
+	requestCollection = mongoClient.Database("Statistics").Collection("request")
 
-	statisticsService = services.NewStatisticsServiceImpl(statisticsCollection, ctx)
-	statisticsHandler = handlers.NewStatisticsHandler(statisticsService, statisticsCollection)
-	statisticsRouteHandler = routes.NewStatisticsRouteHandler(statisticsHandler, statisticsService)
+	reportDelicTypeService = services.NewReportDelicTypeImpl(reportDelicTypeCollection, ctx)
+	reportDelicTypeHandler = handlers.NewReportDelicTypeHandler(reportDelicTypeService, reportDelicTypeCollection)
+	reportDelicTypeRouteHandler = routes.NewReportDelicTypeRouteHandler(reportDelicTypeHandler, reportDelicTypeService)
+
+	reportCarAccidentTypeService = services.NewReportCarAccidentTypeImpl(reportCarAccidentTypeCollection, ctx)
+	reportCarAccidentTypeHandler = handlers.NewReportCarAccidentTypeHandler(reportCarAccidentTypeService, reportCarAccidentTypeCollection)
+	reportCarAccidentTypeRouteHandler = routes.NewReportCarAccidentTypeRouteHandler(reportCarAccidentTypeHandler, reportCarAccidentTypeService)
+
+	reportCarAccidentDegreeService = services.NewReportCarAccidentDegreeImpl(reportCarAccidentDegreeCollection, ctx)
+	reportCarAccidentDegreeHandler = handlers.NewReportCarAccidentDegreeHandler(reportCarAccidentDegreeService, reportCarAccidentDegreeCollection)
+	reportCarAccidentDegreeRouteHandler = routes.NewReportCarAccidentDegreeRouteHandler(reportCarAccidentDegreeHandler, reportCarAccidentDegreeService)
+
+	reportRegisteredVehiclesService = services.NewReportRegisteredVehiclesServiceImpl(reportRegisteredVehiclesCollection, ctx)
+	reportRegisteredVehiclesHandler = handlers.NewReportRegisteredVehiclesHandler(reportRegisteredVehiclesService, reportRegisteredVehiclesCollection)
+	reportRegisteredVehiclesRouteHandler = routes.NewReportRegisteredVehiclesRouteHandler(reportRegisteredVehiclesHandler, reportRegisteredVehiclesService)
+
+	responseService = services.NewResponseServiceImpl(responseCollection, ctx)
+	responseHandler = handlers.NewResponseHandler(responseService, responseCollection)
+	responseRouteHandler = routes.NewResponseRouteHandler(responseHandler, responseService)
+
+	requestService = services.NewRequestServiceImpl(requestCollection, ctx)
+	requestHandler = handlers.NewRequestHandler(requestService, requestCollection)
+	requestRouteHandler = routes.NewRequestRouteHandler(requestHandler, requestService)
 
 	server = gin.Default()
 
@@ -69,7 +120,12 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Message"})
 	})
 
-	statisticsRouteHandler.StatisticsRoute(router)
+	reportDelicTypeRouteHandler.Route(router)
+	reportCarAccidentTypeRouteHandler.Route(router)
+	reportCarAccidentDegreeRouteHandler.Route(router)
+	reportRegisteredVehiclesRouteHandler.Route(router)
+	responseRouteHandler.Route(router)
+	requestRouteHandler.Route(router)
 
 	err := server.Run(":8082")
 	if err != nil {

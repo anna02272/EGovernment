@@ -32,6 +32,7 @@ func (uc *AuthServiceImpl) Registration(user *domain.User, ctx context.Context) 
 		Username: user.Username,
 		Password: hashedPassword,
 		Email:    user.Email,
+		JMBG:     user.JMBG,
 		Name:     user.Name,
 		Lastname: user.Lastname,
 		UserRole: user.UserRole,

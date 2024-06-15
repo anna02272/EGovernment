@@ -14,6 +14,7 @@
   <ul class="main-nav">
     <li *ngIf="!hasSignedIn()" routerLink="/registracija">Registrujte se</li>
     <li *ngIf="!hasSignedIn()" routerLink="/prijava">Prijavite se</li>
+    <li *ngIf="hasSignedIn() && getRole() === 'Employee'" routerLink="/zahtevi">Zahtevi</li>
     <li>
       <div class="dropdown" *ngIf="hasSignedIn()">
         <button

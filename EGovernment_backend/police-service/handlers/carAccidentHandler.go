@@ -3,16 +3,19 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"gopkg.in/gomail.v2"
 	"log"
 	"net/http"
 	"police-service/data"
 	"police-service/domain"
 	errorMessage "police-service/error"
 	"police-service/services"
+	"strconv"
 	"time"
 )
 
@@ -118,6 +121,12 @@ func (s *CarAccidentHandler) CreateCarAccident(c *gin.Context) {
 		return
 	}
 
+	/*err = s.sendCarAccidentMail(carAccidentInsertDB.Description, carAccidentInsertDB.DriverEmail)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
+		return
+	}*/
+
 	rw.WriteHeader(http.StatusCreated)
 	jsonResponse, err1 := json.Marshal(carAccidentInsertDB)
 	if err1 != nil {
@@ -135,6 +144,25 @@ func isValidCarAccidentType(carAccidentType domain.CarAccidentType) bool {
 	default:
 		return false
 	}
+}
+
+func (s *CarAccidentHandler) sendCarAccidentMail(Description, email string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", smtpEmail)
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "EUprava obavestenje")
+
+	bodyString := fmt.Sprintf("Za Vas je kreirana saobracajna nesreca sa opisom:\n %s \nStanje vase saobracajne nesrece mozete pratiti na portalu EUprave https://localhost:4200/", Description)
+	m.SetBody("text", bodyString)
+
+	client := gomail.NewDialer(smtpServer, smtpServerPort, smtpEmail, smtpPassword)
+
+	if err := client.DialAndSend(m); err != nil {
+		log.Fatalf("Failed to send mail because of: %s", err)
+		return err
+	}
+
+	return nil
 }
 
 func isValidCarAccidentDegreeOfAccident(degreeOfAccident domain.DegreeOfAccident) bool {
@@ -247,6 +275,59 @@ func (s *CarAccidentHandler) GetAllCarAccidentsByType(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
+func (s *CarAccidentHandler) GetAllCarAccidentsByTypeAndYear(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+	carAccidentType := c.Param("carAccidentType")
+	yearStr := c.Param("year")
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	carAccidents, err := s.service.GetAllCarAccidentsByTypeAndYear(domain.CarAccidentType(carAccidentType), year)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve car accidents from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(carAccidents)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
 func (s *CarAccidentHandler) GetAllCarAccidentsByDegree(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
@@ -293,6 +374,59 @@ func (s *CarAccidentHandler) GetAllCarAccidentsByDegree(c *gin.Context) {
 		return
 	}
 
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
+func (s *CarAccidentHandler) GetAllCarAccidentsByDegreeAndYear(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+	degreeOfAccident := c.Param("degreeOfAccident")
+	yearStr := c.Param("year")
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	carAccidents, err := s.service.GetAllCarAccidentsByDegreeAndYear(domain.DegreeOfAccident(degreeOfAccident), year)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve car accidents from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(carAccidents)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
 	rw.Header().Set("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(jsonResponse)
@@ -512,14 +646,14 @@ func (s *CarAccidentHandler) GetCarAccidentsByDriver(c *gin.Context) {
 
 	driverEmail := responseUser.LoggedInUser.Email
 	log.Printf("driverEmail: %+v\n", driverEmail)
-	delicts, err := s.service.GetAllCarAccidentsByDriver(driverEmail)
+	carAccidents, err := s.service.GetAllCarAccidentsByDriver(driverEmail)
 	if err != nil {
-		errorMsg := map[string]string{"error": "Failed to retrieve delicts from the database."}
+		errorMsg := map[string]string{"error": "Failed to retrieve car accidents from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
 		return
 	}
 
-	jsonResponse, err := json.Marshal(delicts)
+	jsonResponse, err := json.Marshal(carAccidents)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Error marshaling JSON."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)

@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	"police-service/domain"
 	"time"
 )
@@ -63,7 +64,7 @@ func (d *DelictServiceImpl) InsertDelict(delict *domain.DelictCreate, policemanI
 	trafficDelict.DelictType = delict.DelictType
 	trafficDelict.NumberOfPenaltyPoints = delict.NumberOfPenaltyPoints
 
-	result, err := d.collection.InsertOne(context.Background(), delict)
+	result, err := d.collection.InsertOne(context.Background(), trafficDelict)
 	if err != nil {
 		return nil, "", err
 	}
@@ -74,6 +75,10 @@ func (d *DelictServiceImpl) InsertDelict(delict *domain.DelictCreate, policemanI
 	}
 
 	insertedID = result.InsertedID.(primitive.ObjectID)
+
+	log.Printf("Inserted Delict DB : %+v\n", &trafficDelict)
+
+	log.Printf("Inserted insertedID DB : %+v\n", insertedID)
 
 	return &trafficDelict, insertedID.Hex(), nil
 }
@@ -161,6 +166,39 @@ func (d *DelictServiceImpl) GetAllDelictsByDriver(driverEmail string) ([]*domain
 func (d *DelictServiceImpl) GetAllDelictsByDelictType(delictType domain.DelictType) ([]*domain.Delict, error) {
 	var delicts []*domain.Delict
 	filter := bson.M{"delict_type": delictType}
+
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+
+	for cursor.Next(d.ctx) {
+		var delict domain.Delict
+		if err := cursor.Decode(&delict); err != nil {
+			return nil, err
+		}
+		delicts = append(delicts, &delict)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return delicts, nil
+}
+
+func (d *DelictServiceImpl) GetAllDelictsByDelictTypeAndYear(delictType domain.DelictType, year int) ([]*domain.Delict, error) {
+	var delicts []*domain.Delict
+	startOfYear := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	endOfYear := startOfYear.AddDate(1, 0, 0)
+
+	filter := bson.M{
+		"delict_type": delictType,
+		"date": bson.M{
+			"$gte": startOfYear,
+			"$lt":  endOfYear,
+		},
+	}
 
 	cursor, err := d.collection.Find(d.ctx, filter)
 	if err != nil {

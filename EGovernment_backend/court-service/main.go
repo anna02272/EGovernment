@@ -15,13 +15,21 @@ import (
 )
 
 var (
-	server            *gin.Engine
-	ctx               context.Context
-	mongoClient       *mongo.Client
-	courtCollection   *mongo.Collection
-	courtService      services.CourtService
-	courtHandler      handlers.CourtHandler
-	courtRouteHandler routes.CourtRouteHandler
+	server              *gin.Engine
+	ctx                 context.Context
+	mongoClient         *mongo.Client
+	courtCollection     *mongo.Collection
+	subjectCollection   *mongo.Collection
+	citizenCollection   *mongo.Collection
+	courtService        services.CourtService
+	courtHandler        handlers.CourtHandler
+	courtRouteHandler   routes.CourtRouteHandler
+	citizenHandler      handlers.CitizenHandler
+	citizenService      services.CitizenService
+	citizenRouteHandler routes.CitizenRouteHandler
+	subjectHandler      handlers.SubjectHandler
+	subjectService      services.SubjectService
+	subjectRouteHandler routes.SubjectRouteHandler
 )
 
 func init() {
@@ -39,11 +47,23 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	courtCollection = mongoClient.Database("EGovernment").Collection("court")
+	courtCollection = mongoClient.Database("Court").Collection("court")
 
 	courtService = services.NewCourtServiceImpl(courtCollection, ctx)
 	courtHandler = handlers.NewCourtHandler(courtService, courtCollection)
 	courtRouteHandler = routes.NewCourtRouteHandler(courtHandler, courtService)
+
+	citizenCollection = mongoClient.Database("Court").Collection("citizen")
+
+	citizenService = services.NewCitizenServiceImpl(citizenCollection, ctx)
+	citizenHandler = handlers.NewCitizenHandler(citizenService, citizenCollection)
+	citizenRouteHandler = routes.NewCitizenRouteHandler(citizenHandler, citizenService)
+
+	subjectCollection = mongoClient.Database("Court").Collection("subject")
+
+	subjectService = services.NewSubjectServiceImpl(subjectCollection, ctx)
+	subjectHandler = handlers.NewSubjectHandler(subjectService, subjectCollection)
+	subjectRouteHandler = routes.NewSubjectRouteHandler(subjectHandler, subjectService)
 
 	server = gin.Default()
 
@@ -70,6 +90,8 @@ func main() {
 	})
 
 	courtRouteHandler.CourtRoute(router)
+	citizenRouteHandler.CitizenRoute(router)
+	subjectRouteHandler.SubjectRoutes(router)
 
 	err := server.Run(":8083")
 	if err != nil {

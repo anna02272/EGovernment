@@ -1,0 +1,36 @@
+<app-statistics-header></app-statistics-header>
+<div class="header-for-bg position-relative">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <div class="title">
+          <h4>Zahtevi</h4>
+        </div>
+      </div>
+  
+      <div class="card-body">
+        <div class="row">
+          <div *ngFor="let request of requests" class="col-md-4 column-divider">
+            <div class="request-info">
+              <p><strong>Ime:</strong> {{request.name}}</p>
+              <p><strong>Prezime:</strong>{{request.lastname}}</p>
+              <p><strong>Email:</strong> {{request.email}}</p>
+              <p><strong>Broj telefona:</strong> {{request.phone_number}}</p>
+              <p><strong>Kategorija:</strong> {{request.category}}</p>
+              <p><strong>Pitanje:</strong> {{request.question}}</p>
+              <p><strong>Datum:</strong> {{ formatDate(request.date)}}</p>
+            </div>
+            <ul class="request-list list-inline m-0 p-0">
+              <li class="d-flex align-items-center justify-content-between flex-wrap">
+                <div class="d-flex align-items-center mt-2 mt-md-0">
+                  <div class="confirm-click-btn">
+                    <a class="me-3 btn" (click)="delete(request)">Obriši</a>
+                  </div>
+                  <a class="btn"  (click)="openResponseDialog(request)" data-extra-toggle="delete" data-closest-elem=".item">Odgovori</a>
+                </div>
+              </li>
+            </ul>
+            <hr>
+          </div>
+      </div>
+    </div>
+  </div>

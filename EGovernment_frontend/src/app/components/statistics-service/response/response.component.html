@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Odgovori na zahtev</h1>
+<div mat-dialog-content>
+  <form [formGroup]="responseForm" (ngSubmit)="onSubmit()">
+    <div class="app-form">
+      <div class="app-form-group">
+        <textarea
+          class="app-form-control"
+          placeholder="ODGOVOR"
+          formControlName="text"
+          required
+        ></textarea>
+        <div *ngIf="responseForm.controls['text'].invalid && responseForm.controls['text'].touched" class="text-danger">
+          Odgovor je obavezan.
+        </div>
+      </div>
+      <div class="app-form-group">
+        <input
+          type="file"
+          class="app-form-control"
+          (change)="onFileSelected($event)"
+          placeholder="PRILOG"
+        />
+      </div>
+      <div class="app-form-group">
+        <input
+          type="checkbox"
+          class="app-form-control"
+          formControlName="accepted"
+        />
+        <label>Prihvaćeno</label>
+      </div>
+      <div class="app-form-group">
+        <input
+          class="app-form-control"
+          placeholder="ZA KOGA"
+          formControlName="send_to"
+          required
+        />
+        <div *ngIf="responseForm.controls['send_to'].invalid && responseForm.controls['send_to'].touched" class="text-danger">
+          Email je obavezan.
+        </div>
+      </div>
+      <div class="app-form-group buttons">
+        <button type="button" class="app-form-button" (click)="onCancel()">ODUSTANI</button>
+        <button type="submit" class="app-form-button">POŠALJI</button>
+      </div>
+    </div>
+  </form>
+</div>

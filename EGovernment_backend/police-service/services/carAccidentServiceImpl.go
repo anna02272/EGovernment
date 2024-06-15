@@ -19,7 +19,7 @@ func NewCarAccidentServiceImpl(collection *mongo.Collection, ctx context.Context
 	return &CarAccidentServiceImpl{collection, ctx}
 }
 
-func (c CarAccidentServiceImpl) InsertCarAccident(carAccident *domain.CarAccidentCreate, policemanID string) (*domain.CarAccident, string, error) {
+func (d CarAccidentServiceImpl) InsertCarAccident(carAccident *domain.CarAccidentCreate, policemanID string) (*domain.CarAccident, string, error) {
 	carAccident.PolicemanID = policemanID
 	currentTime := time.Now()
 	dateTime := primitive.NewDateTimeFromTime(currentTime)
@@ -39,7 +39,7 @@ func (c CarAccidentServiceImpl) InsertCarAccident(carAccident *domain.CarAcciden
 	trafficCarAccident.DegreeOfAccident = carAccident.DegreeOfAccident
 	trafficCarAccident.NumberOfPenaltyPoints = carAccident.NumberOfPenaltyPoints
 
-	result, err := c.collection.InsertOne(context.Background(), carAccident)
+	result, err := d.collection.InsertOne(context.Background(), trafficCarAccident)
 	if err != nil {
 		return nil, "", err
 	}
@@ -54,17 +54,17 @@ func (c CarAccidentServiceImpl) InsertCarAccident(carAccident *domain.CarAcciden
 	return &trafficCarAccident, insertedID.Hex(), nil
 }
 
-func (c CarAccidentServiceImpl) GetAllCarAccident() ([]*domain.CarAccident, error) {
+func (d CarAccidentServiceImpl) GetAllCarAccident() ([]*domain.CarAccident, error) {
 	var carAccidents []*domain.CarAccident
 	filter := bson.D{}
 
-	cursor, err := c.collection.Find(c.ctx, filter)
+	cursor, err := d.collection.Find(d.ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(c.ctx)
+	defer cursor.Close(d.ctx)
 
-	for cursor.Next(c.ctx) {
+	for cursor.Next(d.ctx) {
 		var carAccident domain.CarAccident
 		if err := cursor.Decode(&carAccident); err != nil {
 			return nil, err
@@ -78,31 +78,31 @@ func (c CarAccidentServiceImpl) GetAllCarAccident() ([]*domain.CarAccident, erro
 	return carAccidents, nil
 }
 
-func (c CarAccidentServiceImpl) GetCarAccidentById(carAccidentId string, ctx context.Context) (*domain.CarAccident, error) {
+func (d CarAccidentServiceImpl) GetCarAccidentById(carAccidentId string, ctx context.Context) (*domain.CarAccident, error) {
 	objID, err := primitive.ObjectIDFromHex(carAccidentId)
 	if err != nil {
 		return nil, err
 	}
 
 	var carAccident domain.CarAccident
-	err = c.collection.FindOne(c.ctx, bson.M{"_id": objID}).Decode(&carAccident)
+	err = d.collection.FindOne(d.ctx, bson.M{"_id": objID}).Decode(&carAccident)
 	if err != nil {
 		return nil, err
 	}
 	return &carAccident, nil
 }
 
-func (c CarAccidentServiceImpl) GetAllCarAccidentsByType(carAccidentType domain.CarAccidentType) ([]*domain.CarAccident, error) {
+func (d CarAccidentServiceImpl) GetAllCarAccidentsByType(carAccidentType domain.CarAccidentType) ([]*domain.CarAccident, error) {
 	var carAccidents []*domain.CarAccident
 	filter := bson.M{"car_accident_type": carAccidentType}
 
-	cursor, err := c.collection.Find(c.ctx, filter)
+	cursor, err := d.collection.Find(d.ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(c.ctx)
+	defer cursor.Close(d.ctx)
 
-	for cursor.Next(c.ctx) {
+	for cursor.Next(d.ctx) {
 		var carAccident domain.CarAccident
 		if err := cursor.Decode(&carAccident); err != nil {
 			return nil, err
@@ -116,17 +116,50 @@ func (c CarAccidentServiceImpl) GetAllCarAccidentsByType(carAccidentType domain.
 	return carAccidents, nil
 }
 
-func (c CarAccidentServiceImpl) GetAllCarAccidentsByDegree(degreeOfAccident domain.DegreeOfAccident) ([]*domain.CarAccident, error) {
+func (d *CarAccidentServiceImpl) GetAllCarAccidentsByTypeAndYear(carAccidentType domain.CarAccidentType, year int) ([]*domain.CarAccident, error) {
+	var carAccidents []*domain.CarAccident
+	startOfYear := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	endOfYear := startOfYear.AddDate(1, 0, 0)
+
+	filter := bson.M{
+		"car_accident_type": carAccidentType,
+		"date": bson.M{
+			"$gte": startOfYear,
+			"$lt":  endOfYear,
+		},
+	}
+
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+
+	for cursor.Next(d.ctx) {
+		var carAccident domain.CarAccident
+		if err := cursor.Decode(&carAccident); err != nil {
+			return nil, err
+		}
+		carAccidents = append(carAccidents, &carAccident)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return carAccidents, nil
+}
+
+func (d CarAccidentServiceImpl) GetAllCarAccidentsByDegree(degreeOfAccident domain.DegreeOfAccident) ([]*domain.CarAccident, error) {
 	var carAccidents []*domain.CarAccident
 	filter := bson.M{"degree_of_accident": degreeOfAccident}
 
-	cursor, err := c.collection.Find(c.ctx, filter)
+	cursor, err := d.collection.Find(d.ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(c.ctx)
+	defer cursor.Close(d.ctx)
 
-	for cursor.Next(c.ctx) {
+	for cursor.Next(d.ctx) {
 		var carAccident domain.CarAccident
 		if err := cursor.Decode(&carAccident); err != nil {
 			return nil, err
@@ -140,17 +173,50 @@ func (c CarAccidentServiceImpl) GetAllCarAccidentsByDegree(degreeOfAccident doma
 	return carAccidents, nil
 }
 
-func (c CarAccidentServiceImpl) GetAllCarAccidentsByPolicemanID(policemanID string) ([]*domain.CarAccident, error) {
+func (d *CarAccidentServiceImpl) GetAllCarAccidentsByDegreeAndYear(degreeOfAccident domain.DegreeOfAccident, year int) ([]*domain.CarAccident, error) {
+	var carAccidents []*domain.CarAccident
+	startOfYear := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	endOfYear := startOfYear.AddDate(1, 0, 0)
+
+	filter := bson.M{
+		"degree_of_accident": degreeOfAccident,
+		"date": bson.M{
+			"$gte": startOfYear,
+			"$lt":  endOfYear,
+		},
+	}
+
+	cursor, err := d.collection.Find(d.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(d.ctx)
+
+	for cursor.Next(d.ctx) {
+		var carAccident domain.CarAccident
+		if err := cursor.Decode(&carAccident); err != nil {
+			return nil, err
+		}
+		carAccidents = append(carAccidents, &carAccident)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return carAccidents, nil
+}
+
+func (d CarAccidentServiceImpl) GetAllCarAccidentsByPolicemanID(policemanID string) ([]*domain.CarAccident, error) {
 	var carAccidents []*domain.CarAccident
 	filter := bson.M{"policeman_id": policemanID}
 
-	cursor, err := c.collection.Find(c.ctx, filter)
+	cursor, err := d.collection.Find(d.ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(c.ctx)
+	defer cursor.Close(d.ctx)
 
-	for cursor.Next(c.ctx) {
+	for cursor.Next(d.ctx) {
 		var carAccident domain.CarAccident
 		if err := cursor.Decode(&carAccident); err != nil {
 			return nil, err
@@ -164,17 +230,17 @@ func (c CarAccidentServiceImpl) GetAllCarAccidentsByPolicemanID(policemanID stri
 	return carAccidents, nil
 }
 
-func (c CarAccidentServiceImpl) GetAllCarAccidentsByDriver(driverEmail string) ([]*domain.CarAccident, error) {
+func (d CarAccidentServiceImpl) GetAllCarAccidentsByDriver(driverEmail string) ([]*domain.CarAccident, error) {
 	var carAccidents []*domain.CarAccident
 	filter := bson.M{"driver_email": driverEmail}
 
-	cursor, err := c.collection.Find(c.ctx, filter)
+	cursor, err := d.collection.Find(d.ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(c.ctx)
+	defer cursor.Close(d.ctx)
 
-	for cursor.Next(c.ctx) {
+	for cursor.Next(d.ctx) {
 		var carAccident domain.CarAccident
 		if err := cursor.Decode(&carAccident); err != nil {
 			return nil, err

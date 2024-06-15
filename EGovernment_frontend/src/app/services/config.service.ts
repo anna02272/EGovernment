@@ -10,19 +10,22 @@ export class ConfigService {
   private _auth_api_url = 'http://localhost:8085/api';
 
   private _vehicles_url = this._vehicles_api_url + '/vehicles';
-  private _statistics_url = this._statistics_api_url + '/statistics';
   private _auth_url = this._auth_api_url + '/auth';
   private _user_url = this._auth_api_url + '/users';
+
   private _login_url = this._auth_url + '/login';
   private _register_url = this._auth_url + '/register';
   private _current_user_url = this._user_url + '/currentUser';
 
+  private _request_url = this._statistics_api_url + '/request';
+  private _response_url = this._statistics_api_url + '/response';
+  private _registeredVehiclesReport_url = this._statistics_api_url + '/registeredVehiclesReport';
+  private _carAccidentDegreeReport_url = this._statistics_api_url + '/carAccidentDegreeReport';
+  private _carAccidentTypeReport_url = this._statistics_api_url + '/carAccidentTypeReport';
+  private _delictReport_url = this._statistics_api_url + '/delictReport';
+
   get vehicles_url(): string {
     return this._vehicles_url;
-  }
-
-  get statistics_url() {
-    return this._statistics_url;
   }
 
   get auth_url(): string {
@@ -43,6 +46,30 @@ export class ConfigService {
 
   get currentUser_url(): string {
     return this._current_user_url;
+  }
+
+  get request_url(): string {
+    return this._request_url;
+  }
+
+  get response_url(): string {
+    return this._response_url;
+  }
+
+  get registeredVehiclesReport_url(): string {
+    return this._registeredVehiclesReport_url;
+  }
+
+  get carAccidentDegreeReport_url(): string {
+    return this._carAccidentDegreeReport_url;
+  }
+
+  get carAccidentTypeReport_url(): string {
+    return this._carAccidentTypeReport_url;
+  }
+
+  get delictReport_url(): string {
+    return this._delictReport_url;
   }
 }
 

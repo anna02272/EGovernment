@@ -22,7 +22,7 @@ func (vr *VehicleRouteHandler) VehicleRoute(rg *gin.RouterGroup) {
 	router.POST("/createVehicle", MiddlewareVehicleDeserialization, vr.handler.CreateVehicle)
 	router.GET("/all", vr.handler.GetAllVehicles)
 	router.GET("/all/registered", vr.handler.GetAllRegisteredVehicles)
-
+	router.GET("/get/category/:category/year/:year", vr.handler.GetAllVehiclesByCategoryAndYear)
 	router.GET("/get/:id", vr.handler.GetVehicleByID)
 
 }

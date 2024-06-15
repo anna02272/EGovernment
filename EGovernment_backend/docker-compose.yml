@@ -18,6 +18,7 @@ services:
         condition: service_healthy
     networks:
       - network
+
   court-service:
     build:
       context: ./court-service/
@@ -71,6 +72,8 @@ services:
         condition: service_healthy
     networks:
       - network
+    dns:
+      - 8.8.8.8
 
   auth-service:
     build:

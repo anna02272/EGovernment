@@ -27,6 +27,8 @@ func (d *DelictRouteHandler) DelictRoute(rg *gin.RouterGroup) {
 	router.GET("/get/:id", d.handler.GetDelictByID)
 	router.GET("/getDriver/:driverId", d.handler.CheckDriverAlcoholDelicts)
 	router.GET("/get/delictType/:delictType", d.handler.GetAllDelictsByDelictType)
+	router.GET("/get/delictType/:delictType/year/:year", d.handler.GetAllDelictsByDelictTypeAndYear)
+
 }
 
 func MiddlewareDelictDeserialization(c *gin.Context) {

@@ -1,0 +1,119 @@
+<div class="background">
+  <div class="container">
+    <div class="screen">
+      <div class="screen-header">
+        <div class="screen-header-left">
+          <div class="screen-header-button close"></div>
+          <div class="screen-header-button maximize"></div>
+          <div class="screen-header-button minimize"></div>
+        </div>
+        <div class="screen-header-right">
+          <div class="screen-header-ellipsis"></div>
+          <div class="screen-header-ellipsis"></div>
+          <div class="screen-header-ellipsis"></div>
+        </div>
+      </div>
+      <div class="screen-body">
+        <div class="screen-body-item left">
+          <div class="app-title">
+            <span>PITAJTE</span>
+            <span>NAS</span>
+          </div>
+          <div class="app-body">
+            <span>
+              Ukoliko niste uspeli da pronađete potrebne podatke i informacije na
+              našem sajtu, možete nam uputiti zahtev popunjavanjem jednog od ponuđenih
+              formulara. Na vaš zahtev biće odgovoreno što je pre moguće i u skladu sa
+              zakonskim rokovima.
+            </span>
+          </div>
+        </div>
+        <div class="screen-body-item">
+          <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+            <div class="app-form">
+              <div class="app-form-group">
+                <input
+                  class="app-form-control"
+                  placeholder="IME"
+                  formControlName="name"
+                  required
+                />
+                <div *ngIf="requestForm.controls['name'].invalid && requestForm.controls['name'].touched" class="text-danger">
+                  Ime je obavezno.
+                </div>
+              </div>
+              <div class="app-form-group">
+                <input
+                  class="app-form-control"
+                  placeholder="PREZIME"
+                  formControlName="lastname"
+                  required
+                />
+                <div *ngIf="requestForm.controls['lastname'].invalid && requestForm.controls['lastname'].touched" class="text-danger">
+                  Prezime je obavezno.
+                </div>
+              </div>
+              <div class="app-form-group">
+                <input
+                  class="app-form-control"
+                  placeholder="EMAIL"
+                  formControlName="email"
+                  required
+                />
+                <div *ngIf="requestForm.controls['email'].invalid && requestForm.controls['email'].touched" class="text-danger">
+                  <span *ngIf="requestForm.controls['email'].errors?.['required']">Email je obavezan.</span>
+                  <span *ngIf="requestForm.controls['email'].errors?.['email']">Email mora imati važeći format.</span>
+                </div>
+              </div>
+              <div class="app-form-group">
+                <input
+                  type="number"
+                  class="app-form-control"
+                  placeholder="BROJ TELEFONA"
+                  formControlName="phone_number"
+                  required
+                />
+                <div *ngIf="requestForm.controls['phone_number'].invalid && requestForm.controls['phone_number'].touched" class="text-danger">
+                  Broj telefona je obavezan.
+                </div>
+              </div>
+              <div class="app-form-group">
+                <select
+                  class="app-form-control"
+                  formControlName="category"
+                  required
+                  id="categoryPerson"
+                  name="categoryPerson"
+                  class="form-select"
+                >
+                  <option value="" disabled>KATEGORIJA</option>
+                  <option *ngFor="let categoryPerson of categoriesPerson" [value]="categoryPerson">
+                    {{ categoryPerson }}
+                  </option>
+                </select>
+                <div *ngIf="requestForm.controls['category'].invalid && requestForm.controls['category'].touched" class="text-danger">
+                  Kategorija je obavezna.
+                </div>
+              </div>
+              <div class="app-form-group message">
+                <input
+                  class="app-form-control"
+                  placeholder="PITANJE"
+                  formControlName="question"
+                  required
+                />
+                <div *ngIf="requestForm.controls['question'].invalid && requestForm.controls['question'].touched" class="text-danger">
+                  Pitanje je obavezno.
+                </div>
+              </div>
+              <div class="app-form-group buttons">
+                <button type="button" class="app-form-button" (click)="onCancel()">ODUSTANI</button>
+                <button type="submit" class="app-form-button" >POŠALJI</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

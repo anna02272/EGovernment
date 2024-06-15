@@ -1,0 +1,21 @@
+  <app-statistics-header></app-statistics-header>
+
+  <nav>
+    <div class="nav-container">
+    <ul>
+      <li [ngClass]="{'selected': selectedReport === 'registered-vehicles'}" (click)="selectReport('registered-vehicles')">Registrovana vozila</li>
+      <li [ngClass]="{'selected': selectedReport === 'car-accident-degree'}" (click)="selectReport('car-accident-degree')">Stepen saobraćajnih nesreća</li>
+      <li [ngClass]="{'selected': selectedReport === 'car-accident-type'}" (click)="selectReport('car-accident-type')">Tip saobraćajnih nesreća</li>
+      <li [ngClass]="{'selected': selectedReport === 'delicts'}" (click)="selectReport('delicts')">Prekršaji</li>
+    </ul>
+    </div>
+  </nav>
+  
+  <div class="report-container">
+    <app-report-registered-vehicles *ngIf="selectedReport === 'registered-vehicles'"></app-report-registered-vehicles>
+    <app-report-car-accident-degree *ngIf="selectedReport === 'car-accident-degree'"></app-report-car-accident-degree>
+    <app-report-car-accident-type *ngIf="selectedReport === 'car-accident-type'"></app-report-car-accident-type>
+    <app-report-delicts *ngIf="selectedReport === 'delicts'"></app-report-delicts>
+  </div>
+  
+  <app-request *ngIf="getRole() === 'Citizen'"></app-request>

@@ -47,9 +47,9 @@ func init() {
 
 	fmt.Println("MongoDB successfully connected...")
 
-	vehicleCollection = mongoClient.Database("EGovernment").Collection("vehicle")
-	driverLicenceCollection = mongoClient.Database("EGovernment").Collection("driverLicence")
-	vehicleDriverCollection = mongoClient.Database("EGovernment").Collection("vehicleDriver")
+	vehicleCollection = mongoClient.Database("Vehicles").Collection("vehicle")
+	driverLicenceCollection = mongoClient.Database("Vehicles").Collection("driverLicence")
+	vehicleDriverCollection = mongoClient.Database("Vehicles").Collection("vehicleDriver")
 
 	vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
 	vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)

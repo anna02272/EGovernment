@@ -13,4 +13,5 @@ type DelictService interface {
 	GetAllDelictsForDriverByDelictType(driverID string) ([]*domain.Delict, error)
 	GetAllDelictsByPolicemanID(policemanID string) ([]*domain.Delict, error)
 	GetAllDelictsByDriver(driverEmail string) ([]*domain.Delict, error)
+	GetAllDelictsByDelictTypeAndYear(delictType domain.DelictType, year int) ([]*domain.Delict, error)
 }

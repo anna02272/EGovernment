@@ -3,11 +3,13 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"vehicles-service/data"
@@ -263,7 +265,7 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 		return
 	}
 
-	vehicles, err := s.service.GetAllRegisteedVehicles()
+	vehicles, err := s.service.GetAllRegisteredVehicles()
 	if err != nil {
 		errorMsg := map[string]string{"error": "Failed to retrieve registered vehicles from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
@@ -290,6 +292,59 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 		return
 	}
 
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
+func (s *VehicleHandler) GetAllVehiclesByCategoryAndYear(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+	category := c.Param("category")
+	yearStr := c.Param("year")
+	year, err := strconv.Atoi(yearStr)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	vehicles, err := s.service.GetAllVehiclesByCategoryAndYear(domain.Category(category), year)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve registered vehicles from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(vehicles)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
 	rw.Header().Set("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(jsonResponse)

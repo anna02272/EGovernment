@@ -70,7 +70,7 @@ func init() {
 	hearingCollection = mongoClient.Database("EGovernment").Collection("hearing")
 
 	hearingService = services.NewHearingServiceImpl(hearingCollection, ctx)
-	hearingHandler = handlers.NewHearingHandler(hearingService, hearingCollection)
+	hearingHandler = handlers.NewHearingHandler(hearingService, hearingCollection, subjectService)
 	hearingRouteHandler = routes.NewHearingRouteHandler(hearingHandler, hearingService)
 
 	scheduleCollection = mongoClient.Database("EGovernment").Collection("schedule")

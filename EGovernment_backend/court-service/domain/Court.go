@@ -10,8 +10,9 @@ type Court struct {
 
 type Hearing struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	SubjectID primitive.ObjectID `bson:"subject_id" json:"subject_id"`
+	SubjectID primitive.ObjectID `json:"subject_id"`
 	Date      string             `bson:"date" json:"date"`
+	JudgeID   primitive.ObjectID `bson:"judge_id" json:"judge_id"`
 }
 
 type Schedule struct {

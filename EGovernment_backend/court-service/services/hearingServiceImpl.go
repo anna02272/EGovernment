@@ -41,3 +41,11 @@ func (hs *HearingServiceImpl) GetHearingByID(id primitive.ObjectID) (*domain.Hea
 	}
 	return &hearing, nil
 }
+func (hs *HearingServiceImpl) GetSubjectById(id primitive.ObjectID) (*domain.Subject, error) {
+	var subject domain.Subject
+	err := hs.collection.FindOne(hs.ctx, bson.M{"_id": id}).Decode(&subject)
+	if err != nil {
+		return nil, err
+	}
+	return &subject, nil
+}

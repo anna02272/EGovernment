@@ -6,18 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="51b20573-9e0b-4905-816e-9aaba3b5e036" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/data/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/data/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/domain/Court.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/domain/Court.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/domain/Subject.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/domain/Subject.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/court.handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/court.handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/subjectHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/subjectHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/hearingHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/hearingHandler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/court.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/court.routes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/subject.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/subject.routes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/court.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/court.service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/court.service.impl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/court.service.impl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/subjectService.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/subjectService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingService.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingServiceImpl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingServiceImpl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/subjectServiceImpl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/subjectServiceImpl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

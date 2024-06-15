@@ -40,6 +40,7 @@ func (ss *SubjectServiceImpl) GetSubjectByID(id primitive.ObjectID) (*domain.Sub
 	}
 	return &subject, nil
 }
+
 func (ss *SubjectServiceImpl) GetAllSubjects() ([]domain.Subject, error) {
 	cursor, err := ss.collection.Find(ss.ctx, bson.M{})
 	if err != nil {

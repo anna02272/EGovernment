@@ -1,4 +1,17 @@
 <div class="content">
-<p>Za sve</p>
-<p *ngIf="getRole() === 'Judge'">Za sudiju</p>
-</div>
+    <p>Za sve</p>
+    <div *ngIf="getRole() === 'Judge'">
+      <div class="contentt">
+        <h2>Subjects with status WAITING</h2>
+        <div *ngIf="subjects.length > 0; else noSubjects">
+          <div class="articles">
+            <app-subject *ngFor="let subject of subjects" [subject]="subject"></app-subject>
+          </div>
+        </div>
+        <ng-template #noSubjects>
+          <p>No subjects with status "WAITING" found.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  

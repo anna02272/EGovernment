@@ -1,0 +1,41 @@
+<div class="container">
+    <h2>Create and Schedule Hearing</h2>
+  
+    <form (ngSubmit)="onSubmit()" class="hearing-form">
+      <div class="section">
+        <h3>Hearing Details</h3>
+        <div class="form-group">
+          <label for="subjectId">Subject ID:</label>
+          <input id="subjectId" [(ngModel)]="subjectId" name="subjectId" required disabled>
+        </div>
+  
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input id="date" type="date" [(ngModel)]="hearingData.date" name="date" required>
+        </div>
+      </div>
+  
+      <div class="section">
+        <h3>Schedule Details</h3>
+        <div class="form-group">
+          <label for="courtsSelect">Select Courts:</label>
+          <select id="courtsSelect" [(ngModel)]="selectedCourts" name="courtsSelect" multiple required>
+            <option *ngFor="let court of courts" [value]="court.id">{{ court.name }}</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="start_time">Start Time:</label>
+          <input id="start_time" type="datetime-local" [(ngModel)]="scheduleData.start_time" name="start_time" required>
+        </div>
+  
+        <div class="form-group">
+          <label for="end_time">End Time:</label>
+          <input id="end_time" type="datetime-local" [(ngModel)]="scheduleData.end_time" name="end_time" required>
+        </div>
+      </div>
+  
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  

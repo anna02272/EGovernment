@@ -8,4 +8,5 @@ import (
 type CourtService interface {
 	CreateCourt(court *domain.Court) (*domain.Court, error)
 	GetCourtByID(id primitive.ObjectID) (*domain.Court, error)
+	GetAllCourts() ([]domain.Court, error)
 }

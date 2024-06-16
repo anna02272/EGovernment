@@ -59,3 +59,12 @@ func (ch *CourtHandler) GetCourtByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, court)
 }
+func (ch *CourtHandler) GetAllCourts(c *gin.Context) {
+	courts, err := ch.service.GetAllCourts()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Failed to get courts"})
+		return
+	}
+
+	c.JSON(http.StatusOK, courts)
+}

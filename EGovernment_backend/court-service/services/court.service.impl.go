@@ -41,3 +41,25 @@ func (cs *CourtServiceImpl) GetCourtByID(id primitive.ObjectID) (*domain.Court, 
 	}
 	return &court, nil
 }
+func (cs *CourtServiceImpl) GetAllCourts() ([]domain.Court, error) {
+	var courts []domain.Court
+	cursor, err := cs.collection.Find(cs.ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(cs.ctx)
+
+	for cursor.Next(cs.ctx) {
+		var court domain.Court
+		if err := cursor.Decode(&court); err != nil {
+			return nil, err
+		}
+		courts = append(courts, court)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return courts, nil
+}

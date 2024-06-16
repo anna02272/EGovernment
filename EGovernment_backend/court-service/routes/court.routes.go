@@ -19,4 +19,6 @@ func (rc *CourtRouteHandler) CourtRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/court")
 	router.POST("/courts", rc.handler.CreateCourt)
 	router.GET("/courts/:id", rc.handler.GetCourtByID)
+	router.GET("/courts/all", rc.handler.GetAllCourts)
+
 }

@@ -39,16 +39,14 @@ export class EditSubjectComponent implements OnInit {
     if (this.subject) {
       const { id, judgment, status, compromis } = this.subject;
       
-      // Napravite tri odvojena zahteva za ažuriranje svake vrste podatka
       const updateStatus$ = this.subjectService.updateSubjectStatus(id, status);
       const updateJudgment$ = this.subjectService.updateSubjectJudgment(id, judgment);
       const updateCompromise$ = this.subjectService.updateSubjectCompromis(id, compromis);
 
-      // Kombinujte ove observable i izvršite ih istovremeno
       forkJoin([updateStatus$, updateJudgment$, updateCompromise$]).subscribe(
         ([updatedStatus, updatedJudgment, updatedCompromise]) => {
           console.log('Successfully updated subject:', updatedStatus, updatedJudgment, updatedCompromise);
-          this.router.navigate(['/subjectTab', id]); // Navigate back to the subject details
+          this.router.navigate(['/subjectTab', id]);
         },
         error => {
           console.error('Error updating subject:', error);
@@ -59,7 +57,7 @@ export class EditSubjectComponent implements OnInit {
 
   cancel(): void {
     if (this.subject) {
-      this.router.navigate(['/subjectTab', this.subject.id]); // Navigate back to the subject details
+      this.router.navigate(['/subjectTab', this.subject.id]); 
     }
   }
 }

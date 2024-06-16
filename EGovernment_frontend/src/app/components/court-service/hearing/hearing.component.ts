@@ -58,26 +58,21 @@ export class HearingComponent implements OnInit {
         
       };
 
-      // Dohvatanje JWT tokena iz AuthService-a
       const token = this.authService.getToken();
 
-      // Provera da li je token dostupan
       if (!token) {
         console.error('JWT token nije dostupan.');
         return;
       }
 
-      // Postavljanje Authorization zaglavlja sa Bearer tokenom
       const headers = {
         Authorization: `Bearer ${token}`
       };
 
-      // Opcije za HTTP zahtev uključujući zaglavlja
       const options = {
         headers: headers
       };
 
-      // Slanje zahteva sa zaglavljima i telom
       this.hearingService.createHearing(newHearing, options).subscribe(
         (response: any) => {
           const hearingId = response.id;

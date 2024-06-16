@@ -8,14 +8,14 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #C0DFE9; /* Promenjeno u boju iz vašeg headera */
+    background-color: #C0DFE9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   h2 {
     font-size: 1.8rem;
-    color: #28666e; /* Promenjeno u boju iz vašeg headera */
+    color: #28666e; 
     margin-bottom: 20px;
     text-align: center;
   }
@@ -33,7 +33,7 @@
   
   h3 {
     font-size: 1.4rem;
-    color: #28666e; /* Promenjeno u boju iz vašeg headera */
+    color: #28666e; 
     margin-bottom: 10px;
   }
   
@@ -45,7 +45,7 @@
     display: block;
     font-weight: bold;
     margin-bottom: 6px;
-    color: #28666e; /* Promenjeno u boju iz vašeg headera */
+    color: #28666e;
   }
   
   input[type="date"],
@@ -56,11 +56,11 @@
     border: 1px solid #DCE0E0;
     border-radius: 4px;
     font-size: 1rem;
-    color: #484848; /* Promenjeno u boju iz vašeg headera */
+    color: #484848; 
   }
   
   button[type="submit"] {
-    background-color: #28666e; /* Promenjeno u boju iz vašeg headera */
+    background-color: #28666e; 
     color: white;
     border: none;
     padding: 10px 20px;

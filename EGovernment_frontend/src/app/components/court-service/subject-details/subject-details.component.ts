@@ -15,7 +15,7 @@ export class SubjectDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router, // Dodali smo Router
+    private router: Router, 
     private subjectService: SubjectService
   ) { }
 

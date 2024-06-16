@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/auth/user.service';
 })
 export class HomeCourtComponent implements OnInit {
   subjects: Subject[] = [];
-  hearings: Hearing[] = []; // Lista za čuvanje svih ročišta
+  hearings: Hearing[] = []; 
 
   constructor(
     private userService: UserService,
@@ -61,7 +61,6 @@ export class HomeCourtComponent implements OnInit {
     this.hearings.forEach((hearing) => {
       this.hearingService.getSubjectById(hearing.subject_id).subscribe(
         (subject) => {
-          // Find the corresponding hearing and attach the subject
           const hearingIndex = this.hearings.findIndex(
             (h) => h.id === hearing.id,
           );
@@ -82,6 +81,5 @@ export class HomeCourtComponent implements OnInit {
     console.log(hearing);
   }
   navigateToSubjectDetails(subjectId: string, id: any) {
-    this.router.navigate(['/subjectTab', subjectId,{ hearingId: id }]); // Navigate to subject details with subjectId and hearingId as parameter
-  }
+    this.router.navigate(['/subjectTab', subjectId,{ hearingId: id }]); }
 }

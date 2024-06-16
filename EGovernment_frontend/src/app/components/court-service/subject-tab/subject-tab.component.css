@@ -1,31 +1,31 @@
 .subject-details {
     max-width: 600px;
-    margin: 150px auto; /* Povećali smo marginu na vrhu i dnu */
+    margin: 150px auto;
     padding: 20px;
-    background-color: #C0DFE9; /* Boja iz vašeg headera */
+    background-color: #C0DFE9; 
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .subject-details h2 {
     font-size: 1.8rem;
-    color: #28666e; /* Boja iz vašeg headera */
+    color: #28666e;
     margin-bottom: 10px;
   }
   
   .subject-details p {
     margin-bottom: 6px;
-    color: #484848; /* Boja iz vašeg headera */
+    color: #484848;
   }
   
   .subject-details h3 {
     font-size: 1.4rem;
-    color: #28666e; /* Boja iz vašeg headera */
+    color: #28666e; 
     margin-bottom: 10px;
   }
   
   .subject-details button {
-    background-color: #28666e; /* Boja iz vašeg headera */
+    background-color: #28666e;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -33,10 +33,10 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 20px; /* Povećali smo margin na vrhu dugmeta */
+    margin-top: 20px;
   }
   
   .subject-details button:hover {
-    background-color: #1e4d54; /* Tamnija nijansa boje iz vašeg headera */
+    background-color: #1e4d54;
   }
   

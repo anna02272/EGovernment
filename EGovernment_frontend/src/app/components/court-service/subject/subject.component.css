@@ -1,46 +1,49 @@
-.article {
-    cursor: pointer;
-    background-color: #ffffff;
+.subject-details, .article {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #F26B68; /* Narandžasta boja */
+    color: #ffffff; /* Bela boja teksta */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  .article:hover {
+  .subject-details:hover, .article:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
   
-  .article-wrapper {
-    display: flex;
-    align-items: center;
+  .subject-details h2, .article h2 {
+    font-size: 1.8rem;
+    color: #FFB6C1; /* Rozikasta boja */
+    margin-bottom: 10px;
   }
   
-  .article-wrapper figure {
-    margin: 0;
-    padding: 0;
-    width: 100px; /* Prilagodite veličinu slike po potrebi */
+  .subject-details p, .article p {
+    margin-bottom: 6px;
+    color: #ffffff; /* Bela boja teksta */
   }
   
-  .article-wrapper figure img {
-    width: 100%;
-    border-radius: 8px 0 0 8px;
+  .subject-details h3, .article h3 {
+    font-size: 1.4rem;
+    color: #FFB6C1; /* Rozikasta boja */
+    margin-bottom: 10px;
   }
   
-  .article-body {
-    padding: 16px;
-  }
-  
-  .article h2 {
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333333;
-  }
-  
-  .article p {
-    margin: 8px 0;
+  .subject-details button, .article button {
+    background-color: #FFB6C1; /* Rozikasta boja */
+    color: #ffffff; /* Bela boja teksta */
+    border: none;
+    padding: 10px 20px;
     font-size: 1rem;
-    color: #666666;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .subject-details button:hover, .article button:hover {
+    background-color: #FF8C94; /* Tamnija rozikasta boja */
   }
   

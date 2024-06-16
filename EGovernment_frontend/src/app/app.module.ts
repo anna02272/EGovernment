@@ -44,6 +44,8 @@ import { HearingComponent } from './components/court-service/hearing/hearing.com
 import { SubjectComponent } from './components/court-service/subject/subject.component';
 import { SubjectDetailsComponent } from './components/court-service/subject-details/subject-details.component';
 import { ScheduleComponent } from './components/court-service/schedule/schedule.component';
+import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
+import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,9 @@ import { ScheduleComponent } from './components/court-service/schedule/schedule.
     HearingComponent,
     SubjectComponent,
     SubjectDetailsComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    SubjectTabComponent,
+    EditSubjectComponent
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type HearingServiceImpl struct {
@@ -48,4 +49,36 @@ func (hs *HearingServiceImpl) GetSubjectById(id primitive.ObjectID) (*domain.Sub
 		return nil, err
 	}
 	return &subject, nil
+}
+func (hs *HearingServiceImpl) GetJudgeHearings(judgeID primitive.ObjectID) ([]*domain.Hearing, error) {
+	var hearings []*domain.Hearing
+
+	// Postavljamo filter za traženje ročišta povezanih sa određenim sudijom
+	filter := bson.M{"judge_id": judgeID}
+
+	// Opcije za sortiranje rezultata po datumu
+	opts := options.Find().SetSort(bson.D{{"date", 1}})
+
+	// Izvršavamo upit
+	cur, err := hs.collection.Find(context.TODO(), filter, opts)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(context.Background())
+
+	// Iteriramo kroz rezultate i dekodiramo ih u strukturu Hearings
+	for cur.Next(context.Background()) {
+		var hearing domain.Hearing
+		err := cur.Decode(&hearing)
+		if err != nil {
+			return nil, err
+		}
+		hearings = append(hearings, &hearing)
+	}
+
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+
+	return hearings, nil
 }

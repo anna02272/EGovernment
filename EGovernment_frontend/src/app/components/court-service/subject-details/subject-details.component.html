@@ -1,18 +1,18 @@
 <div class="subject-details" *ngIf="subject">
     <h2>{{ subject.judgment }}</h2>
     <p>Status: {{ subject.status }}</p>
-    <p>Compromis: {{ subject.compromis }}</p>
+    <p>Kompromis: {{ subject.compromis }}</p>
   
     <div *ngIf="violationDetails">
-      <h3>Violation Details</h3>
-      <p>Violation ID: {{ violationDetails.id }}</p>
-      <p>Date: {{ violationDetails.date | date }}</p>
-      <p>Location: {{ violationDetails.location }}</p>
-      <p>Description: {{ violationDetails.description }}</p>
-      <p>Delict Type: {{ violationDetails.delict_type }}</p>
-      <p>Number of Penalty Points: {{ violationDetails.number_of_penalty_points }}</p>
+      <h3>Detalji prekrsaja</h3>
+      <p>Prekrsaj ID: {{ violationDetails.id }}</p>
+      <p>Datum: {{ violationDetails.date | date }}</p>
+      <p>Mesto: {{ violationDetails.location }}</p>
+      <p>Opis: {{ violationDetails.description }}</p>
+      <!-- <p>Delict Type: {{ violationDetails.delict_type }}</p> -->
+      <p>Broj kaznenih poena: {{ violationDetails.number_of_penalty_points }}</p>
     </div>
   
-    <button (click)="scheduleHearing()">Schedule Hearing</button>
+    <button (click)="scheduleHearing()">Zakazi rociste</button>
   </div>
   

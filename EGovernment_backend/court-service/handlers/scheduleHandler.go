@@ -59,3 +59,24 @@ func (sh *ScheduleHandler) GetScheduleByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, schedule)
 }
+func (sh *ScheduleHandler) GetScheduleByHearingID(c *gin.Context) {
+	hearingID := c.Param("hearingId")
+	objID, err := primitive.ObjectIDFromHex(hearingID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid hearing ID format"})
+		return
+	}
+
+	schedule, err := sh.service.GetScheduleByHearingID(objID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Failed to get schedule"})
+		return
+	}
+
+	if schedule == nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Schedule not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, schedule)
+}

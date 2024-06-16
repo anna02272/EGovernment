@@ -55,6 +55,7 @@ export class HearingComponent implements OnInit {
       const newHearing: Hearing = {
         subject_id: this.subjectId,
         date: this.hearingData.date,
+        
       };
 
       // Dohvatanje JWT tokena iz AuthService-a

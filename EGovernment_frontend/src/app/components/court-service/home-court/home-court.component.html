@@ -1,15 +1,35 @@
 <div class="content">
-    <p>Za sve</p>
     <div *ngIf="getRole() === 'Judge'">
       <div class="contentt">
-        <h2>Subjects with status WAITING</h2>
+        <h2>Predmeti koji su na čekanju:</h2>
         <div *ngIf="subjects.length > 0; else noSubjects">
           <div class="articles">
             <app-subject *ngFor="let subject of subjects" [subject]="subject"></app-subject>
           </div>
         </div>
         <ng-template #noSubjects>
-          <p>No subjects with status "WAITING" found.</p>
+          <p>Nema predmeta na čekanju</p>
+        </ng-template>
+      </div>
+    </div>
+  
+    <div *ngIf="getRole() === 'Judge'">
+      <div class="contentt">
+        <h2>Sva zakazana ročišta:</h2>
+        <div *ngIf="hearings.length > 0; else noHearings">
+          <div class="hearings">
+            <div *ngFor="let hearing of hearings" class="hearing" (click)="navigateToSubjectDetails(hearing.subject_id,hearing.id)">
+                <div class="hearing-card">
+                <h3>{{ hearing.subject?.judgment }}</h3>
+                <p>Status: {{ hearing.subject?.status }}</p>
+                <p>Predmet Id: {{ hearing.subject_id }}</p>
+                <p>Datum ročišta: {{ hearing.date | date }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noHearings>
+          <p>Nema zakazanih ročišta</p>
         </ng-template>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './services/permission.service';
+import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
 import { HearingComponent } from './components/court-service/hearing/hearing.component';
 import { HomeComponent } from './components/home/home.component';
 import { HomeCourtComponent } from './components/court-service/home-court/home-court.component';
@@ -12,6 +13,7 @@ import { NgModule } from '@angular/core';
 import { RegistrationComponent } from './components/auth-service/registration/registration.component';
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
 import { SubjectDetailsComponent } from './components/court-service/subject-details/subject-details.component';
+import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
 
 const routes: Routes = [
   {
@@ -68,6 +70,10 @@ const routes: Routes = [
     path: 'rociste/:subjectId',
     component: HearingComponent
   },
+  { path: 'subjectTab/:id', component: SubjectTabComponent },
+  { path: 'editSubject/:id', component: EditSubjectComponent },
+
+
   
 ];
 

@@ -41,3 +41,11 @@ func (ss *ScheduleServiceImpl) GetScheduleByID(id primitive.ObjectID) (*domain.S
 	}
 	return &schedule, nil
 }
+func (ss *ScheduleServiceImpl) GetScheduleByHearingID(hearingID primitive.ObjectID) (*domain.Schedule, error) {
+	var schedule domain.Schedule
+	err := ss.collection.FindOne(ss.ctx, bson.M{"hearing_id": hearingID}).Decode(&schedule)
+	if err != nil {
+		return nil, err
+	}
+	return &schedule, nil
+}

@@ -19,5 +19,6 @@ func (rc *HearingRouteHandler) HearingRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/hearing")
 	router.POST("/create", rc.handler.CreateHearing)
 	router.GET("/hearings/:id", rc.handler.GetHearingByID)
+	router.GET("/getByIdJudge", rc.handler.GetJudgeHearings)
 
 }

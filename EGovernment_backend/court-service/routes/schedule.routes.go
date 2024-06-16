@@ -19,5 +19,6 @@ func (rc *ScheduleRouteHandler) ScheduleRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/schedule")
 	router.POST("/create", rc.handler.CreateSchedule)
 	router.GET("/schedules/:id", rc.handler.GetScheduleByID)
+	router.GET("/getByHearing/:hearingId", rc.handler.GetScheduleByHearingID)
 
 }

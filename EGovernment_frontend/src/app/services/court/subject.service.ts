@@ -42,4 +42,5 @@ export class SubjectService {
     const url = `${this.apiUrl}/subjects/${id}/compromis`;
     return this.http.put<Subject>(url, { compromis });
   }
+  
 }

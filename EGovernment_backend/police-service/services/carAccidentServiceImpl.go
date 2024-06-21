@@ -39,7 +39,7 @@ func (d CarAccidentServiceImpl) InsertCarAccident(carAccident *domain.CarAcciden
 	trafficCarAccident.DegreeOfAccident = carAccident.DegreeOfAccident
 	trafficCarAccident.NumberOfPenaltyPoints = carAccident.NumberOfPenaltyPoints
 
-	result, err := d.collection.InsertOne(context.Background(), carAccident)
+	result, err := d.collection.InsertOne(context.Background(), trafficCarAccident)
 	if err != nil {
 		return nil, "", err
 	}

@@ -1,0 +1,21 @@
+<div class="subject-details" *ngIf="subject">
+  <h2>{{ subject.judgment }}</h2>
+  <p>Status: {{ subject.status }}</p>
+  <p>Kompromis: {{ subject.compromis }}</p>
+
+  <div *ngIf="violationDetails">
+    <h3>Detalji prekrsaja</h3>
+    <p>Prekrsaj ID: {{ violationDetails.id }}</p>
+    <p>Datum: {{ violationDetails.date | date }}</p>
+    <p>Mesto: {{ violationDetails.location }}</p>
+    <p>Opis: {{ violationDetails.description }}</p>
+    <p>Broj kaznenih poena: {{ violationDetails.number_of_penalty_points }}</p>
+  </div>
+  <div *ngIf="schedule">
+    <h2>Detalji rocista</h2>
+    <p>Vreme pocetka: {{ schedule.start_time }}</p>
+    <p>Vreme kraja: {{ schedule.end_time }}</p>
+  </div>
+
+  <button (click)="editSubject()" class="btn btn-primary">Promeni detalje</button>
+</div>

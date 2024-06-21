@@ -6,9 +6,27 @@
   <component name="ChangeListManager">
     <list default="true" id="51b20573-9e0b-4905-816e-9aaba3b5e036" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/auth-service/services/user.service.impl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/auth-service/services/user.service.impl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/subjectHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/subjectHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/subject.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/subject.routes.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/hearingHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/hearingHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/scheduleHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/handlers/scheduleHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/hearing.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/hearing.routes.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/schedule.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/routes/schedule.routes.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingService.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingServiceImpl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/hearingServiceImpl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/scheduleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/scheduleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_backend/court-service/services/scheduleServiceImpl.go" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_backend/court-service/services/scheduleServiceImpl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/hearing/hearing.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/hearing/hearing.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/hearing/hearing.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/hearing/hearing.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/home-court/home-court.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/home-court/home-court.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/home-court/home-court.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/home-court/home-court.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/home-court/home-court.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/home-court/home-court.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject-details/subject-details.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject-details/subject-details.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject-details/subject-details.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject-details/subject-details.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject/subject.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject/subject.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject/subject.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/components/court-service/subject/subject.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/models/court/hearing.ts" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/models/court/hearing.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGovernment_frontend/src/app/services/court/hearing.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/EGovernment_frontend/src/app/services/court/hearing.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +41,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file:///usr/lib/go-1.18" />
+  <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../../Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -42,26 +60,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultGoTemplateProperty": "Go File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "vehicles__police",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/Tina/Desktop/EUprava/EGovernment/EGovernment_backend/court-service/data",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;vehicles__police&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Tina/Desktop/EUprava/EGovernment/EGovernment_backend/court-service/data&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Tina\Desktop\EUprava\EGovernment\EGovernment_backend\court-service\data" />

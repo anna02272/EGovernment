@@ -1,0 +1,41 @@
+<div class="container">
+    <h2>Zakazivanje rocista</h2>
+  
+    <form (ngSubmit)="onSubmit()" class="hearing-form">
+      <div class="section">
+        <h3></h3>
+        <div class="form-group">
+          <label for="subjectId">Predmet Id:</label>
+          <input id="subjectId" [(ngModel)]="subjectId" name="subjectId" required disabled>
+        </div>
+  
+        <div class="form-group">
+          <label for="date">Datum:</label>
+          <input id="date" type="date" [(ngModel)]="hearingData.date" name="date" required>
+        </div>
+      </div>
+  
+      <div class="section">
+        <h3>Detalji zakazivanja</h3>
+        <div class="form-group">
+          <label for="courtsSelect">SUD:</label>
+          <select id="courtsSelect" [(ngModel)]="selectedCourts" name="courtsSelect" multiple required>
+            <option *ngFor="let court of courts" [value]="court.id">{{ court.name }}</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="start_time">Vreme pocetka:</label>
+          <input id="start_time" type="datetime-local" [(ngModel)]="scheduleData.start_time" name="start_time" required>
+        </div>
+  
+        <div class="form-group">
+          <label for="end_time">Vreme zavrsavanja:</label>
+          <input id="end_time" type="datetime-local" [(ngModel)]="scheduleData.end_time" name="end_time" required>
+        </div>
+      </div>
+  
+      <button type="submit">Zakazi</button>
+    </form>
+  </div>
+  

@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #C0DFE9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    color: #28666e; 
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .hearing-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section {
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 1.4rem;
+    color: #28666e; 
+    margin-bottom: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #28666e;
+  }
+  
+  input[type="date"],
+  input[type="datetime-local"],
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #DCE0E0;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #484848; 
+  }
+  
+  button[type="submit"] {
+    background-color: #28666e; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #1e4d54; 
+  }
+  
+  

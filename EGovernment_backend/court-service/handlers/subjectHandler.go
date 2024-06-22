@@ -43,7 +43,8 @@ func (sh *SubjectHandler) CreateSubject(c *gin.Context) {
 	//
 	//c.JSON(http.StatusCreated, createdSubject)
 	var input struct {
-		ViolationID string `json:"violation_id"`
+		ViolationID string         `json:"violation_id"`
+		Accused     domain.Citizen `json:"accused"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -56,6 +57,7 @@ func (sh *SubjectHandler) CreateSubject(c *gin.Context) {
 		Judgment:    "Edit",
 		Status:      domain.WAITING,
 		Compromis:   "?",
+		Accused:     input.Accused,
 	}
 
 	createdSubject, err := sh.service.CreateSubject(subject)

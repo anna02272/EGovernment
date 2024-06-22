@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -102,6 +103,10 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Invalid delict type."}, http.StatusBadRequest)
 		return
 	}
+	if !isValidDelictStatus(delictInsert.DelictStatus) {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Invalid delict status."}, http.StatusBadRequest)
+		return
+	}
 	delictInsertDB, _, err := s.service.InsertDelict(&delictInsert, policemanID)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Database problem."}
@@ -114,6 +119,85 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
 		return
 	}*/
+
+	if delictInsert.DelictStatus == domain.SentToCourt {
+		// Fetch the accused (citizen) information
+		citizenURL := fmt.Sprintf("http://court-service:8083/api/citizen/get/%s", delictInsert.DriverJmbg)
+		citizenReq, err := http.NewRequest("GET", citizenURL, nil)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error creating citizen request: %s", err), http.StatusInternalServerError)
+			return
+		}
+		citizenReq.Header.Set("Authorization", token)
+		citizenResp, err := http.DefaultClient.Do(citizenReq)
+		if err != nil || citizenResp.StatusCode != http.StatusOK {
+			errorMessage.ReturnJSONError(rw, "Failed to get citizen information.", http.StatusInternalServerError)
+			return
+		}
+		defer citizenResp.Body.Close()
+
+		var citizen domain.Citizen
+		if err := json.NewDecoder(citizenResp.Body).Decode(&citizen); err != nil {
+			errorMessage.ReturnJSONError(rw, "Failed to decode citizen information.", http.StatusInternalServerError)
+			return
+		}
+
+		log.Printf("Fetched Citizen: %+v\n", citizen)
+		// Create the subject for the court service
+		courtURL := "http://court-service:8083/api/subject/create"
+		subject := struct {
+			ViolationID string         `json:"violation_id"`
+			Accused     domain.Citizen `json:"accused"`
+		}{
+			ViolationID: delictInsertDB.ID.Hex(),
+			Accused:     citizen,
+		}
+		log.Printf("Subject to be sent: %+v\n", subject)
+		subjectJSON, err := json.Marshal(subject)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err), http.StatusInternalServerError)
+			return
+		}
+		log.Printf("Subject JSON: %s\n", string(subjectJSON))
+
+		courtReq, err := http.NewRequest("POST", courtURL, bytes.NewBuffer(subjectJSON))
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error creating court request: %s", err), http.StatusInternalServerError)
+			return
+		}
+		courtReq.Header.Set("Content-Type", "application/json")
+		courtReq.Header.Set("Authorization", token)
+		courtResp, err := http.DefaultClient.Do(courtReq)
+		if err != nil || courtResp.StatusCode != http.StatusCreated {
+			errorMessage.ReturnJSONError(rw, "Failed to create subject in court service.", http.StatusInternalServerError)
+			return
+		}
+		defer courtResp.Body.Close()
+		/*courtURL := "http://court-service:8083/api/subject/create"
+		subject := struct {
+			ViolationID string `json:"violation_id"`
+		}{
+			ViolationID: delictInsertDB.ID.Hex(),
+		}
+		subjectJSON, err := json.Marshal(subject)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err), http.StatusInternalServerError)
+			return
+		}
+		courtReq, err := http.NewRequest("POST", courtURL, bytes.NewBuffer(subjectJSON))
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error creating court request: %s", err), http.StatusInternalServerError)
+			return
+		}
+		courtReq.Header.Set("Content-Type", "application/json")
+		courtReq.Header.Set("Authorization", token)
+		courtResp, err := http.DefaultClient.Do(courtReq)
+		if err != nil || courtResp.StatusCode != http.StatusCreated {
+			errorMessage.ReturnJSONError(rw, "Failed to create subject in court service.", http.StatusInternalServerError)
+			return
+		}
+		defer courtResp.Body.Close()*/
+	}
 
 	rw.WriteHeader(http.StatusCreated)
 	jsonResponse, err1 := json.Marshal(delictInsertDB)
@@ -131,6 +215,113 @@ func isValidDelictType(delictType domain.DelictType) bool {
 	default:
 		return false
 	}
+}
+
+func isValidDelictStatus(delictStatus domain.DelictStatus) bool {
+	switch delictStatus {
+	case domain.FineAwarded, domain.FinePaid, domain.SentToCourt:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s *DelictHandler) PayFine(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if ctx.Err() == context.DeadlineExceeded {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	decoder := json.NewDecoder(resp.Body)
+	var responseUser struct {
+		LoggedInUser struct {
+			Email    string        `json:"email"`
+			UserRole data.UserRole `json:"userRole"`
+		} `json:"user"`
+	}
+	if err := decoder.Decode(&responseUser); err != nil {
+		errorMsg := map[string]string{"error": "User object was not valid."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	if responseUser.LoggedInUser.UserRole != data.Citizen {
+		errorMsg := map[string]string{"Unauthorized": "You are not a citizen."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	delictId := c.Param("id")
+	delict, err := s.service.GetDelictById(delictId, ctx)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve delict from the database. No such delict."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	if delict.DelictStatus != domain.FineAwarded {
+		errorMsg := map[string]string{"error": "Delict is not in a payable status."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	delict.DelictStatus = domain.FinePaid
+	if err := s.service.UpdateDelictStatus(delict); err != nil {
+		errorMsg := map[string]string{"error": "Failed to update delict status."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	if err := s.sendPaymentConfirmationEmail(delict.Description, delict.DriverEmail); err != nil {
+		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK)
+	rw.Write([]byte(`{"message": "Fine paid successfully."}`))
+}
+
+func (s *DelictHandler) sendPaymentConfirmationEmail(Description, driverEmail string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", smtpEmail)
+	m.SetHeader("To", driverEmail)
+	m.SetHeader("Subject", "Potvrda isplate prekrsaja")
+
+	bodyString := fmt.Sprintf("Vasa novcana kazna je uspesno isplacena.\n Opis isplacenog prekrsaja:\n %s ", Description)
+	m.SetBody("text", bodyString)
+
+	client := gomail.NewDialer(smtpServer, smtpServerPort, smtpEmail, smtpPassword)
+
+	if err := client.DialAndSend(m); err != nil {
+		log.Fatalf("Failed to send mail because of: %s", err)
+		return err
+	}
+	return nil
 }
 
 func (s *DelictHandler) sendDelictMail(Description, email string) error {

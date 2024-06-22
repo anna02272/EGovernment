@@ -58,10 +58,13 @@ func (d *DelictServiceImpl) InsertDelict(delict *domain.DelictCreate, policemanI
 	trafficDelict.DriverIdentificationNumber = delict.DriverIdentificationNumber
 	trafficDelict.VehicleLicenceNumber = delict.VehicleLicenceNumber
 	trafficDelict.DriverEmail = delict.DriverEmail
+	trafficDelict.DriverJmbg = delict.DriverJmbg
 	trafficDelict.Date = dateTime
 	trafficDelict.Location = delict.Location
 	trafficDelict.Description = delict.Description
 	trafficDelict.DelictType = delict.DelictType
+	trafficDelict.DelictStatus = delict.DelictStatus
+	trafficDelict.PriceOfFine = delict.PriceOfFine
 	trafficDelict.NumberOfPenaltyPoints = delict.NumberOfPenaltyPoints
 
 	result, err := d.collection.InsertOne(context.Background(), trafficDelict)
@@ -161,6 +164,13 @@ func (d *DelictServiceImpl) GetAllDelictsByDriver(driverEmail string) ([]*domain
 		return nil, err
 	}
 	return delicts, nil
+}
+
+func (d *DelictServiceImpl) UpdateDelictStatus(delict *domain.Delict) error {
+	filter := bson.M{"_id": delict.ID}
+	update := bson.M{"$set": bson.M{"delict_status": delict.DelictStatus}}
+	_, err := d.collection.UpdateOne(context.Background(), filter, update)
+	return err
 }
 
 func (d *DelictServiceImpl) GetAllDelictsByDelictType(delictType domain.DelictType) ([]*domain.Delict, error) {

@@ -80,3 +80,11 @@ func (s *VehicleDriverServiceImpl) GetVehicleDriverByID(identificationNumber str
 
 	return &vehicleDriver, nil
 }
+
+func (s *VehicleDriverServiceImpl) UpdatePenaltyPoints(identificationNumber string, points int64, ctx context.Context) error {
+	filter := bson.M{"identification_number": identificationNumber}
+	update := bson.M{"$inc": bson.M{"number_of_penalty_points": points}}
+
+	_, err := s.collection.UpdateOne(ctx, filter, update)
+	return err
+}

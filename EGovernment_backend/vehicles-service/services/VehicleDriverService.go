@@ -9,4 +9,5 @@ type VehicleDriverService interface {
 	InsertVehicleDriver(driver *domain.VehicleDriverCreate) (*domain.VehicleDriver, string, error)
 	GetAllVehicleDrivers() ([]*domain.VehicleDriver, error)
 	GetVehicleDriverByID(IdentificationNumber string, ctx context.Context) (*domain.VehicleDriver, error)
+	UpdatePenaltyPoints(identificationNumber string, points int64, ctx context.Context) error
 }

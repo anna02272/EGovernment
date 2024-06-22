@@ -120,8 +120,41 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		return
 	}*/
 
+	if delictInsert.NumberOfPenaltyPoints > 0 {
+		driverID := delictInsert.DriverIdentificationNumber
+		points := delictInsert.NumberOfPenaltyPoints
+		updatePointsURL := fmt.Sprintf("http://vehicles-service:8080/api/driver/updatePenaltyPoints/%s", driverID)
+
+		updatePointsReqBody := struct {
+			Points int64 `json:"points"`
+		}{
+			Points: points,
+		}
+
+		updatePointsReqBodyJSON, err := json.Marshal(updatePointsReqBody)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		updatePointsReq, err := http.NewRequest("PATCH", updatePointsURL, bytes.NewBuffer(updatePointsReqBodyJSON))
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error creating update points request: %s", err), http.StatusInternalServerError)
+			return
+		}
+		updatePointsReq.Header.Set("Content-Type", "application/json")
+		updatePointsReq.Header.Set("Authorization", token)
+
+		updatePointsResp, err := http.DefaultClient.Do(updatePointsReq)
+		if err != nil || updatePointsResp.StatusCode != http.StatusOK {
+			errorMessage.ReturnJSONError(rw, "Failed to update penalty points in vehicle driver service.", http.StatusInternalServerError)
+			return
+		}
+		defer updatePointsResp.Body.Close()
+	}
+
 	if delictInsert.DelictStatus == domain.SentToCourt {
-		// Fetch the accused (citizen) information
+
 		citizenURL := fmt.Sprintf("http://court-service:8083/api/citizen/get/%s", delictInsert.DriverJmbg)
 		citizenReq, err := http.NewRequest("GET", citizenURL, nil)
 		if err != nil {
@@ -143,7 +176,7 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		}
 
 		log.Printf("Fetched Citizen: %+v\n", citizen)
-		// Create the subject for the court service
+
 		courtURL := "http://court-service:8083/api/subject/create"
 		subject := struct {
 			ViolationID string         `json:"violation_id"`

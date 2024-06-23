@@ -19,5 +19,10 @@ func (sr *SubjectRouteHandler) SubjectRoutes(rg *gin.RouterGroup) {
 	router := rg.Group("/subject")
 	router.POST("/create", sr.handler.CreateSubject)
 	router.GET("/get/:id", sr.handler.GetDelict)
+	router.GET("/subjects/:id", sr.handler.GetSubject)
+	router.GET("/subjects", sr.handler.GetAllSubjects)
+	router.PUT("/subjects/:id/status", sr.handler.UpdateSubjectStatus)
+	router.PUT("/subjects/:id/judgment", sr.handler.UpdateSubjectJudgment)
+	router.PUT("/subjects/:id/compromis", sr.handler.UpdateSubjectCompromis)
 
 }

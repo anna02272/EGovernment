@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"net/url"
@@ -27,11 +28,36 @@ func NewSubjectHandler(service services.SubjectService, db *mongo.Collection) Su
 }
 
 func (sh *SubjectHandler) CreateSubject(c *gin.Context) {
-	var subject *domain.Subject
+	//var subject *domain.Subject
+	//
+	//if err := c.ShouldBindJSON(&subject); err != nil {
+	//	c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+	//	return
+	//}
+	//
+	//createdSubject, err := sh.service.CreateSubject(subject)
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create subject"})
+	//	return
+	//}
+	//
+	//c.JSON(http.StatusCreated, createdSubject)
+	var input struct {
+		ViolationID string         `json:"violation_id"`
+		Accused     domain.Citizen `json:"accused"`
+	}
 
-	if err := c.ShouldBindJSON(&subject); err != nil {
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
+	}
+
+	subject := &domain.Subject{
+		ViolationID: input.ViolationID,
+		Judgment:    "Edit",
+		Status:      domain.WAITING,
+		Compromis:   "?",
+		Accused:     input.Accused,
 	}
 
 	createdSubject, err := sh.service.CreateSubject(subject)
@@ -54,7 +80,139 @@ func (sh *SubjectHandler) GetDelict(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Delict successfully gotten", "delict": delict})
 
 }
+func (sh *SubjectHandler) GetSubject(c *gin.Context) {
+	subjectID := c.Param("id")
 
+	id, err := primitive.ObjectIDFromHex(subjectID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid subject ID"})
+		return
+	}
+
+	subject, err := sh.service.GetSubjectByID(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Subject not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, subject)
+}
+func (sh *SubjectHandler) GetAllSubjects(c *gin.Context) {
+	subjects, err := sh.service.GetAllSubjects()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get subjects"})
+		return
+	}
+
+	c.JSON(http.StatusOK, subjects)
+}
+func (sh *SubjectHandler) UpdateSubjectStatus(c *gin.Context) {
+	id := c.Param("id")
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid subject ID"})
+		return
+	}
+
+	var input struct {
+		Status domain.Status `json:"status"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	err = sh.service.UpdateSubjectStatus(objectID, input.Status)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Subject not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update subject status"})
+		return
+	}
+
+	// Retrieve the updated subject from the database
+	updatedSubject, err := sh.service.GetSubjectByID(objectID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated subject"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedSubject)
+}
+func (sh *SubjectHandler) UpdateSubjectJudgment(c *gin.Context) {
+	id := c.Param("id")
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid subject ID"})
+		return
+	}
+
+	var input struct {
+		Judgment string `json:"judgment"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	err = sh.service.UpdateSubjectJudgment(objectID, input.Judgment)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Subject not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update subject judgment"})
+		return
+	}
+
+	updatedSubject, err := sh.service.GetSubjectByID(objectID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated subject"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedSubject)
+}
+
+func (sh *SubjectHandler) UpdateSubjectCompromis(c *gin.Context) {
+	id := c.Param("id")
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid subject ID"})
+		return
+	}
+
+	var input struct {
+		Compromis string `json:"compromis"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	err = sh.service.UpdateSubjectCompromis(objectID, input.Compromis)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Subject not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update subject compromis"})
+		return
+	}
+
+	updatedSubject, err := sh.service.GetSubjectByID(objectID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated subject"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedSubject)
+}
 func (sh *SubjectHandler) GetDelictPoliceService(token string, id string) (domain.Delict, error) {
 	baseURL := fmt.Sprintf("http://police-service:8084/api/delict/get/%s", url.QueryEscape(id))
 

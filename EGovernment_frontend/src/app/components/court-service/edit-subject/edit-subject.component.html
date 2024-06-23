@@ -1,0 +1,26 @@
+<div class="edit-subject-container" *ngIf="subject">
+    <h2>Edit Subject</h2>
+    <form (ngSubmit)="saveChanges()">
+      <div class="form-group">
+        <label for="judgment">Judgment</label>
+        <input id="judgment" [(ngModel)]="subject.judgment" name="judgment" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select id="status" [(ngModel)]="subject.status" name="status" class="form-control" required>
+          <option value="OTVOREN">OTVOREN</option>
+          <option value="ZATVOREN">ZATVOREN</option>
+          <option value="NA CEKANJU">NA CEKANJU</option>
+          <option value="ZAKAZAN">ZAKAZAN</option>
+          <option value="ODBIJEN">ODBIJEN</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="compromise">Compromise</label>
+        <input id="compromise" [(ngModel)]="subject.compromis" name="compromise" class="form-control" />
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </form>
+  </div>
+  

@@ -40,6 +40,12 @@ import { CreateReportCarAccidentDegreeComponent } from './components/statistics-
 import { CreateReportCarAccidentTypeComponent } from './components/statistics-service/create-report-car-accident-type/create-report-car-accident-type.component';
 import { CreateReportDelictComponent } from './components/statistics-service/create-report-delict/create-report-delict.component';
 import { CreateReportRegisteredVehiclesComponent } from './components/statistics-service/create-report-registered-vehicles/create-report-registered-vehicles.component';
+import { HearingComponent } from './components/court-service/hearing/hearing.component';
+import { SubjectComponent } from './components/court-service/subject/subject.component';
+import { SubjectDetailsComponent } from './components/court-service/subject-details/subject-details.component';
+import { ScheduleComponent } from './components/court-service/schedule/schedule.component';
+import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
+import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +69,13 @@ import { CreateReportRegisteredVehiclesComponent } from './components/statistics
     CreateReportCarAccidentDegreeComponent,
     CreateReportCarAccidentTypeComponent,
     CreateReportDelictComponent,
-    CreateReportRegisteredVehiclesComponent
+    CreateReportRegisteredVehiclesComponent,
+    HearingComponent,
+    SubjectComponent,
+    SubjectDetailsComponent,
+    ScheduleComponent,
+    SubjectTabComponent,
+    EditSubjectComponent
   ],
   imports: [
     BrowserModule,

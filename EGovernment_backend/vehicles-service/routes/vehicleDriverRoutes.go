@@ -22,7 +22,7 @@ func (vr *VehicleDriverRouteHandler) VehicleDriverRoute(rg *gin.RouterGroup) {
 	router.POST("/createDriver", MiddlewareVehicleDriverDeserialization, vr.handler.CreateVehicleDriver)
 	router.GET("/all", vr.handler.GetAllVehicleDrivers)
 	router.GET("/get/:id", vr.handler.GetVehicleDriverByID)
-
+	router.PATCH("/updatePenaltyPoints/:id", vr.handler.UpdatePenaltyPoints)
 }
 
 func MiddlewareVehicleDriverDeserialization(c *gin.Context) {

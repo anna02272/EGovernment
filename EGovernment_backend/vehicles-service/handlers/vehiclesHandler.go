@@ -19,14 +19,16 @@ import (
 )
 
 type VehicleHandler struct {
-	service services.VehicleService
-	DB      *mongo.Collection
+	service       services.VehicleService
+	driverService services.VehicleDriverService
+	DB            *mongo.Collection
 }
 
-func NewVehicleHandler(service services.VehicleService, db *mongo.Collection) VehicleHandler {
+func NewVehicleHandler(service services.VehicleService, db *mongo.Collection, driverService services.VehicleDriverService) VehicleHandler {
 	return VehicleHandler{
-		service: service,
-		DB:      db,
+		service:       service,
+		DB:            db,
+		driverService: driverService,
 	}
 
 }
@@ -113,6 +115,23 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 
 	registrationPlate := vehicleInsert.RegistrationPlate
 
+	existingVehicle, err := s.service.GetVehicleByID(registrationPlate, ctx)
+
+	if existingVehicle != nil {
+		errorMsg := map[string]string{"error": "Vehicle with this registration plate already exists."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusConflict)
+		return
+	}
+
+	vehicleDriverId := vehicleInsert.VehicleOwner
+	vehicleDriver, _ := s.driverService.GetVehicleDriverByID(vehicleDriverId, ctx)
+
+	if vehicleDriver == nil {
+		errorMsg := map[string]string{"error": "There's no driver with that ID in database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
 	if !isValidRegistrationPlate(registrationPlate) {
 		errorMsg := map[string]string{"error": "Invalid registration plate format."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
@@ -127,6 +146,8 @@ func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
 
 	vehicleDriverInsertDB, _, err := s.service.InsertVehicle(&vehicleInsert)
 	if err != nil {
+		fmt.Println(err)
+		fmt.Println("ERROR HERE")
 		errorMsg := map[string]string{"error": "Database problem."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return

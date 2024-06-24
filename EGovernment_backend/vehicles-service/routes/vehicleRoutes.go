@@ -9,12 +9,14 @@ import (
 )
 
 type VehicleRouteHandler struct {
-	handler handlers.VehicleHandler
-	service services.VehicleService
+	handler       handlers.VehicleHandler
+	service       services.VehicleService
+	driverService services.VehicleDriverService
 }
 
-func NewVehicleRouteHandler(handler handlers.VehicleHandler, service services.VehicleService) VehicleRouteHandler {
-	return VehicleRouteHandler{handler, service}
+func NewVehicleRouteHandler(handler handlers.VehicleHandler,
+	service services.VehicleService, driverService services.VehicleDriverService) VehicleRouteHandler {
+	return VehicleRouteHandler{handler, service, driverService}
 }
 
 func (vr *VehicleRouteHandler) VehicleRoute(rg *gin.RouterGroup) {

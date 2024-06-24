@@ -1,4 +1,4 @@
-import { DelictType } from "./delictType";
+import {DelictType} from "./delictType";
 
 export class ReportDelict {
   id: string;
@@ -7,8 +7,8 @@ export class ReportDelict {
   total_number: number;
   type: DelictType;
   year: number;
- 
- 
+
+
   constructor(id: string, title: string, date: string, total_number: number, type: DelictType, year: number ) {
     this.id = id;
     this.title = title;

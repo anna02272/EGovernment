@@ -26,6 +26,7 @@ import { ReportDelictsComponent } from './components/statistics-service/report-d
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
 import { ResponseComponent } from './components/statistics-service/response/response.component';
 import { RequestService } from './services/statistics/request.service';
+import { VehicleService } from './services/vehicles/vehicleService';
 import { StatisticsHeaderComponent } from './components/statistics-service/statistics-header/statistics-header.component';
 import { ResponseService } from './services/statistics/response.service';
 import { ReportDelicTypeService } from './services/statistics/reportDelicType.service';
@@ -46,6 +47,8 @@ import { SubjectDetailsComponent } from './components/court-service/subject-deta
 import { ScheduleComponent } from './components/court-service/schedule/schedule.component';
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
 import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
+import { VehiclesHeaderComponent } from './components/vehicles-service/vehicles-header/vehicles-header.component';
+import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +78,9 @@ import { EditSubjectComponent } from './components/court-service/edit-subject/ed
     SubjectDetailsComponent,
     ScheduleComponent,
     SubjectTabComponent,
-    EditSubjectComponent
+    EditSubjectComponent,
+    VehiclesHeaderComponent,
+    VehiclesComponent
   ],
   imports: [
     BrowserModule,
@@ -95,6 +100,7 @@ import { EditSubjectComponent } from './components/court-service/edit-subject/ed
     multi: true,
   },
   ConfigService,
+  VehicleService,
   ApiService,
   RefreshService,
   AuthService,

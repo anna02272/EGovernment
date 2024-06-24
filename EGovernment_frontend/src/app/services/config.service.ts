@@ -5,7 +5,7 @@ import {Injectable} from '@angular/core';
 })
 
 export class ConfigService {
-  private _vehicles_api_url = 'http://localhost:8000/api';
+  private _vehicles_api_url = 'http://localhost:8080/api/vehicle';
   private _statistics_api_url = 'http://localhost:8082/api';
   private _auth_api_url = 'http://localhost:8085/api';
 
@@ -23,6 +23,9 @@ export class ConfigService {
   private _carAccidentDegreeReport_url = this._statistics_api_url + '/carAccidentDegreeReport';
   private _carAccidentTypeReport_url = this._statistics_api_url + '/carAccidentTypeReport';
   private _delictReport_url = this._statistics_api_url + '/delictReport';
+
+  private _createVehicle_url = this._vehicles_api_url + '/createVehicle';
+  private _allVehicles_url = this._vehicles_api_url + '/all';
 
   get vehicles_url(): string {
     return this._vehicles_url;
@@ -70,6 +73,14 @@ export class ConfigService {
 
   get delictReport_url(): string {
     return this._delictReport_url;
+  }
+
+  get createVehicle_url(): string {
+    return this._createVehicle_url;
+  }
+
+  get allVehicles_url(): string {
+    return this._allVehicles_url;
   }
 }
 

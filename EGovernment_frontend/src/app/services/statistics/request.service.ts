@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { ApiService } from "../api.service";
-import { ConfigService } from "../config.service";
-import { Request } from "src/app/models/statisics/request";
+import {Injectable} from "@angular/core";
+import {ApiService} from "../api.service";
+import {ConfigService} from "../config.service";
+import {Request} from "src/app/models/statisics/request";
 
 @Injectable()
 export class RequestService {
-    
+
   constructor(
     private apiService: ApiService,
     private config: ConfigService
@@ -15,7 +15,7 @@ export class RequestService {
     const url = `${this.config.request_url}/create`;
     return this.apiService.post(url, request);
    }
-  
+
   getAll() {
     return this.apiService.get(this.config.request_url + "/all");
    }

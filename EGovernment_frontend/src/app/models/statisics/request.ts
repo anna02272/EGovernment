@@ -1,4 +1,4 @@
-import { CategoryPerson } from "./categoryPerson";
+import {CategoryPerson} from "./categoryPerson";
 
 export class Request {
   id: string;
@@ -9,7 +9,7 @@ export class Request {
   category: CategoryPerson;
   question: string;
   date: string;
- 
+
   constructor(id: string, name: string, lastname: string, email: string, phone_number: number, category: CategoryPerson, question: string, date: string) {
     this.id = id;
     this.name = name;

@@ -1,0 +1,81 @@
+.app-form {
+    display: flex;
+    flex-direction: column;
+    background: #C0DFE9;
+    border-radius: 15px;
+    padding: 20px;     
+    max-width: 800px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.app-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+.app-form-group {
+    flex: 0 0 calc(50% - 10px);
+    margin-bottom: 15px;
+}
+
+.app-form-group.buttons {
+    text-align: right;
+}
+
+.app-form-control {
+    width: 100%;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #666;
+    color: #F26B68;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+}
+
+.app-form-control:focus {
+    border-bottom-color: #494949;
+}
+
+.app-form-button {
+    background: none;
+    border: none;
+    color: #F26B68;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    margin-left: 10px;
+}
+
+.app-form-button:disabled {
+    color: #ccc;
+}
+
+.app-form-button:hover:not(:disabled) {
+    color: #e05c59;
+}
+
+::ng-deep .mat-mdc-snack-bar-container.success-snackbar {
+    --mdc-snackbar-container-color: #4caf50;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  ::ng-deep .mat-mdc-snack-bar-container.error-snackbar {
+    --mdc-snackbar-container-color: #f44336;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+
+  
+ h1 {
+    text-align:center; font-size:28px; text-transform:uppercase; color:#F26B68; letter-spacing:1px;
+    font-family:"Playfair Display", serif; font-weight:400;
+	margin: 70px;
+}
+

@@ -14,6 +14,7 @@ import { RegistrationComponent } from './components/auth-service/registration/re
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
 import { SubjectDetailsComponent } from './components/court-service/subject-details/subject-details.component';
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
+import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,8 @@ const routes: Routes = [
   },
   { path: 'subjectTab/:id', component: SubjectTabComponent },
   { path: 'editSubject/:id', component: EditSubjectComponent },
+
+  { path: 'vehicles', component: VehiclesComponent },
 
 
   

@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Subject } from '../../models/court/subject';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Subject} from '../../models/court/subject';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +42,5 @@ export class SubjectService {
     const url = `${this.apiUrl}/subjects/${id}/compromis`;
     return this.http.put<Subject>(url, { compromis });
   }
-  
+
 }

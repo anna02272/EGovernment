@@ -1,11 +1,11 @@
-import { ApiService } from '../api.service';
-import { ConfigService } from '../config.service';
-import { HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserRole } from 'src/app/models/auth/userRole';
-import { UserService } from './user.service';
-import { map } from 'rxjs/operators';
+import {ApiService} from '../api.service';
+import {ConfigService} from '../config.service';
+import {HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {UserRole} from 'src/app/models/auth/userRole';
+import {UserService} from './user.service';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -79,5 +79,5 @@ export class AuthService {
   getId() {
     return this.userService.currentUser.user.id;
   }
- 
+
 }

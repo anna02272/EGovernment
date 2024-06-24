@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {ApiService} from '../api.service';
 import {ConfigService} from '../config.service';
 import {map} from 'rxjs/operators';
-import { User } from 'src/app/models/auth/user';
-import { BehaviorSubject } from 'rxjs';
+import {User} from 'src/app/models/auth/user';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class UserService {
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
-  
+
   constructor(
     private apiService: ApiService,
     private config: ConfigService,
@@ -26,8 +26,8 @@ export class UserService {
         this.currentUser = user;
         return user;
       }));
-  } 
-   
+  }
+
   setCurrentUser(user: User | null) {
     this.currentUserSubject.next(user);
   }

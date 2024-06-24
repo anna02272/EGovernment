@@ -1,3 +1,41 @@
-.content{
-    margin: 130px auto;
+nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .nav-container {
+    display: flex;
+  }
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+  }
+  
+  nav ul li {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #F26B68;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  nav ul li:hover {
+    background-color: #b84b49;
+  }
+
+  nav ul li.selected {
+    background-color: #b84b49; 
+  }
+  
+  .report-container {
+    margin-top: 20px;
+  }
+  
+  .no-link-style {
+    text-decoration: none;
+    color: inherit;
 }

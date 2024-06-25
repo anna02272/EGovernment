@@ -8,16 +8,16 @@ import { VehicleModel } from 'src/app/models/police/vehicleModel';
 import { VehicleService } from 'src/app/services/vehicles/vehicleService';
 
 @Component({
-  selector: 'app-vehicles',
-  templateUrl: './vehicles.component.html',
-  styleUrls: ['./vehicles.component.css']
+  selector: 'app-registered-vehicles',
+  templateUrl: './registered-vehicles.component.html',
+  styleUrls: ['./registered-vehicles.component.css']
 })
-export class VehiclesComponent implements OnInit {
+export class RegisteredVehiclesComponent implements OnInit {
   vehicleForm: FormGroup;
   vehicleModels = Object.values(VehicleModel);
   categories = Object.values(Category);
   backendError: string | null = null;
-  vehicles: Vehicle[] = []; 
+  registeredVehicles: Vehicle[] = []; 
   searchPlate: string = ''; 
 
   constructor(
@@ -87,28 +87,14 @@ export class VehiclesComponent implements OnInit {
   }
 
    loadAllVehicles(): void {
-    this.vehicleService.getAll().subscribe({
-      next: (vehicles: Vehicle[]) => {
-        this.vehicles = vehicles;
+    this.vehicleService.getAllRegisteredVehicles().subscribe({
+      next: (registeredVehicles: Vehicle[]) => {
+        this.registeredVehicles = registeredVehicles;
       },
       error: (errorResponse) => {
-        console.error('Error fetching all vehicles:', errorResponse);
+        console.error('Error fetching all registered vehicles:', errorResponse);
       }
     });
   }
 
-  searchVehicleByPlate(): void {
-    if (this.searchPlate.trim() === '') {
-      return;
-    }
-
-    this.vehicleService.getById(this.searchPlate.trim()).subscribe({
-      next: (vehicle: Vehicle) => {
-        this.vehicles = [vehicle]; 
-      },
-      error: (errorResponse) => {
-        console.error('Error fetching vehicle by plate:', errorResponse);
-      }
-    });
-  }
 }

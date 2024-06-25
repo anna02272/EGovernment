@@ -15,6 +15,7 @@ import { RequestsComponent } from './components/statistics-service/requests/requ
 import { SubjectDetailsComponent } from './components/court-service/subject-details/subject-details.component';
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
 import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
+import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
 
 const routes: Routes = [
   {
@@ -74,10 +75,10 @@ const routes: Routes = [
   { path: 'subjectTab/:id', component: SubjectTabComponent },
   { path: 'editSubject/:id', component: EditSubjectComponent },
 
-  { path: 'vehicles', component: VehiclesComponent },
+  { path: 'vozila', component: VehiclesComponent },
 
+  {path: 'registrovanaVozila', component: RegisteredVehiclesComponent}
 
-  
 ];
 
 @NgModule({

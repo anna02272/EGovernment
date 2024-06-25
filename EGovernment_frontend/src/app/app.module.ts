@@ -49,6 +49,7 @@ import { SubjectTabComponent } from './components/court-service/subject-tab/subj
 import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
 import { VehiclesHeaderComponent } from './components/vehicles-service/vehicles-header/vehicles-header.component';
 import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
+import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicl
     SubjectTabComponent,
     EditSubjectComponent,
     VehiclesHeaderComponent,
-    VehiclesComponent
+    VehiclesComponent,
+    RegisteredVehiclesComponent
   ],
   imports: [
     BrowserModule,

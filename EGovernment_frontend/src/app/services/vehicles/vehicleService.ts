@@ -21,6 +21,11 @@ export class VehicleService {
     return this.apiService.get(url);
    }
 
+   getAllRegisteredVehicles() {
+    const url = this.config.getRegisteredVehicles_url;
+    return this.apiService.get(url);
+   }
+
    getById(id : string) {
     const url = this.config.getVehicleById_url + id;
     return this.apiService.get(url, id);

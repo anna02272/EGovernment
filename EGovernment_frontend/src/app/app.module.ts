@@ -50,6 +50,7 @@ import { EditSubjectComponent } from './components/court-service/edit-subject/ed
 import { VehiclesHeaderComponent } from './components/vehicles-service/vehicles-header/vehicles-header.component';
 import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
 import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
+import { DriverComponent } from './components/vehicles-service/driver/driver.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { RegisteredVehiclesComponent } from './components/vehicles-service/regis
     EditSubjectComponent,
     VehiclesHeaderComponent,
     VehiclesComponent,
-    RegisteredVehiclesComponent
+    RegisteredVehiclesComponent,
+    DriverComponent
   ],
   imports: [
     BrowserModule,

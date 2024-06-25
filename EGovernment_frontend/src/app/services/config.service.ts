@@ -6,6 +6,7 @@ import {Injectable} from '@angular/core';
 
 export class ConfigService {
   private _vehicles_api_url = 'http://localhost:8080/api/vehicle';
+  private _vehicles_drivers_api_url = 'http://localhost:8080/api/driver';
   private _statistics_api_url = 'http://localhost:8082/api';
   private _auth_api_url = 'http://localhost:8085/api';
 
@@ -26,8 +27,12 @@ export class ConfigService {
 
   private _createVehicle_url = this._vehicles_api_url + '/createVehicle';
   private _allVehicles_url = this._vehicles_api_url + '/all';
+  private _allVehicleDrivers_url = this._vehicles_drivers_api_url + '/all';
+
   private _allRegisteredVehicles_url = this.allVehicles_url  + '/registered';
   private _getVehicleById = this._vehicles_api_url + '/get/';
+  private _getVehicleDriverById = this._vehicles_drivers_api_url + '/get/';
+  private _createVehicleDriver_url = this._vehicles_drivers_api_url + '/createDriver';
 
 
   get vehicles_url(): string {
@@ -86,12 +91,25 @@ export class ConfigService {
     return this._allVehicles_url;
   }
 
+  get allVehicleDrivers_url(): string {
+    return this._allVehicleDrivers_url;
+  }
+
   get getVehicleById_url(): string {
     return this._getVehicleById;
   }
 
+  get getVehicleDriverById_url(): string {
+    return this._getVehicleDriverById;
+  }
+
+
   get getRegisteredVehicles_url(): string {
     return this._allRegisteredVehicles_url;
+  }
+
+  get createVehicleDriver(): string {
+    return this._createVehicleDriver_url;
   }
 
   getVehicleByCategoryAndYear_url(category: string, year: number): string {

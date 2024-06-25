@@ -44,7 +44,6 @@ export class VehiclesComponent implements OnInit {
 
   onSubmit(): void {
     if (this.vehicleForm.invalid) {
-      console.log("API krece")
 
       this.markAllAsTouched();
       return;

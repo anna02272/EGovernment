@@ -1,0 +1,195 @@
+<div class="title">
+    <h1>Kreiraj Vozaca</h1>
+  </div>
+  <div class="app-form">
+    <form (ngSubmit)="onSubmit()" [formGroup]="vehicleDriverForm">
+      <div class="app-form-group">
+        <label for="identification_number"> JMBG</label>
+        <input
+          type="text"
+          id="identification_number"
+          formControlName="identification_number"
+          class="app-form-control"
+          required
+        />
+        <div
+          *ngIf="
+            vehicleDriverForm.controls['identification_number'].invalid &&
+            vehicleDriverForm.controls['identification_number'].touched
+          "
+          class="text-danger"
+        >
+          JMBG je obavezan.
+        </div>
+      </div>
+  
+      <div class="app-form-row">
+        <div class="app-form-group">
+          <label for="gender">Pol </label>
+          <select
+            class="app-form-control"
+            formControlName="gender"
+            required
+            id="gender"
+          >
+            <option value="" disabled>Pol </option>
+            <option *ngFor="let gender of genders" [value]="gender">
+              {{ gender }}
+            </option>
+          </select>
+          <div
+            *ngIf="
+            vehicleDriverForm.controls['gender'].invalid &&
+            vehicleDriverForm.controls['gender'].touched
+            "
+            class="text-danger"
+          >
+            Pol je obavezan.
+          </div>
+        </div>
+  
+        <div class="app-form-group">
+          <label for="name">Ime</label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="app-form-control"
+            required
+          />
+          <div
+            *ngIf="
+            vehicleDriverForm.controls['name'].invalid &&
+            vehicleDriverForm.controls['name'].touched
+            "
+            class="text-danger"
+          >
+            Ime je obavezno.
+          </div>
+        </div>
+        <div class="app-form-group">
+          <label for="last_name">Prezime</label>
+          <input
+            type="text"
+            id="last_name"
+            formControlName="last_name"
+            class="app-form-control"
+            required
+          />
+          <div
+            *ngIf="
+            vehicleDriverForm.controls['last_name'].invalid &&
+            vehicleDriverForm.controls['last_name'].touched
+            "
+            class="text-danger"
+          >
+            Prezime je obavezno.
+          </div>
+        </div>
+  
+        <div class="app-form-group">
+          <label for="date_of_birth">Datum rodjenja</label>
+          <input
+            type="date"
+            id="date_of_birth"
+            formControlName="date_of_birth"
+            class="app-form-control"
+            required
+          />
+          <div
+            *ngIf="
+            vehicleDriverForm.controls['date_of_birth'].invalid &&
+            vehicleDriverForm.controls['date_of_birth'].touched
+            "
+            class="text-danger"
+          >
+            Datum rodjenja je obavezan.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="app-form-group buttons">
+        <button type="button" class="app-form-button" (click)="onCancel()">
+          ODUSTANI
+        </button>
+        <button type="submit" class="app-form-button">KREIRAJ</button>
+
+        <div *ngIf="backendError" class="text-danger">
+            {{ backendError }}
+          </div>
+      </div>
+    </form>
+
+  </div>
+
+    <h1 id="lista" class="title">LISTA SVIH VOZAČA</h1>
+
+<div class="search-vehicles">
+    <h3>Pretraži vozače po jedistvenom matičnom broju:</h3>
+    <input type="text" class="searchPlate" [(ngModel)]="searchID">
+    <span class="searchSpan"><button type="button" class="search-btn" (click)="searchVehicleDriversByID()">Pretraži</button>
+    <button type="button" class="search-btn-refresh" (click)="loadAllVehicleDrivers()">Osveži</button></span>
+  </div>
+
+<div class="parent-div">
+    <div *ngFor="let vehicleDriver of vehicleDrivers" class="app-form">
+        <br>
+          <div class="app-form-group">
+            <label for="identification_number">JMBG</label>
+            <input
+            type="text"
+            [value]="vehicleDriver.identification_number"
+            class="app-form-control"
+            disabled
+          />
+          </div>
+      
+          <div class="app-form-row">
+            <div class="app-form-group">
+              <label for="name">Ime vozača</label>
+              <input
+              type="text"
+              [value]="vehicleDriver.name"
+              class="app-form-control"
+              disabled
+            />
+             
+            </div>
+      
+            <div class="app-form-group">
+              <label for="last_name">Prezime vozača</label>
+              <input
+              type="text"
+              [value]="vehicleDriver.last_name"
+              class="app-form-control"
+              disabled
+            />
+            </div>
+      
+             <div class="app-form-group">
+              <label for="date_of_birth">Datum Registracije</label>
+              <input
+              type="text"
+              [value]="vehicleDriver.date_of_birth | date: 'yyyy-MM-dd'"
+              class="app-form-control"
+              disabled
+            />
+             
+            </div>
+    
+            <div class="app-form-group">
+              <label for="gender">Pol</label>
+              <input
+              type="text"
+              [value]="vehicleDriver.gender"
+              class="app-form-control"
+              disabled
+            />
+            </div>
+
+          </div>
+    
+      </div>
+
+    

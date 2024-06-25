@@ -89,7 +89,19 @@ func (s *VehicleDriverHandler) CreateVehicleDriver(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
+
 	vehicleDriverInsert, ok := vehicleDriver.(domain.VehicleDriverCreate)
+
+	identificationNumber := vehicleDriverInsert.IdentificationNumber
+
+	existingVehicleDriver, err := s.service.GetVehicleDriverByID(identificationNumber, ctx)
+
+	if existingVehicleDriver != nil {
+		errorMsg := map[string]string{"error": "Vozac sa ovim JMBG-em vec postoji."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusConflict)
+		return
+	}
+
 	if !ok {
 		errorMsg := map[string]string{"error": "Invalid type for vehicle driver."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)

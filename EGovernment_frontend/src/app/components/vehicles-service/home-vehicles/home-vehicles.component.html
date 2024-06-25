@@ -1,26 +1,21 @@
-<app-vehicles-header></app-vehicles-header>
+<ng-container *ngIf="getRole() === 'Policeman'">
+  <app-vehicles-header></app-vehicles-header>
 
-<!-- <div class="content">
-<p *ngIf="getRole() === 'Policeman'">Za policajca</p>
-</div> -->
+  <!-- <div class="content">
+  <p *ngIf="getRole() === 'Policeman'">Za policajca</p>
+  </div> -->
 
-<nav>
-  <div class="nav-container">
-  <ul>
-    <li><a routerLink="/vozila" class="no-link-style">Vozila</a></li>
-    <!-- <li [ngClass]="{'selected': selectedReport === 'car-accident-degree'}" (click)="selectReport('car-accident-degree')">Stepen saobraćajnih nesreća</li> -->
-    <!-- <li [ngClass]="{'selected': selectedReport === 'car-accident-type'}" (click)="selectReport('car-accident-type')">Tip saobraćajnih nesreća</li> -->
-    <!-- <li [ngClass]="{'selected': selectedReport === 'delicts'}" (click)="selectReport('delicts')">Prekršaji</li> -->
-  </ul>
-  </div>
-</nav>
+  <nav>
+    <div class="nav-container">
+      <ul>
+        <li><a routerLink="/vozila" class="no-link-style">Vozila</a></li>
+        <li><a routerLink="/vozaci" class="no-link-style">Vozaci</a></li>
+      </ul>
+    </div>
+  </nav>
 
+</ng-container>
 
-<!-- <div class="report-container">
-  <app-report-registered-vehicles *ngIf="selectedReport === 'registered-vehicles'"></app-report-registered-vehicles>
-  <app-report-car-accident-degree *ngIf="selectedReport === 'car-accident-degree'"></app-report-car-accident-degree>
-  <app-report-car-accident-type *ngIf="selectedReport === 'car-accident-type'"></app-report-car-accident-type>
-  <app-report-delicts *ngIf="selectedReport === 'delicts'"></app-report-delicts>
-</div>
-
-<app-request *ngIf="getRole() === 'Citizen'"></app-request> -->
+<ng-container *ngIf="getRole() !== 'Policeman'">
+  <p>Access denied. This section is only for policemen.</p>
+</ng-container>

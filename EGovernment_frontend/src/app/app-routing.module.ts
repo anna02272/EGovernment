@@ -16,6 +16,7 @@ import { SubjectDetailsComponent } from './components/court-service/subject-deta
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
 import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
 import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
+import { DriverComponent } from './components/vehicles-service/driver/driver.component';
 
 const routes: Routes = [
   {
@@ -77,7 +78,9 @@ const routes: Routes = [
 
   { path: 'vozila', component: VehiclesComponent },
 
-  {path: 'registrovanaVozila', component: RegisteredVehiclesComponent}
+  {path: 'registrovanaVozila', component: RegisteredVehiclesComponent},
+  {path: 'vozaci', component: DriverComponent}
+
 
 ];
 

@@ -3,6 +3,7 @@ import {ApiService} from "../api.service";
 import {ConfigService} from "../config.service";
 import {Vehicle} from "src/app/models/police/vehicle";
 import { VehicleDriver } from "src/app/models/police/vehicleDriver";
+import { DriverLicence } from "src/app/models/police/driverLicence";
 
 @Injectable()
 export class VehicleService {
@@ -19,6 +20,11 @@ export class VehicleService {
 
   getAll() {
     const url = this.config.allVehicles_url;
+    return this.apiService.get(url);
+   }
+
+   getAllLicences() {
+    const url = this.config.getAllDriverLicences_url;
     return this.apiService.get(url);
    }
 
@@ -41,6 +47,10 @@ export class VehicleService {
     return this.apiService.get(url, id);
    }
 
+   getDriverLicenceById(id: string) {
+    const url = this.config.getDriverLicenceById_url + id;
+    return this.apiService.get(url,id);
+   }
 
    getByCategoryAndYear(category: string, year: number) {
     const url = this.config.getVehicleByCategoryAndYear_url(category, year);
@@ -52,8 +62,9 @@ export class VehicleService {
     return this.apiService.post(url, vehicleDriver);
    }
 
+   createDriverLicence(driverLicence: DriverLicence){
+    const url = this.config.createDriverLicence_url;
+    return this.apiService.post(url, driverLicence);
+   }
 
-//    delete(id : string) {
-//     return this.apiService.delete(this.config.request_url + "/delete/" + id );
-//    }
 }

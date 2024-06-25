@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,10 +23,10 @@ func (s *DriverLicenceServiceImpl) InsertDriverLicence(licence *domain.DriverLic
 	var licenceToInsert domain.DriverLicence
 	licenceToInsert.ID = primitive.NewObjectID()
 	licenceToInsert.VehicleDriver = licence.VehicleDriver
-	licenceToInsert.LicenceNumber = licence.LicenceNumber
+	licenceToInsert.LicenceNumber = uuid.NewString()
 	licenceToInsert.LocationLicenced = licence.LocationLicenced
 	licenceToInsert.Categories = licence.Categories
-	result, err := s.collection.InsertOne(context.Background(), licence)
+	result, err := s.collection.InsertOne(context.Background(), licenceToInsert)
 	if err != nil {
 		return nil, "", err
 	}
@@ -47,4 +48,41 @@ func (s *DriverLicenceServiceImpl) GetDriverLicenceById(driverLicenceNumber stri
 	}
 
 	return &driverLicence, nil
+}
+
+func (s *DriverLicenceServiceImpl) GetDriverLicenceByDriver(driver string, ctx context.Context) (*domain.DriverLicence, error) {
+	var driverLicence domain.DriverLicence
+	filter := bson.M{"vehicle_driver": driver}
+
+	err := s.collection.FindOne(ctx, filter).Decode(&driverLicence)
+	if err != nil {
+		return nil, err
+	}
+
+	return &driverLicence, nil
+}
+
+func (s *DriverLicenceServiceImpl) GetAllDriverLicences() ([]*domain.DriverLicence, error) {
+	var driverLicences []*domain.DriverLicence
+
+	filter := bson.D{}
+
+	cursor, err := s.collection.Find(s.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(s.ctx)
+
+	for cursor.Next(s.ctx) {
+		var driverLicence domain.DriverLicence
+		if err := cursor.Decode(&driverLicence); err != nil {
+			return nil, err
+		}
+		driverLicences = append(driverLicences, &driverLicence)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return driverLicences, nil
 }

@@ -17,6 +17,7 @@ import { SubjectTabComponent } from './components/court-service/subject-tab/subj
 import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
 import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
 import { DriverComponent } from './components/vehicles-service/driver/driver.component';
+import { DriverLicenceComponent } from './components/vehicles-service/driver-licence/driver-licence.component';
 
 const routes: Routes = [
   {
@@ -79,9 +80,8 @@ const routes: Routes = [
   { path: 'vozila', component: VehiclesComponent },
 
   {path: 'registrovanaVozila', component: RegisteredVehiclesComponent},
-  {path: 'vozaci', component: DriverComponent}
-
-
+  {path: 'vozaci', component: DriverComponent},
+  {path: 'vozacke', component: DriverLicenceComponent},
 ];
 
 @NgModule({

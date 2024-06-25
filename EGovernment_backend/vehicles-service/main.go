@@ -61,8 +61,8 @@ func init() {
 	vehicleDriverRouteHandler = routes.NewVehicleDriverRouteHandler(vehicleDriverHandler, vehicleDriverService)
 
 	driverLicenceService = services.NewDriverLicenceServiceImpl(driverLicenceCollection, ctx)
-	driverLicenceHandler = handlers.NewDriverLicenceHandler(driverLicenceService, driverLicenceCollection)
-	driverLicenceRouteHandler = routes.NewDriverLicenceRouteHandler(driverLicenceHandler, driverLicenceService)
+	driverLicenceHandler = handlers.NewDriverLicenceHandler(driverLicenceService, driverLicenceCollection, vehicleDriverService)
+	driverLicenceRouteHandler = routes.NewDriverLicenceRouteHandler(driverLicenceHandler, driverLicenceService, vehicleDriverService)
 
 	server = gin.Default()
 

@@ -51,6 +51,7 @@ import { VehiclesHeaderComponent } from './components/vehicles-service/vehicles-
 import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
 import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
 import { DriverComponent } from './components/vehicles-service/driver/driver.component';
+import { DriverLicenceComponent } from './components/vehicles-service/driver-licence/driver-licence.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { DriverComponent } from './components/vehicles-service/driver/driver.com
     VehiclesHeaderComponent,
     VehiclesComponent,
     RegisteredVehiclesComponent,
-    DriverComponent
+    DriverComponent,
+    DriverLicenceComponent
   ],
   imports: [
     BrowserModule,

@@ -1,127 +1,104 @@
+<app-vehicles-header></app-vehicles-header>
+
 <div class="title">
-    <h1>Kreiraj Vozaca</h1>
-  </div>
-  <div class="app-form">
-    <form (ngSubmit)="onSubmit()" [formGroup]="vehicleDriverForm">
+  <h1>Kreiraj Vozaca</h1>
+</div>
+<div class="app-form">
+  <form (ngSubmit)="onSubmit()" [formGroup]="vehicleDriverForm">
+    <div class="app-form-group">
+      <label for="identification_number">JMBG</label>
+      <input
+        type="text"
+        id="identification_number"
+        formControlName="identification_number"
+        class="app-form-control"
+        required
+      />
+      <div *ngIf="vehicleDriverForm.controls['identification_number'].invalid && vehicleDriverForm.controls['identification_number'].touched" class="text-danger">
+        <div *ngIf="vehicleDriverForm.controls['identification_number'].errors?.['required']">JMBG je obavezan.</div>
+        <div *ngIf="vehicleDriverForm.controls['identification_number'].errors?.['minlength']">JMBG mora imati 13 cifara.</div>
+        <div *ngIf="vehicleDriverForm.controls['identification_number'].errors?.['maxlength']">JMBG mora imati 13 cifara.</div>
+        <div *ngIf="vehicleDriverForm.controls['identification_number'].errors?.['pattern']">JMBG mora sadržati samo brojeve.</div>
+      </div>
+    </div>
+
+    <div class="app-form-row">
       <div class="app-form-group">
-        <label for="identification_number"> JMBG</label>
+        <label for="gender">Pol</label>
+        <select
+          class="app-form-control"
+          formControlName="gender"
+          required
+          id="gender"
+        >
+          <option value="" disabled>Pol</option>
+          <option *ngFor="let gender of genders" [value]="gender">
+            {{ gender }}
+          </option>
+        </select>
+        <div *ngIf="vehicleDriverForm.controls['gender'].invalid && vehicleDriverForm.controls['gender'].touched" class="text-danger">
+          Pol je obavezan.
+        </div>
+      </div>
+
+      <div class="app-form-group">
+        <label for="name">Ime</label>
         <input
           type="text"
-          id="identification_number"
-          formControlName="identification_number"
+          id="name"
+          formControlName="name"
           class="app-form-control"
           required
         />
-        <div
-          *ngIf="
-            vehicleDriverForm.controls['identification_number'].invalid &&
-            vehicleDriverForm.controls['identification_number'].touched
-          "
-          class="text-danger"
-        >
-          JMBG je obavezan.
+        <div *ngIf="vehicleDriverForm.controls['name'].invalid && vehicleDriverForm.controls['name'].touched" class="text-danger">
+          <div *ngIf="vehicleDriverForm.controls['name'].errors?.['required']">Ime je obavezno.</div>
+          <div *ngIf="vehicleDriverForm.controls['name'].errors?.['pattern']">Ime može sadržati samo slova.</div>
         </div>
       </div>
-  
-      <div class="app-form-row">
-        <div class="app-form-group">
-          <label for="gender">Pol </label>
-          <select
-            class="app-form-control"
-            formControlName="gender"
-            required
-            id="gender"
-          >
-            <option value="" disabled>Pol </option>
-            <option *ngFor="let gender of genders" [value]="gender">
-              {{ gender }}
-            </option>
-          </select>
-          <div
-            *ngIf="
-            vehicleDriverForm.controls['gender'].invalid &&
-            vehicleDriverForm.controls['gender'].touched
-            "
-            class="text-danger"
-          >
-            Pol je obavezan.
-          </div>
+      <div class="app-form-group">
+        <label for="last_name">Prezime</label>
+        <input
+          type="text"
+          id="last_name"
+          formControlName="last_name"
+          class="app-form-control"
+          required
+        />
+        <div *ngIf="vehicleDriverForm.controls['last_name'].invalid && vehicleDriverForm.controls['last_name'].touched" class="text-danger">
+          <div *ngIf="vehicleDriverForm.controls['last_name'].errors?.['required']">Prezime je obavezno.</div>
+          <div *ngIf="vehicleDriverForm.controls['last_name'].errors?.['pattern']">Prezime može sadržati samo slova.</div>
         </div>
-  
-        <div class="app-form-group">
-          <label for="name">Ime</label>
-          <input
-            type="text"
-            id="name"
-            formControlName="name"
-            class="app-form-control"
-            required
-          />
-          <div
-            *ngIf="
-            vehicleDriverForm.controls['name'].invalid &&
-            vehicleDriverForm.controls['name'].touched
-            "
-            class="text-danger"
-          >
-            Ime je obavezno.
-          </div>
-        </div>
-        <div class="app-form-group">
-          <label for="last_name">Prezime</label>
-          <input
-            type="text"
-            id="last_name"
-            formControlName="last_name"
-            class="app-form-control"
-            required
-          />
-          <div
-            *ngIf="
-            vehicleDriverForm.controls['last_name'].invalid &&
-            vehicleDriverForm.controls['last_name'].touched
-            "
-            class="text-danger"
-          >
-            Prezime je obavezno.
-          </div>
-        </div>
-  
-        <div class="app-form-group">
-          <label for="date_of_birth">Datum rodjenja</label>
-          <input
-            type="date"
-            id="date_of_birth"
-            formControlName="date_of_birth"
-            class="app-form-control"
-            required
-          />
-          <div
-            *ngIf="
-            vehicleDriverForm.controls['date_of_birth'].invalid &&
-            vehicleDriverForm.controls['date_of_birth'].touched
-            "
-            class="text-danger"
-          >
-            Datum rodjenja je obavezan.
-          </div>
-        </div>
-
       </div>
 
-      <div class="app-form-group buttons">
-        <button type="button" class="app-form-button" (click)="onCancel()">
-          ODUSTANI
-        </button>
-        <button type="submit" class="app-form-button">KREIRAJ</button>
-
-        <div *ngIf="backendError" class="text-danger">
-            {{ backendError }}
-          </div>
+      <div class="app-form-group">
+        <label for="date_of_birth">Datum rođenja</label>
+        <input
+          type="date"
+          id="date_of_birth"
+          formControlName="date_of_birth"
+          class="app-form-control"
+          required
+        />
+        <div *ngIf="vehicleDriverForm.controls['date_of_birth'].invalid && vehicleDriverForm.controls['date_of_birth'].touched" class="text-danger">
+          <div *ngIf="vehicleDriverForm.controls['date_of_birth'].errors?.['required']">Datum rođenja je obavezan.</div>
+          <div *ngIf="vehicleDriverForm.controls['date_of_birth'].errors?.['dateInFuture']">Datum rođenja ne može biti u budućnosti.</div>
+        </div>
       </div>
-    </form>
+    </div>
 
-  </div>
+    <div class="app-form-group buttons">
+      <button type="button" class="app-form-button" (click)="onCancel()">
+        ODUSTANI
+      </button>
+      <button type="submit" class="app-form-button">KREIRAJ</button>
+
+      <div *ngIf="backendError" class="text-danger">
+        {{ backendError }}
+      </div>
+    </div>
+  </form>
+</div>
+
 
     <h1 id="lista" class="title">LISTA SVIH VOZAČA</h1>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Gender } from 'src/app/models/police/gender';
 import { VehicleDriver } from 'src/app/models/police/vehicleDriver';
@@ -17,18 +17,16 @@ export class DriverComponent implements OnInit {
   vehicleDrivers: VehicleDriver[] = []; 
   searchID: string = ''; 
 
-
-
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
     private snackBar: MatSnackBar
   ) {
     this.vehicleDriverForm = this.fb.group({
-      identification_number: ['', Validators.required],
-      name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      date_of_birth: ['', Validators.required],
+      identification_number: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), Validators.pattern('^[0-9]*$')]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      last_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      date_of_birth: ['', [Validators.required, this.dateNotInFuture]],
       gender: ['', Validators.required]
 
     });
@@ -39,7 +37,6 @@ export class DriverComponent implements OnInit {
   
   onSubmit(): void {
     if (this.vehicleDriverForm.invalid) {
-
       this.markAllAsTouched();
       return;
     }
@@ -86,7 +83,6 @@ export class DriverComponent implements OnInit {
     this.backendError = null;
   }
 
-
   loadAllVehicleDrivers(): void {
     this.vehicleService.getAllVehicleDrivers().subscribe({
       next: (vehicleDrivers: VehicleDriver[]) => {
@@ -112,6 +108,15 @@ export class DriverComponent implements OnInit {
         console.error('Error fetching vehicle by plate:', errorResponse);
       }
     });
+  }
+
+  private dateNotInFuture(control: AbstractControl): { [key: string]: boolean } | null {
+    const currentDate = new Date();
+    const selectedDate = new Date(control.value);
+    if (selectedDate > currentDate) {
+      return { 'dateInFuture': true };
+    }
+    return null;
   }
 
 

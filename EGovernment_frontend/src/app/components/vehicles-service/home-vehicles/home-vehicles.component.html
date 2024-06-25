@@ -10,6 +10,8 @@
       <ul>
         <li><a routerLink="/vozila" class="no-link-style">Vozila</a></li>
         <li><a routerLink="/vozaci" class="no-link-style">Vozaci</a></li>
+        <li><a routerLink="/vozacke" class="no-link-style">Vozacke dozvole</a></li>
+
       </ul>
     </div>
   </nav>
@@ -17,5 +19,5 @@
 </ng-container>
 
 <ng-container *ngIf="getRole() !== 'Policeman'">
-  <p>Access denied. This section is only for policemen.</p>
+  <p>Zabranjen pristup. Ovu stranicu vide samo policajci.</p>
 </ng-container>

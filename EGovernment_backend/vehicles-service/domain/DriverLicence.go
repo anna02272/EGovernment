@@ -12,7 +12,6 @@ type DriverLicence struct {
 
 type DriverLicenceCreate struct {
 	VehicleDriver    string     `bson:"vehicle_driver" json:"vehicle_driver"`
-	LicenceNumber    string     `bson:"licence_number" json:"licence_number"`
 	LocationLicenced Location   `bson:"location_licenced" json:"location_licenced"`
 	Categories       []Category `bson:"categories" json:"categories"`
 }

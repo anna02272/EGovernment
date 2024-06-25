@@ -31,6 +31,8 @@ import { ResponseService } from './services/statistics/response.service';
 import { ReportDelicTypeService } from './services/statistics/reportDelicType.service';
 import { ReportCarAccidentTypeService } from './services/statistics/reportCarAccidentTypeService.service';
 import { ReportCarAccidentDegreeService } from './services/statistics/reportCarAccidentDegree.service';
+import { DelictService } from './services/traffic-police/delictService';
+import { CarAccidentService } from './services/traffic-police/carAccidentService';
 import { ReportRegisteredVehiclesService } from './services/statistics/reportRegisteredVehicles.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -46,6 +48,14 @@ import { SubjectDetailsComponent } from './components/court-service/subject-deta
 import { ScheduleComponent } from './components/court-service/schedule/schedule.component';
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
 import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
+import { DelictComponent } from './components/police-service/delict/delict.component';
+import { CarAccidentComponent } from './components/police-service/carAccident/car-accident.component';
+import { DelictDetailsComponent } from './components/police-service/delict-details/delict-details.component';
+import { CarAccidentDetailsComponent } from './components/police-service/car-accident-details/car-accident-details.component';
+import { CreateDelictComponent } from './components/police-service/create-delict/create-delict.component';
+import { AllDelictsComponent } from './components/police-service/all-delicts/all-delicts.component';
+import { AllCarAccidentsComponent } from './components/police-service/all-car-accidents/all-car-accidents.component';
+import { PoliceHeaderComponent } from './components/police-service/police-header/police-header.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +85,15 @@ import { EditSubjectComponent } from './components/court-service/edit-subject/ed
     SubjectDetailsComponent,
     ScheduleComponent,
     SubjectTabComponent,
-    EditSubjectComponent
+    EditSubjectComponent,
+    DelictComponent,
+    CarAccidentComponent,
+    DelictDetailsComponent,
+    CarAccidentDetailsComponent,
+    CreateDelictComponent,
+    AllDelictsComponent,
+    AllCarAccidentsComponent,
+    PoliceHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -104,7 +122,9 @@ import { EditSubjectComponent } from './components/court-service/edit-subject/ed
   ReportRegisteredVehiclesService,
   ReportDelicTypeService,
   ReportCarAccidentTypeService,
-  ReportCarAccidentDegreeService
+  ReportCarAccidentDegreeService,
+  DelictService,
+  CarAccidentService
   ],
   bootstrap: [AppComponent]
 })

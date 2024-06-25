@@ -1,0 +1,33 @@
+<app-police-header></app-police-header>
+<div class="delict-details" *ngIf="delict">
+  <h2>{{ delict.description }}</h2>
+  <p>Date: {{ delict.date | date }}</p>
+  <p>Status: {{ delict.delict_status }}</p>
+  <p>Penalty Points: {{ delict.number_of_penalty_points }}</p>
+  <p>Driver Identification Number: {{ delict.driver_identification_number }}</p>
+  <p>Vehicle Licence Number: {{ delict.vehicle_licence_number }}</p>
+  <p>Driver Email: {{ delict.driver_email }}</p>
+  <p>Driver JMBG: {{ delict.driver_jmbg }}</p>
+  <p>Location: {{ delict.location }}</p>
+  <p>Price of Fine: {{ delict.price_of_fine }}</p>
+    <button *ngIf="getRole() === 'Citizen' && delict.delict_status === 'FineAwarded'" (click)="payFine()">Pay Fine</button>
+
+    <div class="carousel slide" style="width: 40%; height: 40%;padding-top: 25px;padding-bottom: 25px;" *ngIf="images.length > 0">
+      <div class="carousel-inner">
+        <div class="carousel-item" [class.active]="currentSlideIndex === i" *ngFor="let image of images; let i = index">
+          <img [src]="image" class="d-block w-100" alt="Image">
+        </div>
+      </div>
+      <button class="carousel-control-prev" (click)="prevSlide()">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </button>
+      <button class="carousel-control-next" (click)="nextSlide()">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </button>
+    </div>
+
+    <button (click)="downloadPdf()">Download PDF</button>
+
+  </div>

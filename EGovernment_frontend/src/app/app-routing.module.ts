@@ -14,6 +14,13 @@ import { RegistrationComponent } from './components/auth-service/registration/re
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
 import { SubjectDetailsComponent } from './components/court-service/subject-details/subject-details.component';
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
+import { DelictComponent } from './components/police-service/delict/delict.component';
+import { DelictDetailsComponent } from './components/police-service/delict-details/delict-details.component';
+import { CarAccidentComponent } from './components/police-service/carAccident/car-accident.component';
+import { CarAccidentDetailsComponent } from './components/police-service/car-accident-details/car-accident-details.component';
+import { CreateDelictComponent } from './components/police-service/create-delict/create-delict.component';
+import { AllDelictsComponent } from './components/police-service/all-delicts/all-delicts.component';
+import { AllCarAccidentsComponent } from './components/police-service/all-car-accidents/all-car-accidents.component';
 
 const routes: Routes = [
   {
@@ -73,8 +80,45 @@ const routes: Routes = [
   { path: 'subjectTab/:id', component: SubjectTabComponent },
   { path: 'editSubject/:id', component: EditSubjectComponent },
 
+  {
+    path: 'prekrsaj',
+    component: DelictComponent,
+    canActivate: [AuthGuard] 
+  },
 
-  
+  {
+    path: 'delict-details/:id',
+    component: DelictDetailsComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'nesreca',
+    component: CarAccidentComponent,
+    canActivate: [AuthGuard] 
+  },
+
+  {
+    path: 'car-accident-details/:id',
+    component: CarAccidentDetailsComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'create-delict',
+    component: CreateDelictComponent,
+    canActivate: [AuthGuard] 
+  },
+
+  { path: 'all-delicts',
+     component: AllDelictsComponent ,
+     canActivate: [AuthGuard] 
+  },
+
+  { path: 'all-car-accidents',
+      component: AllCarAccidentsComponent ,
+      canActivate: [AuthGuard] 
+  },
 ];
 
 @NgModule({

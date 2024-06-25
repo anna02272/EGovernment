@@ -1,0 +1,12 @@
+
+<article class="article" (click)="openDelictDetails()">
+    <div class="article-wrapper">
+      <div class="article-body">
+        <h2>{{ delict?.description }}</h2>
+        <p>Date: {{ delict?.date | date }}</p>
+        <p>Status: {{ delict?.delict_status }}</p>
+        <p>Penalty Points: {{ delict?.number_of_penalty_points }}</p>
+      </div>
+    </div>
+  </article>
+  

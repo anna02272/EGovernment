@@ -1,0 +1,7 @@
+<app-police-header></app-police-header>
+<div class="car-accident-details" *ngIf="carAccident">
+    <h2>{{ carAccident.description }}</h2>
+    <p>Date: {{ carAccident.date | date }}</p>
+    <p>Location: {{ carAccident.location }}</p>
+    <p>Severity: {{ carAccident.car_accident_type }}</p>
+  </div>

@@ -1,22 +1,34 @@
 package handlers
 
 import (
+	"bufio"
 	"bytes"
 	"context"
+
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+
+	"github.com/jung-kurt/gofpdf"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/gomail.v2"
+	"io"
+
 	"log"
+	"mime"
 	"net/http"
+	"os"
+	"path"
+	"path/filepath"
 	"police-service/data"
 	"police-service/domain"
 	errorMessage "police-service/error"
 	"police-service/services"
+	"police-service/storage"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -31,13 +43,17 @@ type DelictHandler struct {
 	service       services.DelictService
 	reportService services.ReportService
 	DB            *mongo.Collection
+	logger        *log.Logger
+	storage       *storage.FileStorage
 }
 
-func NewDelictHandler(service services.DelictService, db *mongo.Collection, reportService services.ReportService) DelictHandler {
+func NewDelictHandler(service services.DelictService, db *mongo.Collection, reportService services.ReportService, l *log.Logger, s *storage.FileStorage) DelictHandler {
 	return DelictHandler{
 		service:       service,
 		reportService: reportService,
 		DB:            db,
+		logger:        l,
+		storage:       s,
 	}
 }
 func (s *DelictHandler) CreateDelict(c *gin.Context) {
@@ -119,6 +135,15 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
 		return
 	}*/
+
+	pdfFilePath, err := s.GenerateDelictPDF(delictInsertDB)
+	if err != nil {
+		log.Printf("Error generating PDF: %v\n", err)
+		errorMsg := map[string]string{"error": "Failed to generate PDF report."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	log.Printf("Generated PDF saved at: %s", pdfFilePath)
 
 	if delictInsert.NumberOfPenaltyPoints > 0 {
 		driverID := delictInsert.DriverIdentificationNumber
@@ -239,6 +264,179 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		return
 	}
 	rw.Write(jsonResponse)
+}
+
+func (s *DelictHandler) GenerateTestPDF(ctx *gin.Context) {
+	// Example data
+	delictID := "test_delict_id"
+	description := "Test Description"
+
+	// File paths
+	filePath := "/home/flower/Desktop/EUpravaProject/EGovernment/EGovernment_backend/pdf_reports"
+	txtFilename := "delict_report_" + delictID + ".txt"
+	txtFilePath := filepath.Join(filePath, txtFilename)
+	pdfFilename := "delict_report_" + delictID + ".pdf"
+	pdfFilePath := filepath.Join(filePath, pdfFilename)
+
+	// Step 1: Generate text file
+	file, err := os.Create(txtFilePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error creating text file: %v", err)})
+		return
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(fmt.Sprintf("Delict Report\n"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error writing to text file: %v", err)})
+		return
+	}
+	_, err = file.WriteString(fmt.Sprintf("Delict ID: %s\n", delictID))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error writing to text file: %v", err)})
+		return
+	}
+	_, err = file.WriteString(fmt.Sprintf("Description: %s\n", description))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error writing to text file: %v", err)})
+		return
+	}
+
+	log.Println("Text file created successfully")
+
+	// Step 2: Convert text file to PDF
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "", 14)
+
+	txtFile, err := os.Open(txtFilePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error opening text file: %v", err)})
+		return
+	}
+	defer txtFile.Close()
+
+	scanner := bufio.NewScanner(txtFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		pdf.Cell(40, 10, line)
+		pdf.Ln(10)
+	}
+
+	if err := scanner.Err(); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error reading text file: %v", err)})
+		return
+	}
+
+	err = pdf.OutputFileAndClose(pdfFilePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error generating PDF: %v", err)})
+		return
+	}
+
+	log.Printf("PDF generated successfully: %s\n", pdfFilePath)
+	ctx.JSON(http.StatusOK, gin.H{"message": "PDF generated successfully", "pdfPath": pdfFilePath})
+}
+
+func (s *DelictHandler) GenerateDelictPDF(delict *domain.Delict) (string, error) {
+	// Initialize PDF document
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+
+	// Set font
+	pdf.SetFont("Arial", "", 12)
+
+	// Title
+	pdf.Cell(200, 10, "Delict Report")
+	pdf.Ln(10)
+
+	// Delict ID
+	pdf.Cell(0, 10, fmt.Sprintf("Delict ID: %s", delict.ID.Hex()))
+	pdf.Ln(10)
+
+	// Policeman ID
+	pdf.Cell(0, 10, fmt.Sprintf("Policeman ID: %s", delict.PolicemanID))
+	pdf.Ln(10)
+
+	// Driver Identification Number
+	pdf.Cell(0, 10, fmt.Sprintf("Driver Identification Number: %s", delict.DriverIdentificationNumber))
+	pdf.Ln(10)
+
+	// Vehicle Licence Number
+	pdf.Cell(0, 10, fmt.Sprintf("Vehicle Licence Number: %s", delict.VehicleLicenceNumber))
+	pdf.Ln(10)
+
+	// Driver Email
+	pdf.Cell(0, 10, fmt.Sprintf("Driver Email: %s", delict.DriverEmail))
+	pdf.Ln(10)
+
+	// Driver JMBG
+	pdf.Cell(0, 10, fmt.Sprintf("Driver JMBG: %s", delict.DriverJmbg))
+	pdf.Ln(10)
+
+	// Date
+	pdf.Cell(0, 10, fmt.Sprintf("Date: %s", delict.Date.Time().Format("2006-01-02 15:04:05")))
+	pdf.Ln(10)
+
+	// Location
+	pdf.Cell(0, 10, fmt.Sprintf("Location: %s", delict.Location))
+	pdf.Ln(10)
+
+	// Description
+	pdf.Cell(0, 10, fmt.Sprintf("Description: %s", delict.Description))
+	pdf.Ln(10)
+
+	// Delict Type
+	pdf.Cell(0, 10, fmt.Sprintf("Delict Type: %s", delict.DelictType))
+	pdf.Ln(10)
+
+	// Delict Status
+	pdf.Cell(0, 10, fmt.Sprintf("Delict Status: %s", delict.DelictStatus))
+	pdf.Ln(10)
+
+	// Price Of Fine
+	pdf.Cell(0, 10, fmt.Sprintf("Price Of Fine: %.2f", delict.PriceOfFine))
+	pdf.Ln(10)
+
+	// Number Of Penalty Points
+	pdf.Cell(0, 10, fmt.Sprintf("Number Of Penalty Points: %d", delict.NumberOfPenaltyPoints))
+	pdf.Ln(10)
+
+	pdfDir := os.Getenv("FILE_PATH")
+	log.Printf("PDF Directory: %s", pdfDir)
+
+	pdfFilename := "delict_report_" + delict.ID.Hex() + ".pdf"
+	pdfFilePath := filepath.Join(pdfDir, pdfFilename)
+
+	err := pdf.OutputFileAndClose(pdfFilePath)
+	if err != nil {
+		log.Println("Error generating PDF:", err)
+		return "", err
+	}
+
+	log.Printf("Generated PDF saved at: %s", pdfFilePath)
+	return pdfFilePath, nil
+}
+
+func (h *DelictHandler) ServeDelictPDF(c *gin.Context) {
+	delictID := c.Param("id")
+
+	pdfDir := os.Getenv("FILE_PATH")
+
+	pdfFilename := fmt.Sprintf("delict_report_%s.pdf", delictID)
+	pdfFilePath := filepath.Join(pdfDir, pdfFilename)
+
+	pdfFile, err := os.Open(pdfFilePath)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		return
+	}
+	defer pdfFile.Close()
+
+	c.Header("Content-Type", "application/pdf")
+	c.Header("Content-Disposition", "attachment; filename="+pdfFilename)
+
+	http.ServeFile(c.Writer, c.Request, pdfFilePath)
 }
 
 func isValidDelictType(delictType domain.DelictType) bool {
@@ -790,4 +988,155 @@ func (s *DelictHandler) GetAllDelictsByDelictTypeAndYear(c *gin.Context) {
 	rw.Header().Set("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(jsonResponse)
+}
+
+func (s *DelictHandler) GetImageURLS(c *gin.Context) {
+	rw := c.Writer
+	//h := c.Request
+	/*token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}*/
+
+	folderName := c.Param("folderName")
+	imageURLs, err := s.storage.GetImageURLS(folderName)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error getting image URLs"}, http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(imageURLs)
+}
+
+func (s *DelictHandler) GetImageContent(c *gin.Context) {
+	rw := c.Writer
+	//h := c.Request
+	/*token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}*/
+
+	folderName := c.Param("folderName")
+	imageName := c.Param("imageName")
+	imagePath := path.Join(folderName, imageName)
+	imagePath = strings.TrimPrefix(imagePath, "/")
+
+	imageType := mime.TypeByExtension(filepath.Ext(imagePath))
+	if imageType == "" {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error retrieving image type"}, http.StatusInternalServerError)
+		return
+	}
+
+	imageContent, err := s.storage.GetImageContent(imagePath)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error retrieving image content"}, http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Set("Content-Type", imageType)
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(imageContent)
+}
+
+func (s *DelictHandler) UploadImages(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+
+	folderName := c.Param("folderName")
+
+	err = h.ParseMultipartForm(40 << 20)
+	if err != nil {
+		errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error parsing form"}, http.StatusBadRequest)
+		return
+	}
+
+	files := h.MultipartForm.File["images"]
+
+	for _, file := range files {
+		src, err := file.Open()
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error opening file"}, http.StatusInternalServerError)
+			return
+		}
+		defer src.Close()
+
+		imageContent, err := io.ReadAll(src)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error reading file"}, http.StatusInternalServerError)
+			return
+		}
+
+		err = s.storage.SaveImage(folderName, file.Filename, imageContent)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, map[string]string{"error": "Error saving file"}, http.StatusInternalServerError)
+			return
+		}
+		log.Printf("[UploadImages] File %s successfully saved in folder %s", file.Filename, folderName)
+	}
+
+	rw.WriteHeader(http.StatusOK)
 }

@@ -1,0 +1,11 @@
+<app-police-header></app-police-header>
+<div class="content">
+    <div *ngIf="delicts.length > 0; else noDelicts">
+      <div class="articles">
+        <app-delict *ngFor="let delict of delicts" [delict]="delict"></app-delict>
+      </div>
+    </div>
+    <ng-template #noDelicts>
+      <p>No delicts available</p>
+    </ng-template>
+  </div>

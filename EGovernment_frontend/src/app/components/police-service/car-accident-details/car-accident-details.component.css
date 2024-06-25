@@ -1,0 +1,35 @@
+.car-accident-details {
+    max-width: 600px;
+    margin: 120px auto;
+    padding: 20px;
+    background-color: #C0DFE9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .car-accident-details h2 {
+    font-size: 1.8rem;
+    color: #28666e;
+    margin-bottom: 10px;
+  }
+  
+  .car-accident-details p {
+    margin-bottom: 6px;
+    color: #484848; 
+  }
+  
+  .car-accident-details button {
+    background-color: #28666e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px; 
+  }
+  
+  .car-accident-details button:hover {
+    background-color: #1e4d54;
+  }

@@ -29,6 +29,11 @@ func (d *DelictRouteHandler) DelictRoute(rg *gin.RouterGroup) {
 	router.GET("/get/delictType/:delictType", d.handler.GetAllDelictsByDelictType)
 	router.GET("/get/delictType/:delictType/year/:year", d.handler.GetAllDelictsByDelictTypeAndYear)
 	router.PATCH("/pay/:id", d.handler.PayFine)
+	router.GET("/getImagesUrls/:folderName", d.handler.GetImageURLS)
+	router.GET("/getImages/:folderName/:imageName", d.handler.GetImageContent)
+	router.POST("/upload/:folderName", d.handler.UploadImages)
+	router.GET("/test/pdf", d.handler.GenerateTestPDF)
+	router.GET("/getPdf/:id", d.handler.ServeDelictPDF)
 }
 
 func MiddlewareDelictDeserialization(c *gin.Context) {

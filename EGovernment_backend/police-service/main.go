@@ -8,10 +8,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"log"
 	"net/http"
+	"os"
 	"police-service/handlers"
 	"police-service/routes"
 	"police-service/services"
+	"police-service/storage"
 )
 
 var (
@@ -57,8 +60,24 @@ func init() {
 	reportHandler = handlers.NewReportHandler(reportService, reportCollection)
 	reportRouteHandler = routes.NewReportRouteHandler(reportHandler, reportService)
 
+	//Initialize the logger we are going to use, with prefix and datetime for every log
+	logger := log.New(os.Stdout, "[storage-api] ", log.LstdFlags)
+	storageLogger := log.New(os.Stdout, "[FileStorage] ", log.Ldate|log.Ltime|log.Lshortfile)
+
+	//// NoSQL: Initialize File Storage store
+	fileStorage, err := storage.New(storageLogger)
+	if err != nil {
+		logger.Fatalf("Error initializing FileStorage: %v", err)
+	}
+
+	// Close connection to HDFS on shutdown
+	defer fileStorage.Close()
+
+	//// Create directory tree on HDFS
+	_ = fileStorage.CreateDirectories()
+
 	delictService = services.NewDelictServiceImpl(delictCollection, ctx)
-	delictHandler = handlers.NewDelictHandler(delictService, delictCollection, reportService)
+	delictHandler = handlers.NewDelictHandler(delictService, delictCollection, reportService, logger, fileStorage)
 	delictRouteHandler = routes.NewDelictRouteHandler(delictHandler, delictService, reportService)
 
 	carAccidentService = services.NewCarAccidentServiceImpl(carAccidentCollection, ctx)

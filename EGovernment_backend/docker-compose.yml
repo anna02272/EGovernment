@@ -67,13 +67,22 @@ services:
     environment:
       - PORT=8084
       - MONGO_DB_URI=mongodb://root:root@mongo:27017
+      - HDFS_URI=namenode:9000
+      - FILE_PATH=/police-service/pdf_reports
     depends_on:
       mongo:
+        condition: service_healthy
+      datanode:
+        condition: service_healthy
+      namenode:
         condition: service_healthy
     networks:
       - network
     dns:
       - 8.8.8.8
+    volumes:
+      - ./files:/usr/bin/files
+      - ./police-service/pdf_reports:/police-service/pdf_reports
 
   auth-service:
     build:
@@ -133,9 +142,39 @@ services:
     networks:
       - network
 
+  namenode:
+   image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+   container_name: namenode
+   ports:
+     - "9870:9870"
+     - "9000:9000"
+   volumes:
+     - hadoop_namenode:/hadoop/dfs/name
+   environment:
+     - CLUSTER_NAME=gobnb
+   env_file:
+     - ./hdfs.env
+   networks:
+     - network
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    networks:
+      - network
+    env_file:
+      - ./hdfs.env
+
+
 volumes:
   mongo_store:
   mongo_express_data:
+  hadoop_namenode:
+  hadoop_datanode:
 
 networks:
   network:

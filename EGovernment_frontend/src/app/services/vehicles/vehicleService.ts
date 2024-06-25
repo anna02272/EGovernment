@@ -21,9 +21,10 @@ export class VehicleService {
     return this.apiService.get(url);
    }
 
-//    getById(id : string) {
-//     return this.apiService.get(this.config.request_url + "/get/" + id );
-//    }
+   getById(id : string) {
+    const url = this.config.getVehicleById_url + id;
+    return this.apiService.get(url, id);
+   }
 
 //    delete(id : string) {
 //     return this.apiService.delete(this.config.request_url + "/delete/" + id );

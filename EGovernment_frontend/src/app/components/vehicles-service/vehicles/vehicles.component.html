@@ -127,7 +127,20 @@
 
   </div>
 
-    <h1 class="title">LISTA SVIH VOZILA</h1>
+    <h1 id="lista" class="title">LISTA SVIH VOZILA</h1>
+
+
+<div class="search-vehicles">
+    <h3>Pretraži vozilo po registarskoj tablici:</h3>
+    <input type="text" class="searchPlate" [(ngModel)]="searchPlate">
+    <span class="searchSpan"><button type="button" class="search-btn" (click)="searchVehicleByPlate()">Pretraži</button>
+    <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button></span>
+  </div>
+
+
+  
+
+  <br>
 
 <div class="parent-div">
     <div *ngFor="let vehicle of vehicles" class="app-form">
@@ -164,17 +177,17 @@
             />
             </div>
       
-            <!-- <div class="app-form-group">
+             <div class="app-form-group">
               <label for="registration_date">Datum Registracije</label>
               <input
               type="text"
-              [value]="vehicle.registration_date"
+              [value]="vehicle.registration_date | date: 'yyyy-MM-dd'"
               class="app-form-control"
               disabled
             />
              
             </div>
-       -->
+    
             <div class="app-form-group">
               <label for="category">Kategorija</label>
               <input

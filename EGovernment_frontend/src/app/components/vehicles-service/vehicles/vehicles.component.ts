@@ -18,6 +18,7 @@ export class VehiclesComponent implements OnInit {
   categories = Object.values(Category);
   backendError: string | null = null;
   vehicles: Vehicle[] = []; 
+  searchPlate: string = ''; 
 
   constructor(
     private fb: FormBuilder,
@@ -34,23 +35,21 @@ export class VehiclesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAllVehicles();
+    this.loadAllVehicles(); 
   }
 
   onSubmit(): void {
     if (this.vehicleForm.invalid) {
+      console.log("API krece")
+
       this.markAllAsTouched();
       return;
     }
 
-    // const dateValue: Date = this.vehicleForm.value.registration_date;
-    // const newVehicle: Vehicle = this.vehicleForm.value;
-    // newVehicle.registration_date = dateValue + "T00:00:00Z";
-
-    const currentDate = new Date().toISOString(); // Get current date in ISO format
+    const currentDate = new Date().toISOString(); 
     const newVehicle: Vehicle = {
       ...this.vehicleForm.value,
-      registration_date: currentDate // Set registration_date to current date
+      registration_date: currentDate 
     };
 
     this.vehicleService.create(newVehicle).subscribe({
@@ -60,9 +59,8 @@ export class VehiclesComponent implements OnInit {
           panelClass: ['success-snackbar']
         });
         this.onCancel();
-        this.refreshService.refresh();
         this.backendError = null;
-        this.loadAllVehicles();  
+        this.loadAllVehicles();
       },
       error: (errorResponse) => {
         console.error('Error creating vehicle:', errorResponse);
@@ -88,13 +86,29 @@ export class VehiclesComponent implements OnInit {
     this.vehicleForm.markAllAsTouched();
   }
 
-  private loadAllVehicles(): void {
+   loadAllVehicles(): void {
     this.vehicleService.getAll().subscribe({
-      next: (vehicles) => {
+      next: (vehicles: Vehicle[]) => {
         this.vehicles = vehicles;
       },
-      error: (error) => {
-        console.error('Error fetching vehicles:', error);
+      error: (errorResponse) => {
+        console.error('Error fetching all vehicles:', errorResponse);
+        // Handle error as needed
+      }
+    });
+  }
+
+  searchVehicleByPlate(): void {
+    if (this.searchPlate.trim() === '') {
+      return;
+    }
+
+    this.vehicleService.getById(this.searchPlate.trim()).subscribe({
+      next: (vehicle: Vehicle) => {
+        this.vehicles = [vehicle]; // Show only the found vehicle
+      },
+      error: (errorResponse) => {
+        console.error('Error fetching vehicle by plate:', errorResponse);
       }
     });
   }

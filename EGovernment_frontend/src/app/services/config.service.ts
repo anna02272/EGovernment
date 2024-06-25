@@ -26,6 +26,8 @@ export class ConfigService {
 
   private _createVehicle_url = this._vehicles_api_url + '/createVehicle';
   private _allVehicles_url = this._vehicles_api_url + '/all';
+  private _getVehicleById = this._vehicles_api_url + '/get/';
+
 
   get vehicles_url(): string {
     return this._vehicles_url;
@@ -81,6 +83,10 @@ export class ConfigService {
 
   get allVehicles_url(): string {
     return this._allVehicles_url;
+  }
+
+  get getVehicleById_url(): string {
+    return this._getVehicleById;
   }
 }
 

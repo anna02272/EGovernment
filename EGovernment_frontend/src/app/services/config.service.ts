@@ -93,5 +93,9 @@ export class ConfigService {
   get getRegisteredVehicles_url(): string {
     return this._allRegisteredVehicles_url;
   }
+
+  getVehicleByCategoryAndYear_url(category: string, year: number): string {
+    return `${this._vehicles_api_url}/get/category/${category}/year/${year}`;
+  }
 }
 

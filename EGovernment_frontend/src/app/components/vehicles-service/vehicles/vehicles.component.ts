@@ -18,12 +18,15 @@ export class VehiclesComponent implements OnInit {
   categories = Object.values(Category);
   backendError: string | null = null;
   vehicles: Vehicle[] = []; 
+  searchCategory: string = 'B';
+  searchYear: number | null = new Date().getFullYear();
+  years: number[] = [];
   searchPlate: string = ''; 
+  
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
-    private refreshService: RefreshService,
     private snackBar: MatSnackBar
   ) {
     this.vehicleForm = this.fb.group({
@@ -36,6 +39,7 @@ export class VehiclesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAllVehicles(); 
+    this.generateYears();
   }
 
   onSubmit(): void {
@@ -97,6 +101,14 @@ export class VehiclesComponent implements OnInit {
     });
   }
 
+  generateYears(): void {
+    const currentYear = new Date().getFullYear();
+    for (let year = 2000; year <= currentYear; year++) {
+      console.log(year);
+      this.years.push(year);
+    }
+  }
+
   searchVehicleByPlate(): void {
     if (this.searchPlate.trim() === '') {
       return;
@@ -108,6 +120,22 @@ export class VehiclesComponent implements OnInit {
       },
       error: (errorResponse) => {
         console.error('Error fetching vehicle by plate:', errorResponse);
+      }
+    });
+  }
+
+
+  searchVehiclesByCategoryAndYear(): void {
+    if (!this.searchCategory || !this.searchYear) {
+      return;
+    }
+
+    this.vehicleService.getByCategoryAndYear(this.searchCategory, this.searchYear).subscribe({
+      next: (vehicles: Vehicle[]) => {
+        this.vehicles = vehicles;
+      },
+      error: (errorResponse) => {
+        console.error('Error fetching vehicles by category and year:', errorResponse);
       }
     });
   }

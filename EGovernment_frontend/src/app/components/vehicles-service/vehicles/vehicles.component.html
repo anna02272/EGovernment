@@ -139,8 +139,21 @@
     <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button></span>
   </div>
 
-
-  
+  <div class="search-vehicles">
+    <h3>Pretraži vozila po kategoriji i godini:</h3>
+    <div class="search-inputs">
+        <select [(ngModel)]="searchCategory" class="search-dropdown">
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+        <select [(ngModel)]="searchYear" class="search-dropdown">
+            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+        <span class="searchSpan">
+            <button type="button" class="search-btn" (click)="searchVehiclesByCategoryAndYear()">Pretraži</button>
+            <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button>
+        </span>
+    </div>
+</div>
 
   <br>
 

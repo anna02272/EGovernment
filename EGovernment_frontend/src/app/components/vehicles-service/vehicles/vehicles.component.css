@@ -150,3 +150,7 @@ h3 {
     text-decoration: none;
     color: inherit;
 }
+
+.search-dropdown {
+    margin-right: 1%;
+}

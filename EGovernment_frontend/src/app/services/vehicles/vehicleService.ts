@@ -31,6 +31,11 @@ export class VehicleService {
     return this.apiService.get(url, id);
    }
 
+   getByCategoryAndYear(category: string, year: number) {
+    const url = this.config.getVehicleByCategoryAndYear_url(category, year);
+    return this.apiService.get(url);
+  }
+
 //    delete(id : string) {
 //     return this.apiService.delete(this.config.request_url + "/delete/" + id );
 //    }

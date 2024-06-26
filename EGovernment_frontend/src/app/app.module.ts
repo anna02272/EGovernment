@@ -56,6 +56,7 @@ import { CreateDelictComponent } from './components/police-service/create-delict
 import { AllDelictsComponent } from './components/police-service/all-delicts/all-delicts.component';
 import { AllCarAccidentsComponent } from './components/police-service/all-car-accidents/all-car-accidents.component';
 import { PoliceHeaderComponent } from './components/police-service/police-header/police-header.component';
+import { CreateCarAccidentComponent } from './components/police-service/create-car-accident/create-car-accident.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { PoliceHeaderComponent } from './components/police-service/police-header
     CreateDelictComponent,
     AllDelictsComponent,
     AllCarAccidentsComponent,
-    PoliceHeaderComponent
+    PoliceHeaderComponent,
+    CreateCarAccidentComponent
   ],
   imports: [
     BrowserModule,

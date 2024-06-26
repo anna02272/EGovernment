@@ -11,7 +11,6 @@ type Delict struct {
 	DriverIdentificationNumber string             `bson:"driver_identification_number" json:"driver_identification_number"`
 	VehicleLicenceNumber       string             `bson:"vehicle_licence_number" json:"vehicle_licence_number"`
 	DriverEmail                string             `bson:"driver_email" json:"driver_email"`
-	DriverJmbg                 string             `bson:"driver_jmbg" json:"driver_jmbg"`
 	Date                       primitive.DateTime `bson:"date" json:"date"`
 	Location                   string             `bson:"location" json:"location"`
 	Description                string             `bson:"description" json:"description"`
@@ -23,23 +22,24 @@ type Delict struct {
 type DelictType string
 
 const (
-	Speeding                                  = "Speeding"
-	DrivingUnderTheInfluence                  = "DrivingUnderTheInfluence"
-	DrivingUnderTheInfluenceOfAlcohol         = "DrivingUnderTheInfluenceOfAlcohol"
-	ImproperOvertaking                        = "ImproperOvertaking"
-	ImproperParking                           = "ImproperParking"
-	FailureTooComplyWithTrafficLightsAndSigns = "FailureTooComplyWithTrafficLightsAndSigns"
-	ImproperUseOfSeatBeltsAndChildSeats       = "ImproperUseOfSeatBeltsAndChildSeats"
-	UsingMobilePhoneWhileDriving              = "UsingMobilePhoneWhileDriving"
-	ImproperUseOfMotorVehicle                 = "ImproperUseOfMotorVehicle"
+	Speeding                                  = "Prekoracenje brzine"
+	DrivingUnderTheInfluence                  = "Voznja pod uticajem narkotika"
+	DrivingUnderTheInfluenceOfAlcohol         = "Voznja pod uticajem alkohola"
+	ImproperOvertaking                        = "Nepravilno preticanje"
+	ImproperParking                           = "Nepravilno parkiranje"
+	FailureTooComplyWithTrafficLightsAndSigns = "Nepostovanje saobracajnih znakova"
+	ImproperUseOfSeatBeltsAndChildSeats       = "Nepravilna upotreba sigurnosnog pojasa i sedista za decu"
+	UsingMobilePhoneWhileDriving              = "Koriscenje mobilnog telefona tokom voznje"
+	ImproperUseOfMotorVehicle                 = "Nepravilna upotreba motornih vozila"
+	Other                                     = "Drugo"
 )
 
 type DelictStatus string
 
 const (
-	FineAwarded = "FineAwarded"
-	FinePaid    = "FinePaid"
-	SentToCourt = "SentToCourt"
+	FineAwarded = "Novcana kazna dodeljena"
+	FinePaid    = "Novcana kazna isplacena"
+	SentToCourt = "Poslato na sud"
 )
 
 type DelictCreate struct {
@@ -47,7 +47,6 @@ type DelictCreate struct {
 	DriverIdentificationNumber string             `bson:"driver_identification_number" json:"driver_identification_number"`
 	VehicleLicenceNumber       string             `bson:"vehicle_licence_number" json:"vehicle_licence_number"`
 	DriverEmail                string             `bson:"driver_email" json:"driver_email"`
-	DriverJmbg                 string             `bson:"driver_jmbg" json:"driver_jmbg"`
 	Date                       primitive.DateTime `bson:"date" json:"date"`
 	Location                   string             `bson:"location" json:"location"`
 	Description                string             `bson:"description" json:"description"`

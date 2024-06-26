@@ -1,41 +1,14 @@
-<!--<div class="content">
-    <div *ngIf="getRole() === 'TrafficPoliceman'">
-      <div class="contentt">
-        <h2>All Delicts:</h2>
-        <div *ngIf="delicts.length > 0; else noDelicts">
-          <div class="articles">
-            <app-delict *ngFor="let delict of delicts" [delict]="delict"></app-delict>
-          </div>
-        </div>
-        <ng-template #noDelicts>
-          <p>No delicts available</p>
-        </ng-template>
-        <button (click)="navigateToCreateDelict()">Create Delict</button>
-      </div>
-      <div class="contentt">
-        <h2>All Car Accidents:</h2>
-        <div *ngIf="carAccidents.length > 0; else noCarAccidents">
-          <div class="articles">
-            <app-car-accident *ngFor="let carAccident of carAccidents" [carAccident]="carAccident"></app-car-accident>
-          </div>
-        </div>
-        <ng-template #noCarAccidents>
-          <p>No car accidents available</p>
-        </ng-template>
-      </div>
-    </div>
-  </div>-->
   <app-police-header></app-police-header>
 
   <div class="content">
     <div *ngIf="getRole() === 'TrafficPoliceman'" class="role-buttons">
-      <button (click)="navigateToAllDelicts()" class="traffic-button">Show All Delicts</button>
-      <button (click)="navigateToAllCarAccidents()" class="traffic-button">Show All Car Accidents</button>
-      <button (click)="navigateToCreateDelict()" class="traffic-button">Create Delict</button>
+      <button (click)="navigateToAllDelicts()" class="traffic-button">Prikazi sve prekrsaje</button>
+      <button (click)="navigateToAllCarAccidents()" class="traffic-button">Prikazi sve saobracajne nesrece</button>
+      <button (click)="navigateToCreateDelict()" class="traffic-button">Kreiraj prekrsaj</button>
+      <button (click)="navigateToCreateCarAccident()" class="traffic-button">Kreiraj saobracajnu nesrecu</button>
     </div>
     <div *ngIf="getRole() === 'Citizen'" class="role-buttons">
-      <button (click)="navigateToAllDelicts()" class="citizen-button">Show My Delicts</button>
-      <button (click)="navigateToAllCarAccidents()" class="citizen-button">Show My Car Accidents</button>
-      <!-- Add Pay Fine button here if needed -->
+      <button (click)="navigateToAllDelicts()" class="citizen-button">Prikazi sve prekrsaje</button>
+      <button (click)="navigateToAllCarAccidents()" class="citizen-button">Prikazi sve saobracajne nesrece</button>
     </div>
   </div>

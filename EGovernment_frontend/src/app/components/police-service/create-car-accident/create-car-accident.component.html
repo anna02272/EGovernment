@@ -1,0 +1,53 @@
+<app-police-header></app-police-header>
+<div class="create-car-accident">
+  <h2>Kreiraj saobracajnu nesrecu</h2>
+  <form (ngSubmit)="createCarAccident()">
+
+    <label for="driver_identification_number_first">ID Vozaca (Prvi):</label>
+    <input id="driver_identification_number_first" [(ngModel)]="carAccident.driver_identification_number_first" name="driver_identification_number_first" required>
+
+    <label for="driver_identification_number_second">ID Vozaca (Drugi):</label>
+    <input id="driver_identification_number_second" [(ngModel)]="carAccident.driver_identification_number_second" name="driver_identification_number_second" required>
+
+    <label for="vehicle_licence_number_first">Broj tablica (Prvi):</label>
+    <input id="vehicle_licence_number_first" [(ngModel)]="carAccident.vehicle_licence_number_first" name="vehicle_licence_number_first" required>
+
+    <label for="vehicle_licence_number_second">Broj tablica (Drugi):</label>
+    <input id="vehicle_licence_number_second" [(ngModel)]="carAccident.vehicle_licence_number_second" name="vehicle_licence_number_second" required>
+
+    <label for="driver_email">Email vozaca:</label>
+    <input id="driver_email" [(ngModel)]="carAccident.driver_email" name="driver_email" type="email" required>
+
+    <label for="location">Lokacija:</label>
+    <input id="location" [(ngModel)]="carAccident.location" name="location" required>
+
+    <label for="description">Opis:</label>
+    <textarea id="description" [(ngModel)]="carAccident.description" name="description" required></textarea>
+
+    <label for="car_accident_type">Tip saobracajne nesrece:</label>
+    <select id="car_accident_type" [(ngModel)]="carAccident.car_accident_type" name="car_accident_type" required>
+      <option [ngValue]="null" disabled>Odaberi tip nesrece</option>
+      <option *ngFor="let type of carAccidentTypes" [ngValue]="type">{{ type }}</option>
+    </select>
+
+    <label for="degree_of_accident">Stepen saobracajne nesrece:</label>
+    <select id="degree_of_accident" [(ngModel)]="carAccident.degree_of_accident" name="degree_of_accident" required>
+      <option [ngValue]="null" disabled>Odaberi stepen nesrece</option>
+      <option *ngFor="let degree of degreesOfAccident" [ngValue]="degree">{{ degree }}</option>
+    </select>
+
+    <label for="number_of_penalty_points">Broj kaznenih poena:</label>
+    <input id="number_of_penalty_points" [(ngModel)]="carAccident.number_of_penalty_points" name="number_of_penalty_points" type="number" required>
+
+    <label class="formbold-form-label formbold-form-label-2" style="margin-bottom: 25px;">
+      Upload image
+    </label>
+    <input type="file" (change)="onFileChange($event)" multiple accept="image/jpeg, image/jpg, image/png"/>
+    <p style="margin-top: 20px;">Images:</p>
+    <div *ngFor="let file of imageFiles">
+      {{ file.name }}
+    </div>
+
+    <button type="submit">Create Car Accident</button>
+  </form>
+</div>

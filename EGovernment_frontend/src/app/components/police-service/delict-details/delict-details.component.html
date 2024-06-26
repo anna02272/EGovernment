@@ -1,18 +1,18 @@
 <app-police-header></app-police-header>
 <div class="delict-details" *ngIf="delict">
   <h2>{{ delict.description }}</h2>
-  <p>Date: {{ delict.date | date }}</p>
-  <p>Status: {{ delict.delict_status }}</p>
-  <p>Penalty Points: {{ delict.number_of_penalty_points }}</p>
-  <p>Driver Identification Number: {{ delict.driver_identification_number }}</p>
-  <p>Vehicle Licence Number: {{ delict.vehicle_licence_number }}</p>
-  <p>Driver Email: {{ delict.driver_email }}</p>
-  <p>Driver JMBG: {{ delict.driver_jmbg }}</p>
-  <p>Location: {{ delict.location }}</p>
-  <p>Price of Fine: {{ delict.price_of_fine }}</p>
-    <button *ngIf="getRole() === 'Citizen' && delict.delict_status === 'FineAwarded'" (click)="payFine()">Pay Fine</button>
+  <p>Datum: {{ delict.date | date }}</p>
+  <p>Status prekrsaja: {{ delict.delict_status }}</p>
+  <p>Tip prekrsaja: {{ delict.delict_type }}</p>
+  <p>Broj vozacke dozvole: {{ delict.vehicle_licence_number }}</p>
+  <p>Email vozaca: {{ delict.driver_email }}</p>
+  <p>JMBG vozaca: {{ delict.driver_identification_number }}</p>
+  <p>Lokacija: {{ delict.location }}</p>
+  <p *ngIf="delict.delict_status !== 'Poslato na sud'">Novčana kazna: {{ delict.price_of_fine }}</p>
+  <p *ngIf="delict.delict_status !== 'Poslato na sud'">Broj kaznenih poena: {{ delict.number_of_penalty_points }}</p>
+    <button *ngIf="getRole() === 'Citizen' && delict.delict_status === 'Novcana kazna dodeljena'" (click)="payFine()">Plati novcanu kaznu</button>
 
-    <div class="carousel slide" style="width: 40%; height: 40%;padding-top: 25px;padding-bottom: 25px;" *ngIf="images.length > 0">
+    <div class="carousel slide" style="width: 80%; height: 80%;padding-top: 25px;padding-bottom: 25px;" *ngIf="images.length > 0">
       <div class="carousel-inner">
         <div class="carousel-item" [class.active]="currentSlideIndex === i" *ngFor="let image of images; let i = index">
           <img [src]="image" class="d-block w-100" alt="Image">
@@ -28,6 +28,17 @@
       </button>
     </div>
 
-    <button (click)="downloadPdf()">Download PDF</button>
+    <button (click)="downloadPdf()">Preuzmi PDF</button>
+
+    <div *ngIf="getRole() === 'TrafficPoliceman'">
+      <label class="formbold-form-label formbold-form-label-2" style="margin-top: 25px;">
+        Upload image
+      </label>
+      <input type="file" (change)="onFileChange($event)" multiple accept="image/jpeg, image/jpg, image/png"/>
+      <button (click)="uploadImages()">Upload Images</button>
+      <div *ngFor="let file of imageFiles">
+        {{ file.name }}
+      </div>
+    </div>
 
   </div>

@@ -1,6 +1,6 @@
 export enum DegreeOfAccident {
-  NoHarm = "NoHarm",
-  WithMaterialDamage = "WithMaterialDamage",
-  WithInjuredPersons = "WithInjuredPersons",
-  WithDeadBodies = "WithDeadBodies"
+  NoHarm = "Bez stete",
+  WithMaterialDamage = "Sa materijalnom stetom",
+  WithInjuredPersons = "Sa povredjenim osobama",
+  WithDeadBodies = "Sa poginulim osobama"
 }

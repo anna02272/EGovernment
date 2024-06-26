@@ -81,7 +81,6 @@ services:
     dns:
       - 8.8.8.8
     volumes:
-      - ./files:/usr/bin/files
       - ./police-service/pdf_reports:/police-service/pdf_reports
 
   auth-service:

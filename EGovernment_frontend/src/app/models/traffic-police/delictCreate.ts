@@ -5,7 +5,6 @@ export class DelictCreate {
   driver_identification_number: string;
   vehicle_licence_number: string;
   driver_email: string;
-  driver_jmbg: string;
   location: string;
   description: string;
   delict_type: DelictType;
@@ -17,7 +16,6 @@ export class DelictCreate {
     driver_identification_number: string,
     vehicle_licence_number: string,
     driver_email: string,
-    driver_jmbg: string,
     location: string,
     description: string,
     delict_type: DelictType,
@@ -28,7 +26,6 @@ export class DelictCreate {
     this.driver_identification_number = driver_identification_number;
     this.vehicle_licence_number = vehicle_licence_number;
     this.driver_email = driver_email;
-    this.driver_jmbg = driver_jmbg;
     this.location = location;
     this.description = description;
     this.delict_type = delict_type;

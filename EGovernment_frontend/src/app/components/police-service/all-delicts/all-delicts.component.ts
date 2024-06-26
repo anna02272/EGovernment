@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Delict } from 'src/app/models/traffic-police/delict';
 import { DelictService } from 'src/app/services/traffic-police/delictService';
 import { UserService } from 'src/app/services/auth/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-delicts',
@@ -13,7 +14,8 @@ export class AllDelictsComponent implements OnInit {
 
   constructor(
     private delictService: DelictService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -42,5 +44,9 @@ export class AllDelictsComponent implements OnInit {
         }
       );
     }
+  }
+
+  navigateToMainPage() {
+    this.router.navigate(['/saobracajnaPolicija']);
   }
 }

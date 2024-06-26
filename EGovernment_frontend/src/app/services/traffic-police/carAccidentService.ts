@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CarAccident } from 'src/app/models/traffic-police/carAccident';
+import { CarAccidentCreate } from 'src/app/models/traffic-police/carAccidentCreate';
 import { CarAccidentType } from 'src/app/models/traffic-police/carAccidentType';
 import { DegreeOfAccident } from 'src/app/models/traffic-police/degreeOfAccident';
 import { ConfigService } from '../config.service';
@@ -19,9 +19,9 @@ export class CarAccidentService {
   ) {
   }
 
-  insertCarAccident(carAccident: CarAccident, policemanID: string) {
-    const url = `${this.config.car_accident_url}/createCarAccident?policemanID=${policemanID}`;
-    return this.apiService.post(url, carAccident);
+  insertCarAccident(CarAccidentCreate: CarAccidentCreate) {
+    const url = `${this.config.car_accident_url}/createCarAccident`;
+    return this.apiService.post(url, CarAccidentCreate);
   }
 
   getAllCarAccidents(){

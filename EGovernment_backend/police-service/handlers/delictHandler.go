@@ -180,7 +180,7 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 
 	if delictInsert.DelictStatus == domain.SentToCourt {
 
-		citizenURL := fmt.Sprintf("http://court-service:8083/api/citizen/get/%s", delictInsert.DriverJmbg)
+		/*citizenURL := fmt.Sprintf("http://court-service:8083/api/citizen/get/%s", delictInsert.DriverJmbg)
 		citizenReq, err := http.NewRequest("GET", citizenURL, nil)
 		if err != nil {
 			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error creating citizen request: %s", err), http.StatusInternalServerError)
@@ -230,8 +230,8 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 			errorMessage.ReturnJSONError(rw, "Failed to create subject in court service.", http.StatusInternalServerError)
 			return
 		}
-		defer courtResp.Body.Close()
-		/*courtURL := "http://court-service:8083/api/subject/create"
+		defer courtResp.Body.Close()*/
+		courtURL := "http://court-service:8083/api/subject/create"
 		subject := struct {
 			ViolationID string `json:"violation_id"`
 		}{
@@ -254,7 +254,7 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 			errorMessage.ReturnJSONError(rw, "Failed to create subject in court service.", http.StatusInternalServerError)
 			return
 		}
-		defer courtResp.Body.Close()*/
+		defer courtResp.Body.Close()
 	}
 
 	rw.WriteHeader(http.StatusCreated)
@@ -339,71 +339,107 @@ func (s *DelictHandler) GenerateTestPDF(ctx *gin.Context) {
 }
 
 func (s *DelictHandler) GenerateDelictPDF(delict *domain.Delict) (string, error) {
-	// Initialize PDF document
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 
-	// Set font
+	pdf.SetFont("Arial", "B", 16)
+
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, 10, 190, 12, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 12, "Izvestaj o prekrsaju", "", 0, "C", true, 0, "")
+	pdf.Ln(15)
+
+	pdf.SetFont("Arial", "B", 14)
+
+	pdf.SetFillColor(255, 255, 255)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, "Detalji izvestaja", "", 0, "C", false, 0, "")
+	pdf.Ln(10)
+
 	pdf.SetFont("Arial", "", 12)
 
-	// Title
-	pdf.Cell(200, 10, "Delict Report")
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("ID prekrsaja: %s", delict.ID.Hex()), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Delict ID
-	pdf.Cell(0, 10, fmt.Sprintf("Delict ID: %s", delict.ID.Hex()))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("ID policajca: %s", delict.PolicemanID), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Policeman ID
-	pdf.Cell(0, 10, fmt.Sprintf("Policeman ID: %s", delict.PolicemanID))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Broj vozacke dozvole: %s", delict.VehicleLicenceNumber), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Driver Identification Number
-	pdf.Cell(0, 10, fmt.Sprintf("Driver Identification Number: %s", delict.DriverIdentificationNumber))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Email vozaca: %s", delict.DriverEmail), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Vehicle Licence Number
-	pdf.Cell(0, 10, fmt.Sprintf("Vehicle Licence Number: %s", delict.VehicleLicenceNumber))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("JMBG vozaca: %s", delict.DriverIdentificationNumber), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Driver Email
-	pdf.Cell(0, 10, fmt.Sprintf("Driver Email: %s", delict.DriverEmail))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Datum: %s", delict.Date.Time().Format("02.01.2006. 15:04:05")), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Driver JMBG
-	pdf.Cell(0, 10, fmt.Sprintf("Driver JMBG: %s", delict.DriverJmbg))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Lokacija: %s", delict.Location), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Date
-	pdf.Cell(0, 10, fmt.Sprintf("Date: %s", delict.Date.Time().Format("2006-01-02 15:04:05")))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Opis: %s", delict.Description), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Location
-	pdf.Cell(0, 10, fmt.Sprintf("Location: %s", delict.Location))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Tip prekrsaja: %s", delict.DelictType), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Description
-	pdf.Cell(0, 10, fmt.Sprintf("Description: %s", delict.Description))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Status prekrsaja: %s", delict.DelictStatus), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Delict Type
-	pdf.Cell(0, 10, fmt.Sprintf("Delict Type: %s", delict.DelictType))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Novcana kazna: %.2f", delict.PriceOfFine), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Delict Status
-	pdf.Cell(0, 10, fmt.Sprintf("Delict Status: %s", delict.DelictStatus))
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, fmt.Sprintf("Broj kaznenih poena: %d", delict.NumberOfPenaltyPoints), "", 0, "", false, 0, "")
 	pdf.Ln(10)
 
-	// Price Of Fine
-	pdf.Cell(0, 10, fmt.Sprintf("Price Of Fine: %.2f", delict.PriceOfFine))
-	pdf.Ln(10)
-
-	// Number Of Penalty Points
-	pdf.Cell(0, 10, fmt.Sprintf("Number Of Penalty Points: %d", delict.NumberOfPenaltyPoints))
-	pdf.Ln(10)
+	pdf.SetFooterFunc(func() {
+		// Footer
+		pdf.SetY(-15)
+		pdf.SetFont("Arial", "I", 10)
+		pdf.CellFormat(0, 10, "Generisano od strane eUprave", "", 0, "C", false, 0, "")
+	})
 
 	pdfDir := os.Getenv("FILE_PATH")
-	log.Printf("PDF Directory: %s", pdfDir)
 
 	pdfFilename := "delict_report_" + delict.ID.Hex() + ".pdf"
 	pdfFilePath := filepath.Join(pdfDir, pdfFilename)
@@ -441,7 +477,7 @@ func (h *DelictHandler) ServeDelictPDF(c *gin.Context) {
 
 func isValidDelictType(delictType domain.DelictType) bool {
 	switch delictType {
-	case domain.Speeding, domain.DrivingUnderTheInfluenceOfAlcohol, domain.DrivingUnderTheInfluence, domain.ImproperOvertaking, domain.ImproperParking, domain.FailureTooComplyWithTrafficLightsAndSigns, domain.ImproperUseOfSeatBeltsAndChildSeats, domain.UsingMobilePhoneWhileDriving, domain.ImproperUseOfMotorVehicle:
+	case domain.Speeding, domain.DrivingUnderTheInfluenceOfAlcohol, domain.DrivingUnderTheInfluence, domain.ImproperOvertaking, domain.ImproperParking, domain.FailureTooComplyWithTrafficLightsAndSigns, domain.ImproperUseOfSeatBeltsAndChildSeats, domain.UsingMobilePhoneWhileDriving, domain.ImproperUseOfMotorVehicle, domain.Other:
 		return true
 	default:
 		return false

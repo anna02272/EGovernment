@@ -1,5 +1,5 @@
 export enum DelictStatus {
-    FineAwarded = "FineAwarded",
-	FinePaid    = "FinePaid",
-	SentToCourt = "SentToCourt"
+  FineAwarded = "Novcana kazna dodeljena",
+	FinePaid    = "Novcana kazna isplacena",
+	SentToCourt = "Poslato na sud"
   }

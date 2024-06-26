@@ -1,11 +1,12 @@
 <app-police-header></app-police-header>
 <div class="content">
+  <button (click)="navigateToMainPage()" class="citizen-button">Vrati se na pocetnu stranicu</button>
     <div *ngIf="delicts.length > 0; else noDelicts">
       <div class="articles">
         <app-delict *ngFor="let delict of delicts" [delict]="delict"></app-delict>
       </div>
     </div>
     <ng-template #noDelicts>
-      <p>No delicts available</p>
+      <p>Nemate kreirane prekrsaje</p>
     </ng-template>
   </div>

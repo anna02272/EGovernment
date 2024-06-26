@@ -36,57 +36,8 @@ export class HomePoliceComponent implements OnInit {
   navigateToCreateDelict() {
     this.router.navigate(['/create-delict']);
   }
+
+  navigateToCreateCarAccident() {
+    this.router.navigate(['/create-car-accident']);
+  }
 }
-/*export class HomePoliceComponent implements OnInit {
-  delicts: Delict[] = [];
-  carAccidents: CarAccident[] = [];
-
-  constructor(
-    private userService: UserService,
-    private delictService: DelictService,
-    private carAccidentService: CarAccidentService,
-    private router: Router,
-  ) {}
-
-  ngOnInit() {
-    this.loadDelicts();
-    this.loadCarAccidents();
-  }
-
-  getRole() {
-    return this.userService.currentUser?.user.userRole;
-  }
-
-  loadDelicts() {
-    this.delictService.getAllDelicts().subscribe(
-      (delicts) => {
-        this.delicts = delicts;
-      },
-      (error) => {
-        console.error('Error loading delicts:', error);
-      },
-    );
-  }
-
-  loadCarAccidents() {
-    this.carAccidentService.getAllCarAccidents().subscribe(
-      (carAccidents) => {
-        this.carAccidents = carAccidents;
-      },
-      (error) => {
-        console.error('Error loading car accidents:', error);
-      },
-    );
-  }
-
-  navigateToDelictDetails(delictId: string) {
-    this.router.navigate(['/delict-details', delictId]);
-  }
-
-  navigateToCarAccidentDetails(carAccidentId: string) {
-    this.router.navigate(['/car-accident-details', carAccidentId]);
-  }
-  navigateToCreateDelict() {
-    this.router.navigate(['/create-delict']);
-  }
-}*/

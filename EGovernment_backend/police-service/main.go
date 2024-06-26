@@ -71,7 +71,7 @@ func init() {
 	}
 
 	// Close connection to HDFS on shutdown
-	defer fileStorage.Close()
+	//defer fileStorage.Close()
 
 	//// Create directory tree on HDFS
 	_ = fileStorage.CreateDirectories()

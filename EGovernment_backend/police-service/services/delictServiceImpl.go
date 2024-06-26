@@ -58,7 +58,6 @@ func (d *DelictServiceImpl) InsertDelict(delict *domain.DelictCreate, policemanI
 	trafficDelict.DriverIdentificationNumber = delict.DriverIdentificationNumber
 	trafficDelict.VehicleLicenceNumber = delict.VehicleLicenceNumber
 	trafficDelict.DriverEmail = delict.DriverEmail
-	trafficDelict.DriverJmbg = delict.DriverJmbg
 	trafficDelict.Date = dateTime
 	trafficDelict.Location = delict.Location
 	trafficDelict.Description = delict.Description

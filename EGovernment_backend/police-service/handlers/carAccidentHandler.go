@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -121,6 +122,39 @@ func (s *CarAccidentHandler) CreateCarAccident(c *gin.Context) {
 		return
 	}
 
+	if carAccidentInsertDB.NumberOfPenaltyPoints > 0 {
+		driverID := carAccidentInsertDB.DriverIdentificationNumber1
+		points := carAccidentInsertDB.NumberOfPenaltyPoints
+		updatePointsURL := fmt.Sprintf("http://vehicles-service:8080/api/driver/updatePenaltyPoints/%s", driverID)
+
+		updatePointsReqBody := struct {
+			Points int64 `json:"points"`
+		}{
+			Points: points,
+		}
+
+		updatePointsReqBodyJSON, err := json.Marshal(updatePointsReqBody)
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error marshaling JSON: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		updatePointsReq, err := http.NewRequest("PATCH", updatePointsURL, bytes.NewBuffer(updatePointsReqBodyJSON))
+		if err != nil {
+			errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error creating update points request: %s", err), http.StatusInternalServerError)
+			return
+		}
+		updatePointsReq.Header.Set("Content-Type", "application/json")
+		updatePointsReq.Header.Set("Authorization", token)
+
+		updatePointsResp, err := http.DefaultClient.Do(updatePointsReq)
+		if err != nil || updatePointsResp.StatusCode != http.StatusOK {
+			errorMessage.ReturnJSONError(rw, "Failed to update penalty points in vehicle driver service.", http.StatusInternalServerError)
+			return
+		}
+		defer updatePointsResp.Body.Close()
+	}
+
 	/*err = s.sendCarAccidentMail(carAccidentInsertDB.Description, carAccidentInsertDB.DriverEmail)
 	if err != nil {
 		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
@@ -139,7 +173,7 @@ func (s *CarAccidentHandler) CreateCarAccident(c *gin.Context) {
 
 func isValidCarAccidentType(carAccidentType domain.CarAccidentType) bool {
 	switch carAccidentType {
-	case domain.KnockingDownPedestrians, domain.VehicleLandingFromRoad, domain.CollisionFromOppositeDirection, domain.CollisionInSameDirection, domain.SideCollision, domain.Rollover:
+	case domain.KnockingDownPedestrians, domain.VehicleLandingFromRoad, domain.CollisionFromOppositeDirection, domain.CollisionInSameDirection, domain.SideCollision, domain.Rollover, domain.Other:
 		return true
 	default:
 		return false

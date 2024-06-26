@@ -1,11 +1,12 @@
 <app-police-header></app-police-header>
 <div class="content">
+  <button (click)="navigateToMainPage()" class="citizen-button">Vrati se na pocetnu stranicu</button>
     <div *ngIf="carAccidents.length > 0; else noCarAccidents">
       <div class="articles">
         <app-car-accident *ngFor="let carAccident of carAccidents" [carAccident]="carAccident"></app-car-accident>
       </div>
     </div>
     <ng-template #noCarAccidents>
-      <p>No car accidents available</p>
+      <p>Nemate kreirane saobracajne nesrece</p>
     </ng-template>
   </div>

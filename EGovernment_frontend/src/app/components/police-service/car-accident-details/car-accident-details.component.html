@@ -1,7 +1,42 @@
 <app-police-header></app-police-header>
 <div class="car-accident-details" *ngIf="carAccident">
-    <h2>{{ carAccident.description }}</h2>
-    <p>Date: {{ carAccident.date | date }}</p>
-    <p>Location: {{ carAccident.location }}</p>
-    <p>Severity: {{ carAccident.car_accident_type }}</p>
+  <h2>{{ carAccident.description }}</h2>
+  <p>Datum: {{ carAccident.date | date }}</p>
+  <p>Lokacija: {{ carAccident.location }}</p>
+  <p>ID Vozaca(Prvi): {{ carAccident.driver_identification_number_first }}</p>
+  <p>ID Vozaca(Drugi): {{ carAccident.driver_identification_number_second }}</p>
+  <p>Broj tablica(Prvi): {{ carAccident.vehicle_licence_number_first }}</p>
+  <p>Broj tablica(Drugi): {{ carAccident.vehicle_licence_number_second }}</p>
+  <p>Email vozaca: {{ carAccident.driver_email }}</p>
+  <p>Tip saobracajne nesrece: {{ carAccident.car_accident_type }}</p>
+  <p>Stepen saobracajne nesrece: {{ carAccident.degree_of_accident }}</p>
+  <p>Broj kaznenih poena: {{ carAccident.number_of_penalty_points }}</p>
+
+    <div class="carousel slide" style="width: 80%; height: 80%;padding-top: 25px;padding-bottom: 25px;" *ngIf="images.length > 0">
+      <div class="carousel-inner">
+        <div class="carousel-item" [class.active]="currentSlideIndex === i" *ngFor="let image of images; let i = index">
+          <img [src]="image" class="d-block w-100" alt="Image">
+        </div>
+      </div>
+      <button class="carousel-control-prev" (click)="prevSlide()">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </button>
+      <button class="carousel-control-next" (click)="nextSlide()">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </button>
+    </div>
+
+    <div *ngIf="getRole() === 'TrafficPoliceman'">
+      <label class="formbold-form-label formbold-form-label-2" style="margin-top: 25px;">
+        Upload image
+      </label>
+      <input type="file" (change)="onFileChange($event)" multiple accept="image/jpeg, image/jpg, image/png"/>
+      <button (click)="uploadImages()">Upload Images</button>
+      <div *ngFor="let file of imageFiles">
+        {{ file.name }}
+      </div>
+    </div>
+    
   </div>

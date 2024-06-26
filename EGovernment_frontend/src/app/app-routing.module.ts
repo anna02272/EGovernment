@@ -21,6 +21,7 @@ import { CarAccidentDetailsComponent } from './components/police-service/car-acc
 import { CreateDelictComponent } from './components/police-service/create-delict/create-delict.component';
 import { AllDelictsComponent } from './components/police-service/all-delicts/all-delicts.component';
 import { AllCarAccidentsComponent } from './components/police-service/all-car-accidents/all-car-accidents.component';
+import { CreateCarAccidentComponent } from './components/police-service/create-car-accident/create-car-accident.component';
 
 const routes: Routes = [
   {
@@ -81,7 +82,7 @@ const routes: Routes = [
   { path: 'editSubject/:id', component: EditSubjectComponent },
 
   {
-    path: 'prekrsaj',
+    path: 'delict',
     component: DelictComponent,
     canActivate: [AuthGuard] 
   },
@@ -93,7 +94,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'nesreca',
+    path: 'carAccident',
     component: CarAccidentComponent,
     canActivate: [AuthGuard] 
   },
@@ -118,6 +119,12 @@ const routes: Routes = [
   { path: 'all-car-accidents',
       component: AllCarAccidentsComponent ,
       canActivate: [AuthGuard] 
+  },
+
+  {
+    path: 'create-car-accident',
+    component: CreateCarAccidentComponent,
+    canActivate: [AuthGuard] 
   },
 ];
 

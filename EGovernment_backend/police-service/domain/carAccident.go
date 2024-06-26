@@ -21,21 +21,21 @@ type CarAccident struct {
 type CarAccidentType string
 
 const (
-	KnockingDownPedestrians        = "KnockingDownPedestrians"
-	VehicleLandingFromRoad         = "VehicleLandingFromRoad"
-	CollisionFromOppositeDirection = "CollisionFromOppositeDirection"
-	CollisionInSameDirection       = "CollisionInSameDirection"
-	SideCollision                  = "SideCollision"
-	Rollover                       = "Rollover"
+	KnockingDownPedestrians        = "Obaranje pesaka"
+	VehicleLandingFromRoad         = "Sletanje vozila sa puta"
+	CollisionFromOppositeDirection = "Sudar iz suprotnog smera"
+	CollisionInSameDirection       = "Sudar u istom smeru"
+	SideCollision                  = "Bocni sudar"
+	Rollover                       = "Prevrtanje vozila"
 )
 
 type DegreeOfAccident string
 
 const (
-	NoHarm             = "NoHarm"
-	WithMaterialDamage = "WithMaterialDamage"
-	WithInjuredPersons = "WithInjuredPersons"
-	WithDeadBodies     = "WithDeadBodies"
+	NoHarm             = "Bez stete"
+	WithMaterialDamage = "Sa materijalnom stetom"
+	WithInjuredPersons = "Sa povredjenim osobama"
+	WithDeadBodies     = "Sa poginulim osobama"
 )
 
 type CarAccidentCreate struct {

@@ -24,6 +24,7 @@ go.work
 
 EGovernment_backend/.idea/
 EGovernment_backend/.vscode/
+EGovernment_backend/police-service/pdf_reports
 
 EGovernment_frontend/.idea/
 EGovernment_frontend/.vscode/

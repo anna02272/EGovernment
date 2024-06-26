@@ -86,9 +86,6 @@ func (s *ReportHandler) CreateReport(c *gin.Context) {
 		return
 	}
 
-	/* Later for report
-	loggedInUserID := responseUser.LoggedInUser.ID*/
-
 	report, exists := c.Get("report")
 	if !exists {
 		errorMsg := map[string]string{"Error": " report object was not valid."}

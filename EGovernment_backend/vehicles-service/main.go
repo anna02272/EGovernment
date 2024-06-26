@@ -52,16 +52,17 @@ func init() {
 	vehicleDriverCollection = mongoClient.Database("Vehicles").Collection("vehicleDriver")
 
 	vehicleService = services.NewVehicleServiceImpl(vehicleCollection, ctx)
-	vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection)
-	vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService)
-
 	vehicleDriverService = services.NewVehicleDriverServiceImpl(vehicleDriverCollection, ctx)
+
+	vehicleHandler = handlers.NewVehicleHandler(vehicleService, vehicleCollection, vehicleDriverService)
+	vehicleRouteHandler = routes.NewVehicleRouteHandler(vehicleHandler, vehicleService, vehicleDriverService)
+
 	vehicleDriverHandler = handlers.NewVehicleDriverHandler(vehicleDriverService, vehicleDriverCollection)
 	vehicleDriverRouteHandler = routes.NewVehicleDriverRouteHandler(vehicleDriverHandler, vehicleDriverService)
 
 	driverLicenceService = services.NewDriverLicenceServiceImpl(driverLicenceCollection, ctx)
-	driverLicenceHandler = handlers.NewDriverLicenceHandler(driverLicenceService, driverLicenceCollection)
-	driverLicenceRouteHandler = routes.NewDriverLicenceRouteHandler(driverLicenceHandler, driverLicenceService)
+	driverLicenceHandler = handlers.NewDriverLicenceHandler(driverLicenceService, driverLicenceCollection, vehicleDriverService)
+	driverLicenceRouteHandler = routes.NewDriverLicenceRouteHandler(driverLicenceHandler, driverLicenceService, vehicleDriverService)
 
 	server = gin.Default()
 

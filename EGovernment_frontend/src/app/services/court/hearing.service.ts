@@ -1,10 +1,10 @@
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import {HttpClient, HttpEvent} from '@angular/common/http';
 
-import { Hearing } from '../../models/court/hearing';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Subject } from 'src/app/models/court/subject';
-import { SubjectService } from './subject.service';
+import {Hearing} from '../../models/court/hearing';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Subject} from 'src/app/models/court/subject';
+import {SubjectService} from './subject.service';
 
 @Injectable({
   providedIn: 'root'

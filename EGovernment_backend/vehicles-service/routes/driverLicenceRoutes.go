@@ -9,18 +9,20 @@ import (
 )
 
 type DriverLicenceRouteHandler struct {
-	handler handlers.DriverLicenceHandler
-	service services.DriverLicenceService
+	handler       handlers.DriverLicenceHandler
+	service       services.DriverLicenceService
+	driverService services.VehicleDriverService
 }
 
-func NewDriverLicenceRouteHandler(handler handlers.DriverLicenceHandler, service services.DriverLicenceService) DriverLicenceRouteHandler {
-	return DriverLicenceRouteHandler{handler, service}
+func NewDriverLicenceRouteHandler(handler handlers.DriverLicenceHandler, service services.DriverLicenceService, driverService services.VehicleDriverService) DriverLicenceRouteHandler {
+	return DriverLicenceRouteHandler{handler, service, driverService}
 }
 
 func (vr *DriverLicenceRouteHandler) DriverLicenceRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/driverlicence")
 	router.POST("/create", MiddlewareDriverLicenceDeserialization, vr.handler.CreateDriverLicence)
 	router.GET("/get/:id", vr.handler.GetLicenceByID)
+	router.GET("/all", vr.handler.GetAllDriverLicences)
 
 }
 

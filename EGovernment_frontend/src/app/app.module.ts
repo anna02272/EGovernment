@@ -26,6 +26,7 @@ import { ReportDelictsComponent } from './components/statistics-service/report-d
 import { RequestsComponent } from './components/statistics-service/requests/requests.component';
 import { ResponseComponent } from './components/statistics-service/response/response.component';
 import { RequestService } from './services/statistics/request.service';
+import { VehicleService } from './services/vehicles/vehicleService';
 import { StatisticsHeaderComponent } from './components/statistics-service/statistics-header/statistics-header.component';
 import { ResponseService } from './services/statistics/response.service';
 import { ReportDelicTypeService } from './services/statistics/reportDelicType.service';
@@ -48,6 +49,11 @@ import { SubjectDetailsComponent } from './components/court-service/subject-deta
 import { ScheduleComponent } from './components/court-service/schedule/schedule.component';
 import { SubjectTabComponent } from './components/court-service/subject-tab/subject-tab.component';
 import { EditSubjectComponent } from './components/court-service/edit-subject/edit-subject.component';
+import { VehiclesHeaderComponent } from './components/vehicles-service/vehicles-header/vehicles-header.component';
+import { VehiclesComponent } from './components/vehicles-service/vehicles/vehicles.component';
+import { RegisteredVehiclesComponent } from './components/vehicles-service/registered-vehicles/registered-vehicles.component';
+import { DriverComponent } from './components/vehicles-service/driver/driver.component';
+import { DriverLicenceComponent } from './components/vehicles-service/driver-licence/driver-licence.component';
 import { DelictComponent } from './components/police-service/delict/delict.component';
 import { CarAccidentComponent } from './components/police-service/carAccident/car-accident.component';
 import { DelictDetailsComponent } from './components/police-service/delict-details/delict-details.component';
@@ -87,6 +93,11 @@ import { CreateCarAccidentComponent } from './components/police-service/create-c
     ScheduleComponent,
     SubjectTabComponent,
     EditSubjectComponent,
+    VehiclesHeaderComponent,
+    VehiclesComponent,
+    RegisteredVehiclesComponent,
+    DriverComponent,
+    DriverLicenceComponent,
     DelictComponent,
     CarAccidentComponent,
     DelictDetailsComponent,
@@ -115,6 +126,7 @@ import { CreateCarAccidentComponent } from './components/police-service/create-c
     multi: true,
   },
   ConfigService,
+  VehicleService,
   ApiService,
   RefreshService,
   AuthService,

@@ -1,4 +1,4 @@
-import { DegreeOfAccident } from "./degreeOfAccident";
+import {DegreeOfAccident} from "./degreeOfAccident";
 
 export class ReportCarAccidentDegree {
   id: string;
@@ -7,8 +7,8 @@ export class ReportCarAccidentDegree {
   total_number: number;
   degree: DegreeOfAccident;
   year: number;
- 
- 
+
+
   constructor(id: string, title: string, date: string, total_number: number, degree: DegreeOfAccident, year: number ) {
     this.id = id;
     this.title = title;

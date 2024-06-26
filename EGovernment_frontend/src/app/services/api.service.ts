@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpParams, HttpEvent } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { catchError, filter, map } from 'rxjs/operators';
+import {HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpRequest, HttpResponse} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {catchError, filter, map} from 'rxjs/operators';
 
 export enum RequestMethod {
   Get = 'GET',
@@ -43,7 +43,7 @@ export class ApiService {
     if (!(data instanceof FormData)) {
       headers = headers.set('Content-Type', 'application/json');
     }
-    
+
     if (customHeaders) {
       customHeaders.keys().forEach(key => {
         headers = headers.set(key, customHeaders.get(key) || '');
@@ -56,15 +56,15 @@ export class ApiService {
   put(path: string, body?: any): Observable<any> {
     return this.request(path, body, RequestMethod.Put);
   }
- 
+
   delete(path: string, body?: any): Observable<any> {
     return this.request(path, body, RequestMethod.Delete);
   }
   patch(path: string, body?: any): Observable<any> {
     return this.request(path, body, RequestMethod.Patch);
   }
-  
-  
+
+
   private request(path: string, body: any, method = RequestMethod.Post, customHeaders?: HttpHeaders): Observable<any> {
     const req = new HttpRequest(method, path, body, {
       headers: customHeaders || this.headers,

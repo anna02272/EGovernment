@@ -1,0 +1,62 @@
+<app-vehicles-header></app-vehicles-header>
+
+<h1 id="lista" class="title">LISTA SVIH REGISTROVANIH VOZILA</h1>
+  <br>
+<div class="parent-div">
+    <div *ngFor="let vehicle of registeredVehicles" class="app-form">
+        <br>
+          <div class="app-form-group">
+            <label for="registration_plate">Registarska Tablica</label>
+            <input
+            type="text"
+            [value]="vehicle.registration_plate"
+            class="app-form-control"
+            disabled
+          />
+          </div>
+      
+          <div class="app-form-row">
+            <div class="app-form-group">
+              <label for="vehicle_model">Model Vozila</label>
+              <input
+              type="text"
+              [value]="vehicle.vehicle_model"
+              class="app-form-control"
+              disabled
+            />
+             
+            </div>
+      
+            <div class="app-form-group">
+              <label for="vehicle_owner">Vlasnik Vozila</label>
+              <input
+              type="text"
+              [value]="vehicle.vehicle_owner"
+              class="app-form-control"
+              disabled
+            />
+            </div>
+      
+             <div class="app-form-group">
+              <label for="registration_date">Datum Registracije</label>
+              <input
+              type="text"
+              [value]="vehicle.registration_date | date: 'yyyy-MM-dd'"
+              class="app-form-control"
+              disabled
+            />
+             
+            </div>
+    
+            <div class="app-form-group">
+              <label for="category">Kategorija</label>
+              <input
+              type="text"
+              [value]="vehicle.category"
+              class="app-form-control"
+              disabled
+            />
+            </div>
+          </div>
+      </div>
+    </div>

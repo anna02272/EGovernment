@@ -1,4 +1,4 @@
-import { UserRole } from "./userRole";
+import {UserRole} from "./userRole";
 
 export class User {
   id: string;
@@ -9,7 +9,7 @@ export class User {
   name: string;
   lastname: string;
   userRole: UserRole;
-  
+
 
   constructor(id: string, username: string, password: string, email:string, jmbg: number, name: string, lastname: string, userRole: UserRole) {
     this.id = id;
@@ -19,6 +19,6 @@ export class User {
     this.jmbg = jmbg;
     this.name = name;
     this.lastname = lastname;
-    this.userRole = userRole; 
+    this.userRole = userRole;
   }
 }

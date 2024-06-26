@@ -1,4 +1,4 @@
-import { Category } from "./category";
+import {Category} from "./category";
 
 export class ReportRegisteredVehicle {
   id: string;
@@ -7,8 +7,8 @@ export class ReportRegisteredVehicle {
   total_number: number;
   category: Category;
   year: number;
- 
- 
+
+
   constructor(id: string, title: string, date: string, total_number: number, category: Category, year: number ) {
     this.id = id;
     this.title = title;

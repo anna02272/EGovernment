@@ -1,4 +1,23 @@
-<div class="content">
-<p>Za sve</p>
-<p *ngIf="getRole() === 'Policeman'">Za policajca</p>
-</div>
+<ng-container *ngIf="getRole() === 'Policeman'">
+  <app-vehicles-header></app-vehicles-header>
+
+  <!-- <div class="content">
+  <p *ngIf="getRole() === 'Policeman'">Za policajca</p>
+  </div> -->
+
+  <nav>
+    <div class="nav-container">
+      <ul>
+        <li><a routerLink="/vozila" class="no-link-style">Vozila</a></li>
+        <li><a routerLink="/vozaci" class="no-link-style">Vozaci</a></li>
+        <li><a routerLink="/vozacke" class="no-link-style">Vozacke dozvole</a></li>
+
+      </ul>
+    </div>
+  </nav>
+
+</ng-container>
+
+<ng-container *ngIf="getRole() !== 'Policeman'">
+  <p>Zabranjen pristup. Ovu stranicu vide samo policajci.</p>
+</ng-container>

@@ -1,15 +1,15 @@
 <app-police-header></app-police-header>
 <div class="car-accident-details" *ngIf="carAccident">
   <h2>{{ carAccident.description }}</h2>
-  <p>Datum: {{ carAccident.date | date }}</p>
-  <p>Lokacija: {{ carAccident.location }}</p>
-  <p>ID Vozaca(Prvi): {{ carAccident.driver_identification_number_first }}</p>
-  <p>ID Vozaca(Drugi): {{ carAccident.driver_identification_number_second }}</p>
+  <p>JMBG Vozaca(Prvi): {{ carAccident.driver_identification_number_first }}</p>
+  <p>JMBG Vozaca(Drugi): {{ carAccident.driver_identification_number_second }}</p>
   <p>Broj tablica(Prvi): {{ carAccident.vehicle_licence_number_first }}</p>
   <p>Broj tablica(Drugi): {{ carAccident.vehicle_licence_number_second }}</p>
   <p>Email vozaca: {{ carAccident.driver_email }}</p>
   <p>Tip saobracajne nesrece: {{ carAccident.car_accident_type }}</p>
   <p>Stepen saobracajne nesrece: {{ carAccident.degree_of_accident }}</p>
+  <p>Datum: {{ carAccident.date | date }}</p>
+  <p>Lokacija: {{ carAccident.location }}</p>
   <p>Broj kaznenih poena: {{ carAccident.number_of_penalty_points }}</p>
 
     <div class="carousel slide" style="width: 80%; height: 80%;padding-top: 25px;padding-bottom: 25px;" *ngIf="images.length > 0">
@@ -38,5 +38,5 @@
         {{ file.name }}
       </div>
     </div>
-    
+
   </div>

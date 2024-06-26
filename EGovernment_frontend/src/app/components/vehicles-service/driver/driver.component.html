@@ -1,9 +1,9 @@
-<app-vehicles-header></app-vehicles-header>
+<app-vehicles-header *ngIf="getRole() === 'Policeman'" ></app-vehicles-header>
 
-<div class="title">
+<div *ngIf="getRole() === 'Policeman'" class="title">
   <h1>Kreiraj Vozaca</h1>
 </div>
-<div class="app-form">
+<div *ngIf="getRole() === 'Policeman'" class="app-form">
   <form (ngSubmit)="onSubmit()" [formGroup]="vehicleDriverForm">
     <div class="app-form-group">
       <label for="identification_number">JMBG</label>
@@ -102,14 +102,14 @@
 
     <h1 id="lista" class="title">LISTA SVIH VOZAČA</h1>
 
-<div class="search-vehicles">
+<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="search-vehicles">
     <h3>Pretraži vozače po jedistvenom matičnom broju:</h3>
     <input type="text" class="searchPlate" [(ngModel)]="searchID">
     <span class="searchSpan"><button type="button" class="search-btn" (click)="searchVehicleDriversByID()">Pretraži</button>
     <button type="button" class="search-btn-refresh" (click)="loadAllVehicleDrivers()">Osveži</button></span>
   </div>
 
-<div class="parent-div">
+<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="parent-div">
     <div *ngFor="let vehicleDriver of vehicleDrivers" class="app-form">
         <br>
           <div class="app-form-group">
@@ -121,7 +121,7 @@
             disabled
           />
           </div>
-      
+
           <div class="app-form-row">
             <div class="app-form-group">
               <label for="name">Ime vozača</label>
@@ -131,9 +131,9 @@
               class="app-form-control"
               disabled
             />
-             
+
             </div>
-      
+
             <div class="app-form-group">
               <label for="last_name">Prezime vozača</label>
               <input
@@ -143,7 +143,7 @@
               disabled
             />
             </div>
-      
+
              <div class="app-form-group">
               <label for="date_of_birth">Datum Registracije</label>
               <input
@@ -152,9 +152,9 @@
               class="app-form-control"
               disabled
             />
-             
+
             </div>
-    
+
             <div class="app-form-group">
               <label for="gender">Pol</label>
               <input
@@ -166,7 +166,8 @@
             </div>
 
           </div>
-    
+
       </div>
 
-    
+
+</div>

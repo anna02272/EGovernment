@@ -39,6 +39,7 @@ export class ConfigService {
   private _allRegisteredVehicles_url = this.allVehicles_url  + '/registered';
   private _getVehicleById = this._vehicles_api_url + '/get/';
   private _getDriverLicenceById = this._driver_licence_api_url + '/get/';
+  private _getDriverLicenceByDriver = this._driver_licence_api_url + '/getDriver/';
   private _getVehicleDriverById = this._vehicles_drivers_api_url + '/get/';
   private _createVehicleDriver_url = this._vehicles_drivers_api_url + '/createDriver';
 
@@ -121,6 +122,10 @@ export class ConfigService {
 
   get getDriverLicenceById_url(): string {
     return this._getDriverLicenceById;
+  }
+
+  get getDriverLicenceByDriver_url(): string {
+    return this._getDriverLicenceByDriver;
   }
 
   get getVehicleDriverById_url(): string {

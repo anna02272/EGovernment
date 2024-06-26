@@ -1,12 +1,12 @@
 <app-police-header></app-police-header>
 <div class="delict-details" *ngIf="delict">
   <h2>{{ delict.description }}</h2>
-  <p>Datum: {{ delict.date | date }}</p>
-  <p>Status prekrsaja: {{ delict.delict_status }}</p>
-  <p>Tip prekrsaja: {{ delict.delict_type }}</p>
-  <p>Broj vozacke dozvole: {{ delict.vehicle_licence_number }}</p>
-  <p>Email vozaca: {{ delict.driver_email }}</p>
   <p>JMBG vozaca: {{ delict.driver_identification_number }}</p>
+  <p>Broj registarskih tablica: {{ delict.vehicle_licence_number }}</p>
+  <p>Email vozaca: {{ delict.driver_email }}</p>
+  <p>Tip prekrsaja: {{ delict.delict_type }}</p>
+  <p>Status prekrsaja: {{ delict.delict_status }}</p>
+  <p>Datum: {{ delict.date | date }}</p>
   <p>Lokacija: {{ delict.location }}</p>
   <p *ngIf="delict.delict_status !== 'Poslato na sud'">Novčana kazna: {{ delict.price_of_fine }}</p>
   <p *ngIf="delict.delict_status !== 'Poslato na sud'">Broj kaznenih poena: {{ delict.number_of_penalty_points }}</p>

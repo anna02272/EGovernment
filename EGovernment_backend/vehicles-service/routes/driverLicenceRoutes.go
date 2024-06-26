@@ -22,6 +22,7 @@ func (vr *DriverLicenceRouteHandler) DriverLicenceRoute(rg *gin.RouterGroup) {
 	router := rg.Group("/driverlicence")
 	router.POST("/create", MiddlewareDriverLicenceDeserialization, vr.handler.CreateDriverLicence)
 	router.GET("/get/:id", vr.handler.GetLicenceByID)
+	router.GET("/getDriver/:id", vr.handler.GetLicenceByDriverID)
 	router.GET("/all", vr.handler.GetAllDriverLicences)
 
 }

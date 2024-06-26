@@ -1,9 +1,9 @@
-<app-vehicles-header></app-vehicles-header>
+<app-vehicles-header *ngIf="getRole() === 'Policeman'"></app-vehicles-header>
 
-<div class="title">
+<div *ngIf="getRole() === 'Policeman'" class="title">
     <h1>Kreiraj Vozilo</h1>
   </div>
-  <div class="app-form">
+  <div *ngIf="getRole() === 'Policeman'" class="app-form">
     <form (ngSubmit)="onSubmit()" [formGroup]="vehicleForm">
       <div class="app-form-group">
         <label for="registration_plate">Registarska Tablica</label>
@@ -24,7 +24,7 @@
           Registarska tablica je obavezna.
         </div>
       </div>
-  
+
       <div class="app-form-row">
         <div class="app-form-group">
           <label for="vehicle_model">Model Vozila</label>
@@ -49,7 +49,7 @@
             Model vozila je obavezan.
           </div>
         </div>
-  
+
         <div class="app-form-group">
           <label for="vehicle_owner">Vlasnik Vozila</label>
           <input
@@ -69,7 +69,7 @@
             Vlasnik vozila je obavezan.
           </div>
         </div>
-  
+
         <!-- <div class="app-form-group">
           <label for="registration_date">Datum Registracije</label>
           <input
@@ -89,7 +89,7 @@
             Datum registracije je obavezan.
           </div>
         </div> -->
-  
+
         <div class="app-form-group">
           <label for="category">Kategorija</label>
           <select
@@ -134,14 +134,14 @@
 
 
 
-<div class="search-vehicles">
+<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="search-vehicles">
     <h3>Pretraži vozilo po registarskoj tablici:</h3>
     <input type="text" class="searchPlate" [(ngModel)]="searchPlate">
     <span class="searchSpan"><button type="button" class="search-btn" (click)="searchVehicleByPlate()">Pretraži</button>
     <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button></span>
   </div>
 
-  <div class="search-vehicles">
+  <div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
     <h3>Pretraži vozila po kategoriji i godini:</h3>
     <div class="search-inputs">
         <select [(ngModel)]="searchCategory" class="search-dropdown">
@@ -160,7 +160,7 @@
 
   <br>
 
-<div class="parent-div">
+<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="parent-div">
     <div *ngFor="let vehicle of vehicles" class="app-form">
         <br>
           <div class="app-form-group">
@@ -172,7 +172,7 @@
             disabled
           />
           </div>
-      
+
           <div class="app-form-row">
             <div class="app-form-group">
               <label for="vehicle_model">Model Vozila</label>
@@ -182,9 +182,9 @@
               class="app-form-control"
               disabled
             />
-             
+
             </div>
-      
+
             <div class="app-form-group">
               <label for="vehicle_owner">Vlasnik Vozila</label>
               <input
@@ -194,7 +194,7 @@
               disabled
             />
             </div>
-      
+
              <div class="app-form-group">
               <label for="registration_date">Datum Registracije</label>
               <input
@@ -203,9 +203,9 @@
               class="app-form-control"
               disabled
             />
-             
+
             </div>
-    
+
             <div class="app-form-group">
               <label for="category">Kategorija</label>
               <input
@@ -217,8 +217,8 @@
             </div>
 
           </div>
-    
+
       </div>
 
-    
+
     </div>

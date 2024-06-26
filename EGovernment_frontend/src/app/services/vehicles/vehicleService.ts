@@ -52,6 +52,11 @@ export class VehicleService {
     return this.apiService.get(url,id);
    }
 
+  getDriverLicenceByDriver(id: string) {
+    const url = this.config.getDriverLicenceByDriver_url + id;
+    return this.apiService.get(url,id);
+  }
+
    getByCategoryAndYear(category: string, year: number) {
     const url = this.config.getVehicleByCategoryAndYear_url(category, year);
     return this.apiService.get(url);

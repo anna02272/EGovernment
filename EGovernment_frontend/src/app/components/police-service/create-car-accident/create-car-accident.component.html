@@ -1,12 +1,16 @@
 <app-police-header></app-police-header>
+<app-driver></app-driver>
+<app-driver-licence></app-driver-licence>
+<app-vehicles></app-vehicles>
+
 <div class="create-car-accident">
   <h2>Kreiraj saobracajnu nesrecu</h2>
   <form (ngSubmit)="createCarAccident()">
 
-    <label for="driver_identification_number_first">ID Vozaca (Prvi):</label>
+    <label for="driver_identification_number_first">JMBG Vozaca (Prvi):</label>
     <input id="driver_identification_number_first" [(ngModel)]="carAccident.driver_identification_number_first" name="driver_identification_number_first" required>
 
-    <label for="driver_identification_number_second">ID Vozaca (Drugi):</label>
+    <label for="driver_identification_number_second">JMBG Vozaca (Drugi):</label>
     <input id="driver_identification_number_second" [(ngModel)]="carAccident.driver_identification_number_second" name="driver_identification_number_second" required>
 
     <label for="vehicle_licence_number_first">Broj tablica (Prvi):</label>

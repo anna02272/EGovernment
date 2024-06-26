@@ -6,6 +6,7 @@ import { RefreshService } from 'src/app/services/refresh.service';
 import { Category } from 'src/app/models/statisics/category';
 import { VehicleModel } from 'src/app/models/police/vehicleModel';
 import { VehicleService } from 'src/app/services/vehicles/vehicleService';
+import { UserService } from 'src/app/services/auth/user.service';
 
 @Component({
   selector: 'app-vehicles',
@@ -17,17 +18,18 @@ export class VehiclesComponent implements OnInit {
   vehicleModels = Object.values(VehicleModel);
   categories = Object.values(Category);
   backendError: string | null = null;
-  vehicles: Vehicle[] = []; 
+  vehicles: Vehicle[] = [];
   searchCategory: string = 'B';
   searchYear: number | null = new Date().getFullYear();
   years: number[] = [];
-  searchPlate: string = ''; 
-  
+  searchPlate: string = '';
+
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService,
   ) {
     this.vehicleForm = this.fb.group({
       registration_plate: ['', Validators.required],
@@ -38,7 +40,7 @@ export class VehiclesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAllVehicles(); 
+    this.loadAllVehicles();
     this.generateYears();
   }
 
@@ -49,10 +51,10 @@ export class VehiclesComponent implements OnInit {
       return;
     }
 
-    const currentDate = new Date().toISOString(); 
+    const currentDate = new Date().toISOString();
     const newVehicle: Vehicle = {
       ...this.vehicleForm.value,
-      registration_date: currentDate 
+      registration_date: currentDate
     };
 
     this.vehicleService.create(newVehicle).subscribe({
@@ -115,7 +117,7 @@ export class VehiclesComponent implements OnInit {
 
     this.vehicleService.getById(this.searchPlate.trim()).subscribe({
       next: (vehicle: Vehicle) => {
-        this.vehicles = [vehicle]; 
+        this.vehicles = [vehicle];
       },
       error: (errorResponse) => {
         console.error('Error fetching vehicle by plate:', errorResponse);
@@ -137,5 +139,9 @@ export class VehiclesComponent implements OnInit {
         console.error('Error fetching vehicles by category and year:', errorResponse);
       }
     });
+  }
+
+  getRole() {
+    return this.userService.currentUser?.user.userRole;
   }
 }

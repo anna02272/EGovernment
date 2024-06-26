@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Gender } from 'src/app/models/police/gender';
 import { VehicleDriver } from 'src/app/models/police/vehicleDriver';
 import { VehicleService } from 'src/app/services/vehicles/vehicleService';
+import { UserService } from 'src/app/services/auth/user.service';
 
 @Component({
   selector: 'app-driver',
@@ -14,13 +15,14 @@ export class DriverComponent implements OnInit {
   vehicleDriverForm: FormGroup;
   genders = Object.values(Gender);
   backendError: string | null = null;
-  vehicleDrivers: VehicleDriver[] = []; 
-  searchID: string = ''; 
+  vehicleDrivers: VehicleDriver[] = [];
+  searchID: string = '';
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService,
   ) {
     this.vehicleDriverForm = this.fb.group({
       identification_number: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), Validators.pattern('^[0-9]*$')]],
@@ -32,9 +34,9 @@ export class DriverComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.loadAllVehicleDrivers(); 
+    this.loadAllVehicleDrivers();
   }
-  
+
   onSubmit(): void {
     if (this.vehicleDriverForm.invalid) {
       this.markAllAsTouched();
@@ -102,7 +104,7 @@ export class DriverComponent implements OnInit {
 
     this.vehicleService.getDriverById(this.searchID.trim()).subscribe({
       next: (vehicleDriver: VehicleDriver) => {
-        this.vehicleDrivers = [vehicleDriver]; 
+        this.vehicleDrivers = [vehicleDriver];
       },
       error: (errorResponse) => {
         console.error('Error fetching vehicle by plate:', errorResponse);
@@ -117,6 +119,10 @@ export class DriverComponent implements OnInit {
       return { 'dateInFuture': true };
     }
     return null;
+  }
+
+  getRole() {
+    return this.userService.currentUser?.user.userRole;
   }
 
 

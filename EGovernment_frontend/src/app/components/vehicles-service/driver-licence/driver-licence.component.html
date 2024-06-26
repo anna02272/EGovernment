@@ -1,9 +1,9 @@
-<app-vehicles-header></app-vehicles-header>
+<app-vehicles-header  *ngIf="getRole() === 'Policeman'" ></app-vehicles-header>
 
-<div class="title">
+<div  *ngIf="getRole() === 'Policeman'" class="title">
   <h1>Kreiraj vozacku dozvolu</h1>
 </div>
-<div class="app-form">
+<div  *ngIf="getRole() === 'Policeman'" class="app-form">
     <form (ngSubmit)="onSubmit()" [formGroup]="driverLicenceForm">
         <div class="app-form-group">
       <label for="vehicle_driver">JMBG vozaca</label>
@@ -75,7 +75,7 @@
           ODUSTANI
         </button>
         <button type="submit" class="app-form-button">KREIRAJ</button>
-  
+
         <div *ngIf="backendError" class="text-danger">
           {{ backendError }}
         </div>
@@ -87,14 +87,25 @@
 
 <h1 id="lista" class="title">LISTA SVIH VOZACKIH DOZVOLA</h1>
 
-<div class="search-vehicles">
-    <h3>Pretraži vozacke dozvole po ID-ju:</h3>
-    <input type="text" class="searchPlate" [(ngModel)]="searchID">
-    <span class="searchSpan"><button type="button" class="search-btn" (click)="searchDriverLicencesByID()">Pretraži</button>
-    <button type="button" class="search-btn-refresh" (click)="loadAllDriverLicences()">Osveži</button></span>
-  </div>
+<div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
+  <h3>Pretraži vozacke dozvole po ID-ju:</h3>
+  <input type="text" class="searchPlate" [(ngModel)]="searchIDByLicence">
+  <span class="searchSpan">
+    <button type="button" class="search-btn" (click)="searchDriverLicencesByID()">Pretraži</button>
+    <button type="button" class="search-btn-refresh" (click)="loadAllDriverLicences()">Osveži</button>
+  </span>
+</div>
 
-<div class="parent-div">
+<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="search-vehicles">
+  <h3>Pretraži vozacke dozvole po JMBG-u:</h3>
+  <input type="text" class="searchPlate" [(ngModel)]="searchIDByDriver">
+  <span class="searchSpan">
+    <button type="button" class="search-btn" (click)="searchDriverLicencesByDriver()">Pretraži</button>
+    <button type="button" class="search-btn-refresh" (click)="loadAllDriverLicences()">Osveži</button>
+  </span>
+</div>
+
+ <div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'"   class="parent-div">
     <div *ngFor="let driverLicence of driverLicences" class="app-form">
         <br>
           <div class="app-form-group">
@@ -106,7 +117,7 @@
             disabled
           />
           </div>
-      
+
           <div class="app-form-row">
             <div class="app-form-group">
               <label for="name"> Mesto izdavanja</label>
@@ -116,10 +127,10 @@
               class="app-form-control"
               disabled
             />
-             
+
             </div>
-      
-      
+
+
              <div class="app-form-group">
               <label for="licence_number">Broj dozvole</label>
               <input
@@ -128,7 +139,7 @@
               class="app-form-control"
               disabled
             />
-             
+
             </div>
             <div class="app-form-group">
               <label for="categories">Kategorije</label>
@@ -138,6 +149,6 @@
                 </span>
               </div>
           </div>
-    
-      </div>
-
+        </div>
+    </div>
+ </div>

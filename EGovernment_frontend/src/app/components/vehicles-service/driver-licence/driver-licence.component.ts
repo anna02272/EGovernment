@@ -5,6 +5,7 @@ import { DriverLicence } from 'src/app/models/police/driverLicence';
 import { VehicleService } from 'src/app/services/vehicles/vehicleService';
 import { Category } from 'src/app/models/police/category';
 import { Location } from 'src/app/models/police/location';
+import { UserService } from 'src/app/services/auth/user.service';
 
 @Component({
   selector: 'app-driver-licence',
@@ -17,12 +18,14 @@ export class DriverLicenceComponent implements OnInit {
   categories = Object.values(Category);
   backendError: string | null = null;
   driverLicences: DriverLicence[] = [];
-  searchID: string = '';
+  searchIDByDriver: string = '';
+  searchIDByLicence: string = '';
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService,
   ) {
     this.driverLicenceForm = this.fb.group({
       vehicle_driver: ['', Validators.required],
@@ -33,11 +36,11 @@ export class DriverLicenceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAllDriverLicences(); 
+    this.loadAllDriverLicences();
   }
   onSubmit(): void {
     if (this.driverLicenceForm.invalid) {
-      console.log("Form is invalid", this.driverLicenceForm); 
+      console.log("Form is invalid", this.driverLicenceForm);
       this.markAllAsTouched();
       console.log("Vehicle Driver Control:", this.driverLicenceForm.controls['vehicle_driver'].errors);
       console.log("Licence Number Control:", this.driverLicenceForm.controls['licence_number'].errors);
@@ -50,7 +53,7 @@ export class DriverLicenceComponent implements OnInit {
 
     const newDriverLicence: DriverLicence = {
       ...this.driverLicenceForm.value,
-      categories: this.driverLicenceForm.value.categories 
+      categories: this.driverLicenceForm.value.categories
     };
 
 
@@ -89,7 +92,7 @@ export class DriverLicenceComponent implements OnInit {
   }
 
 
-  
+
   loadAllDriverLicences(): void {
     this.vehicleService.getAllLicences().subscribe({
       next: (driverLicences: DriverLicence[]) => {
@@ -107,18 +110,37 @@ export class DriverLicenceComponent implements OnInit {
 
 
   searchDriverLicencesByID(): void {
-    if (this.searchID.trim() === '') {
+    if (this.searchIDByLicence.trim() === '') {
       return;
     }
 
-    this.vehicleService.getDriverLicenceById(this.searchID.trim()).subscribe({
+    this.vehicleService.getDriverLicenceById(this.searchIDByLicence.trim()).subscribe({
       next: (driverLicence: DriverLicence) => {
-        this.driverLicences = [driverLicence]; 
+        this.driverLicences = [driverLicence];
       },
       error: (errorResponse) => {
         console.error('Error fetching driver licences by ID:', errorResponse);
       }
     });
+  }
+
+  searchDriverLicencesByDriver(): void {
+    if (this.searchIDByDriver.trim() === '') {
+      return;
+    }
+
+    this.vehicleService.getDriverLicenceByDriver(this.searchIDByDriver.trim()).subscribe({
+      next: (driverLicence: DriverLicence) => {
+        this.driverLicences = [driverLicence];
+      },
+      error: (errorResponse) => {
+        console.error('Error fetching driver licences by ID:', errorResponse);
+      }
+    });
+  }
+
+  getRole() {
+    return this.userService.currentUser?.user.userRole;
   }
 
 }

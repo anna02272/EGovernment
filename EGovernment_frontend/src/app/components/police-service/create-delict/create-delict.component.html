@@ -1,4 +1,8 @@
 <app-police-header></app-police-header>
+<app-driver></app-driver>
+<app-driver-licence></app-driver-licence>
+<app-vehicles></app-vehicles>
+
 <div class="create-delict">
   <h2>Kreiraj prekršaj</h2>
   <form (ngSubmit)="createDelict()">
@@ -6,7 +10,7 @@
     <label for="driver_identification_number">JMBG vozača:</label>
     <input id="driver_identification_number" [(ngModel)]="delict.driver_identification_number" name="driver_identification_number" required>
 
-    <label for="vehicle_licence_number">Broj vozačke dozvole:</label>
+    <label for="vehicle_licence_number">Broj registarskih tablica:</label>
     <input id="vehicle_licence_number" [(ngModel)]="delict.vehicle_licence_number" name="vehicle_licence_number" required>
 
     <label for="driver_email">Email vozača:</label>

@@ -132,3 +132,5 @@ func (r *ReportServiceImpl) GetAllReportsByDelictType(delictType domain.DelictTy
 
 	return reports, nil
 }
+
+//Merge with traffic police

@@ -18,6 +18,7 @@ export class ConfigService {
   private _user_url = this._auth_api_url + '/users';
   private _traffic_police_url = this._traffic_police_api_url + '/delict';
   private _car_accident_url = this._traffic_police_api_url + '/carAccident';
+  private _count_registered_vehicles_url = this._vehicles_api_url + '/count/category/';
 
   private _login_url = this._auth_url + '/login';
   private _register_url = this._auth_url + '/register';
@@ -148,6 +149,10 @@ export class ConfigService {
 
   getVehicleByCategoryAndYear_url(category: string, year: number): string {
     return `${this._vehicles_api_url}/get/category/${category}/year/${year}`;
+  }
+
+  get getCountRegisteredVehiclesCategory(): string {
+    return this._count_registered_vehicles_url;
   }
 
   get getRegisteredVehiclesPdf(): string {

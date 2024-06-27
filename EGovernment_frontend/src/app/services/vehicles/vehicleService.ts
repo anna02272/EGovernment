@@ -75,6 +75,11 @@ export class VehicleService {
     return this.apiService.post(url, driverLicence);
    }
 
+   getNumberOfRegVehiclesCategory(category: string) {
+    const url = this.config.getCountRegisteredVehiclesCategory + category;
+    return this.apiService.get(url);
+   }
+
    getRegisteredVehiclesPdf(): Observable<Blob> {
     return this.http.get('http://localhost:8080/api/vehicle/registeredVehicles/pdf', { responseType: 'blob' });
   }

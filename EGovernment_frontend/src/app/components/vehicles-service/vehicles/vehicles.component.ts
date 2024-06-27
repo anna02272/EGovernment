@@ -7,6 +7,7 @@ import { Category } from 'src/app/models/statisics/category';
 import { VehicleModel } from 'src/app/models/police/vehicleModel';
 import { VehicleService } from 'src/app/services/vehicles/vehicleService';
 import { UserService } from 'src/app/services/auth/user.service';
+import { ResponseCount } from 'src/app/models/police/responseCount';
 
 @Component({
   selector: 'app-vehicles',
@@ -17,12 +18,15 @@ export class VehiclesComponent implements OnInit {
   vehicleForm: FormGroup;
   vehicleModels = Object.values(VehicleModel);
   categories = Object.values(Category);
+  responseCount?: ResponseCount;
   backendError: string | null = null;
   vehicles: Vehicle[] = [];
   searchCategory: string = 'B';
   searchYear: number | null = new Date().getFullYear();
   years: number[] = [];
   searchPlate: string = '';
+  vehicleCountsByCategory: { [key: string]: number } = {};
+
 
 
   constructor(
@@ -41,6 +45,7 @@ export class VehiclesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAllVehicles();
+    this.fetchVehicleCountsByCategory();
     this.generateYears();
   }
 
@@ -144,4 +149,18 @@ export class VehiclesComponent implements OnInit {
   getRole() {
     return this.userService.currentUser?.user.userRole;
   }
+
+  fetchVehicleCountsByCategory(): void {
+    this.categories.forEach(category => {
+      this.vehicleService.getNumberOfRegVehiclesCategory(category).subscribe({
+        next: (response: ResponseCount) => {
+          this.vehicleCountsByCategory[category] = response.count;
+        },
+        error: (errorResponse) => {
+          console.error(`Error fetching count for category ${category}:`, errorResponse);
+          this.vehicleCountsByCategory[category] = 0;
+        }
+      });
+    });
+}
 }

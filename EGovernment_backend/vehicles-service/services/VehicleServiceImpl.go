@@ -155,3 +155,33 @@ func (s *VehicleServiceImpl) GetVehicleByID(registrationPlate string, ctx contex
 
 	return &vehicle, nil
 }
+
+func (s *VehicleServiceImpl) GetAllRegisteredVehiclesByCategory(category domain.Category) ([]*domain.Vehicle, error) {
+	var vehicles []*domain.Vehicle
+
+	cutoffDate := time.Now().AddDate(-1, 0, 0)
+
+	filter := bson.M{
+		"category":          category,
+		"registration_date": bson.M{"$gte": cutoffDate},
+	}
+
+	cursor, err := s.collection.Find(s.ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(s.ctx)
+
+	for cursor.Next(s.ctx) {
+		var vehicle domain.Vehicle
+		if err := cursor.Decode(&vehicle); err != nil {
+			return nil, err
+		}
+		vehicles = append(vehicles, &vehicle)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return vehicles, nil
+}

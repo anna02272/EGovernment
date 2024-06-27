@@ -351,6 +351,102 @@ func (s *VehicleHandler) GetAllVehicles(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
+func (s *VehicleHandler) GenerateAndServeVehiclesByCategoryReportPDF(c *gin.Context) {
+	categoryParam := c.Param("category")
+	if categoryParam == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Category parameter is required"})
+		return
+	}
+
+	category := domain.Category(categoryParam)
+
+	vehicles, err := s.service.GetAllRegisteredVehiclesByCategory(category)
+	fmt.Println(vehicles)
+	fmt.Println("ALL REGISTERED VEHICLES BY CATEGORY")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving registered vehicles for category"})
+		log.Println("Error retrieving registered vehicles for category:", err)
+		return
+	}
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+
+	pdf.SetFont("Arial", "B", 16)
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, 10, 190, 12, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 12, "Izvestaj o registrovanim vozilima za kategoriju "+string(category), "", 0, "C", true, 0, "")
+	pdf.Ln(15)
+
+	pdf.SetFont("Arial", "B", 14)
+	pdf.SetFillColor(255, 255, 255)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, "Detalji registrovanih vozila", "", 0, "C", false, 0, "")
+	pdf.Ln(10)
+
+	pdf.SetFont("Arial", "", 12)
+
+	for _, vehicle := range vehicles {
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("ID: %s", vehicle.ID.Hex()), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Registraciona tablica: %s", vehicle.RegistrationPlate), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Model vozila: %s", vehicle.VehicleModel), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Vlasnik vozila: %s", vehicle.VehicleOwner), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Datum registracije: %s", vehicle.RegistrationDate.Format("02.01.2006")), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Kategorija: %s", vehicle.Category), "", 0, "", false, 0, "")
+		pdf.Ln(20) // Add extra space here between each vehicle's details
+	}
+
+	pdf.SetFooterFunc(func() {
+		// Footer
+		pdf.SetY(-15)
+		pdf.SetFont("Arial", "I", 10)
+		pdf.CellFormat(0, 10, "Generisano od strane eUprave", "", 0, "C", false, 0, "")
+	})
+
+	// Serve PDF as downloadable file
+	c.Writer.Header().Set("Content-Disposition", "attachment; filename=registered_vehicles_report_"+string(category)+".pdf")
+	c.Writer.Header().Set("Content-Type", "application/pdf")
+
+	err = pdf.Output(c.Writer)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating PDF"})
+		log.Println("Error generating PDF:", err)
+		return
+	}
+
+	log.Println("Generated PDF served successfully")
+}
+
 func (s *VehicleHandler) GenerateAndServeVehiclesReportPDF(c *gin.Context) {
 	// Generate PDF
 	vehicles, err := s.service.GetAllRegisteredVehicles()
@@ -573,6 +669,57 @@ func (s *VehicleHandler) GetAllVehiclesByCategoryAndYear(c *gin.Context) {
 	}
 
 	vehicles, err := s.service.GetAllVehiclesByCategoryAndYear(domain.Category(category), year)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Failed to retrieve registered vehicles from the database."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(vehicles)
+	if err != nil {
+		errorMsg := map[string]string{"error": "Error marshaling JSON."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(jsonResponse)
+}
+
+func (s *VehicleHandler) GetAllRegisteredVehiclesByCategory(c *gin.Context) {
+	rw := c.Writer
+	h := c.Request
+	token := h.Header.Get("Authorization")
+	url := "http://auth-service:8085/api/users/currentUser"
+	timeout := 5 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	resp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
+	if err != nil {
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			errorMsg := map[string]string{"error": "Authorization service is not available."}
+			errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+			return
+		}
+		errorMsg := map[string]string{"error": "Error performing authorization request."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+	defer resp.Body.Close()
+	statusCode := resp.StatusCode
+	if statusCode != 200 {
+		errorMsg := map[string]string{"error": "Unauthorized."}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusUnauthorized)
+		return
+	}
+	category := c.Param("category")
+	if err != nil {
+		errorMsg := map[string]string{"error": "Invalid year parameter"}
+		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
+		return
+	}
+
+	vehicles, err := s.service.GetAllRegisteredVehiclesByCategory(domain.Category(category))
 	if err != nil {
 		errorMsg := map[string]string{"error": "Failed to retrieve registered vehicles from the database."}
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusInternalServerError)

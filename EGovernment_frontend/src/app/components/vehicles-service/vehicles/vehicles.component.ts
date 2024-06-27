@@ -21,6 +21,7 @@ export class VehiclesComponent implements OnInit {
   responseCount?: ResponseCount;
   backendError: string | null = null;
   vehicles: Vehicle[] = [];
+  searchCategoryPdf: Category = Category.B;
   searchCategory: string = 'B';
   searchYear: number | null = new Date().getFullYear();
   years: number[] = [];
@@ -162,5 +163,23 @@ export class VehiclesComponent implements OnInit {
         }
       });
     });
+}
+
+
+downloadPdfCategory(searchCategory: string): void {
+  this.vehicleService.getRegisteredVehiclesCategoryPdf(searchCategory).subscribe({
+    next: (pdfBlob: Blob) => {
+      const url = window.URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Registered_Vehicles_Report_${searchCategory}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    error: (error) => {
+      console.error('Error downloading PDF:', error);
+    }
+  });
+
 }
 }

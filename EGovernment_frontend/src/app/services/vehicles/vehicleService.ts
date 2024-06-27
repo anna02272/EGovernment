@@ -6,6 +6,7 @@ import { VehicleDriver } from "src/app/models/police/vehicleDriver";
 import { DriverLicence } from "src/app/models/police/driverLicence";
 import { Observable } from "rxjs/internal/Observable";
 import { HttpClient } from "@angular/common/http";
+import { Category } from "src/app/models/police/category";
 
 @Injectable()
 export class VehicleService {
@@ -84,4 +85,7 @@ export class VehicleService {
     return this.http.get('http://localhost:8080/api/vehicle/registeredVehicles/pdf', { responseType: 'blob' });
   }
 
+  getRegisteredVehiclesCategoryPdf(searchCategory: string): Observable<Blob> {
+    return this.http.get(`http://localhost:8080/api/vehicle/registeredVehicles/category/${searchCategory}/pdf`, { responseType: 'blob' });
+  }
 }

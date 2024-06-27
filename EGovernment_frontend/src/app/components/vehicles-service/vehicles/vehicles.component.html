@@ -133,7 +133,7 @@
 
 
 
-<!-- Display counts by category -->
+<!-- Display counts by category
 <div class="vehicle-counts">
   <h3>Broj vozila po kategoriji:</h3>
   <ul>
@@ -141,7 +141,7 @@
       {{ category }}: {{ vehicleCountsByCategory[category] }}
     </li>
   </ul>
-</div>
+</div> -->
 
 
       <h3><a routerLink="/registrovanaVozila" class="no-link-style">Pregled svih registrovanih vozila (kliknite ovde)</a></h3>
@@ -175,7 +175,7 @@
     <br>
 
 
-    
+<!--     
     <div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
       <h3>Preuzmite izvestaj registoravnih vozila po kategoriji:</h3>
       <div class="search-inputs">
@@ -187,7 +187,7 @@
           <button type="button" class="search-btn" (click)="downloadPdfCategory(searchCategory)">Preuzmi PDF</button>
         </span>
       </div>
-    </div>
+    </div> -->
 
   <div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="parent-div">
       <div *ngFor="let vehicle of vehicles" class="app-form">

@@ -6,6 +6,8 @@ import { RefreshService } from 'src/app/services/refresh.service';
 import { Category } from 'src/app/models/statisics/category';
 import { VehicleModel } from 'src/app/models/police/vehicleModel';
 import { VehicleService } from 'src/app/services/vehicles/vehicleService';
+import { ResponseCount } from 'src/app/models/police/responseCount';
+import { UserService } from 'src/app/services/auth/user.service';
 
 @Component({
   selector: 'app-registered-vehicles',
@@ -16,14 +18,20 @@ export class RegisteredVehiclesComponent implements OnInit {
   vehicleForm: FormGroup;
   vehicleModels = Object.values(VehicleModel);
   categories = Object.values(Category);
+  searchCategory: string = 'B';
+  responseCount?: ResponseCount;
   backendError: string | null = null;
+  searchCategoryPdf: Category = Category.B;
   registeredVehicles: Vehicle[] = []; 
+  vehicleCountsByCategory: { [key: string]: number } = {};
   searchPlate: string = ''; 
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
     private refreshService: RefreshService,
+    private userService: UserService,
+
     private snackBar: MatSnackBar
   ) {
     this.vehicleForm = this.fb.group({
@@ -36,6 +44,8 @@ export class RegisteredVehiclesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAllVehicles(); 
+    this.fetchVehicleCountsByCategory();
+
   }
 
   onSubmit(): void {
@@ -96,6 +106,10 @@ export class RegisteredVehiclesComponent implements OnInit {
     });
   }
 
+  getRole() {
+    return this.userService.currentUser?.user.userRole;
+  }
+
 
   downloadPdf(): void {
     this.vehicleService.getRegisteredVehiclesPdf().subscribe({
@@ -112,5 +126,38 @@ export class RegisteredVehiclesComponent implements OnInit {
       }
     });
   }
+
+
+  downloadPdfCategory(searchCategory: string): void {
+    this.vehicleService.getRegisteredVehiclesCategoryPdf(searchCategory).subscribe({
+      next: (pdfBlob: Blob) => {
+        const url = window.URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Registered_Vehicles_Report_${searchCategory}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading PDF:', error);
+      }
+    });
+  
+  }
+
+
+  fetchVehicleCountsByCategory(): void {
+    this.categories.forEach(category => {
+      this.vehicleService.getNumberOfRegVehiclesCategory(category).subscribe({
+        next: (response: ResponseCount) => {
+          this.vehicleCountsByCategory[category] = response.count;
+        },
+        error: (errorResponse) => {
+          console.error(`Error fetching count for category ${category}:`, errorResponse);
+          this.vehicleCountsByCategory[category] = 0;
+        }
+      });
+    });
+}
 
 }

@@ -2,7 +2,50 @@
 
 <h1 id="lista" class="title">LISTA SVIH REGISTROVANIH VOZILA</h1>
 
-<button type="button" class="search-btn-refresh" (click)="downloadPdf ()">Preuzmi PDF izvestaj</button>
+<button type="button" class="search-btn-refresh" (click)="downloadPdf ()">Preuzmi PDF izvestaj svih registrovanih vozila</button>
+
+
+<div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
+  <h3>Preuzmite izvestaj registoravnih vozila po kategoriji:</h3>
+  <div class="search-inputs">
+    <select [(ngModel)]="searchCategory" class="search-dropdown">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+
+    <span class="searchSpan">
+      <button type="button" class="search-btn" (click)="downloadPdfCategory(searchCategory)">Preuzmi PDF</button>
+    </span>
+  </div>
+</div>
+
+<!-- Display counts by category -->
+<div class="vehicle-counts">
+  <h3>Broj vozila po kategoriji:</h3>
+  <ul>
+    <li *ngFor="let category of categories">
+      {{ category }}: {{ vehicleCountsByCategory[category] }}
+    </li>
+  </ul>
+</div>
+
+
+   
+<div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
+  <h3>Preuzmite izvestaj registoravnih vozila po kategoriji:</h3>
+  <div class="search-inputs">
+    <select [(ngModel)]="searchCategory" class="search-dropdown">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+
+    <span class="searchSpan">
+      <button type="button" class="search-btn" (click)="downloadPdfCategory(searchCategory)">Preuzmi PDF</button>
+    </span>
+  </div>
+</div>
+
+
+
+
 
   <br>
 <div class="parent-div">

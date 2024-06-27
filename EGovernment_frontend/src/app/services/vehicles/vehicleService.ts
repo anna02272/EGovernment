@@ -4,12 +4,15 @@ import {ConfigService} from "../config.service";
 import {Vehicle} from "src/app/models/police/vehicle";
 import { VehicleDriver } from "src/app/models/police/vehicleDriver";
 import { DriverLicence } from "src/app/models/police/driverLicence";
+import { Observable } from "rxjs/internal/Observable";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class VehicleService {
 
   constructor(
     private apiService: ApiService,
+    private http: HttpClient,
     private config: ConfigService
   ) {
   }
@@ -71,5 +74,9 @@ export class VehicleService {
     const url = this.config.createDriverLicence_url;
     return this.apiService.post(url, driverLicence);
    }
+
+   getRegisteredVehiclesPdf(): Observable<Blob> {
+    return this.http.get('http://localhost:8080/api/vehicle/registeredVehicles/pdf', { responseType: 'blob' });
+  }
 
 }

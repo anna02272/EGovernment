@@ -42,6 +42,7 @@ export class ConfigService {
   private _getDriverLicenceByDriver = this._driver_licence_api_url + '/getDriver/';
   private _getVehicleDriverById = this._vehicles_drivers_api_url + '/get/';
   private _createVehicleDriver_url = this._vehicles_drivers_api_url + '/createDriver';
+  private _registeredVehiclesPdf_url = this._vehicles_api_url + '/registeredVehicles/pdf';
 
 
   get vehicles_url(): string {
@@ -147,6 +148,10 @@ export class ConfigService {
 
   getVehicleByCategoryAndYear_url(category: string, year: number): string {
     return `${this._vehicles_api_url}/get/category/${category}/year/${year}`;
+  }
+
+  get getRegisteredVehiclesPdf(): string {
+    return this._registeredVehiclesPdf_url;
   }
 }
 

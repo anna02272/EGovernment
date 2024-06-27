@@ -1,6 +1,9 @@
 <app-vehicles-header></app-vehicles-header>
 
 <h1 id="lista" class="title">LISTA SVIH REGISTROVANIH VOZILA</h1>
+
+<button type="button" class="search-btn-refresh" (click)="downloadPdf ()">Preuzmi PDF izvestaj</button>
+
   <br>
 <div class="parent-div">
     <div *ngFor="let vehicle of registeredVehicles" class="app-form">

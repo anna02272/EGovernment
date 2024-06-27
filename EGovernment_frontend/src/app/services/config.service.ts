@@ -44,6 +44,8 @@ export class ConfigService {
   private _getVehicleDriverById = this._vehicles_drivers_api_url + '/get/';
   private _createVehicleDriver_url = this._vehicles_drivers_api_url + '/createDriver';
   private _registeredVehiclesPdf_url = this._vehicles_api_url + '/registeredVehicles/pdf';
+  private _registeredVehiclesCategoryPdf_url = this._vehicles_api_url + '/registeredVehicles/pdf/';
+
 
 
   get vehicles_url(): string {

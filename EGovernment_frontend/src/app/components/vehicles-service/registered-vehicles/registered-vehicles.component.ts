@@ -97,24 +97,6 @@ export class RegisteredVehiclesComponent implements OnInit {
   }
 
 
-
-  // downloadPdf(): void {
-  //   this.vehicleService.getRegisteredVehiclesPdf().subscribe({
-  //     next: (pdfBlob: Blob) => {
-  //       const url = window.URL.createObjectURL(pdfBlob);
-  //       const a = document.createElement('a');
-  //       a.href = url;
-  //       a.download = 'Registered_Vehicles_Report.pdf';
-  //       a.click();
-  //       window.URL.revokeObjectURL(url);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error downloading PDF:', error);
-  //     }
-  //   });
-  // }
-
-
   downloadPdf(): void {
     this.vehicleService.getRegisteredVehiclesPdf().subscribe({
       next: (pdfBlob: Blob) => {

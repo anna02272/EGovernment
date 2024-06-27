@@ -6,8 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jung-kurt/gofpdf"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -47,6 +51,112 @@ func (s *VehicleHandler) performAuthorizationRequestWithContext(method string, c
 	}
 
 	return resp, nil
+}
+
+func (s *VehicleHandler) GenerateVehiclesReportPDF() (string, error) {
+	vehicles, err := s.service.GetAllRegisteredVehicles()
+	if err != nil {
+		log.Println("Error retrieving registered vehicles:", err)
+		return "", err
+	}
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+
+	pdf.SetFont("Arial", "B", 16)
+
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, 10, 190, 12, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 12, "Izvestaj o registrovanim vozilima", "", 0, "C", true, 0, "")
+	pdf.Ln(15)
+
+	pdf.SetFont("Arial", "B", 14)
+
+	pdf.SetFillColor(255, 255, 255)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, "Detalji registrovanih vozila", "", 0, "C", false, 0, "")
+	pdf.Ln(10)
+
+	pdf.SetFont("Arial", "", 12)
+
+	for _, vehicle := range vehicles {
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("ID: %s", vehicle.ID.Hex()), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Registraciona tablica: %s", vehicle.RegistrationPlate), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Model vozila: %s", vehicle.VehicleModel), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Vlasnik vozila: %s", vehicle.VehicleOwner), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Datum registracije: %s", vehicle.RegistrationDate.Format("02.01.2006")), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Kategorija: %s", vehicle.Category), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+	}
+
+	pdf.SetFooterFunc(func() {
+		// Footer
+		pdf.SetY(-15)
+		pdf.SetFont("Arial", "I", 10)
+		pdf.CellFormat(0, 10, "Generisano od strane eUprave", "", 0, "C", false, 0, "")
+	})
+
+	pdfDir := os.Getenv("FILE_PATH")
+
+	pdfFilename := "registered_vehicles_report.pdf"
+	pdfFilePath := filepath.Join(pdfDir, pdfFilename)
+
+	err = pdf.OutputFileAndClose(pdfFilePath)
+	if err != nil {
+		log.Println("Error generating PDF:", err)
+		return "", err
+	}
+
+	log.Printf("Generated PDF saved at: %s", pdfFilePath)
+	return pdfFilePath, nil
+}
+func (h *VehicleHandler) ServeVehiclesPDF(c *gin.Context) {
+	pdfDir := os.Getenv("FILE_PATH")
+
+	pdfFilename := "registered_vehicles_report.pdf"
+	pdfFilePath := filepath.Join(pdfDir, pdfFilename)
+
+	pdfFile, err := os.Open(pdfFilePath)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		return
+	}
+	defer pdfFile.Close()
+
+	c.Header("Content-Type", "application/pdf")
+	c.Header("Content-Disposition", "attachment; filename="+pdfFilename)
+
+	http.ServeFile(c.Writer, c.Request, pdfFilePath)
 }
 
 func (s *VehicleHandler) CreateVehicle(c *gin.Context) {
@@ -241,6 +351,94 @@ func (s *VehicleHandler) GetAllVehicles(c *gin.Context) {
 	rw.Write(jsonResponse)
 }
 
+func (s *VehicleHandler) GenerateAndServeVehiclesReportPDF(c *gin.Context) {
+	// Generate PDF
+	vehicles, err := s.service.GetAllRegisteredVehicles()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving registered vehicles"})
+		log.Println("Error retrieving registered vehicles:", err)
+		return
+	}
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+
+	pdf.SetFont("Arial", "B", 16)
+
+	pdf.SetFillColor(240, 240, 240)
+	pdf.Rect(10, 10, 190, 12, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 12, "Izvestaj o registrovanim vozilima", "", 0, "C", true, 0, "")
+	pdf.Ln(15)
+
+	pdf.SetFont("Arial", "B", 14)
+
+	pdf.SetFillColor(255, 255, 255)
+	pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+	pdf.SetTextColor(0, 0, 0)
+	pdf.CellFormat(0, 8, "Detalji registrovanih vozila", "", 0, "C", false, 0, "")
+	pdf.Ln(10)
+
+	pdf.SetFont("Arial", "", 12)
+
+	for _, vehicle := range vehicles {
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("ID: %s", vehicle.ID.Hex()), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Registraciona tablica: %s", vehicle.RegistrationPlate), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Model vozila: %s", vehicle.VehicleModel), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Vlasnik vozila: %s", vehicle.VehicleOwner), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Datum registracije: %s", vehicle.RegistrationDate.Format("02.01.2006")), "", 0, "", false, 0, "")
+		pdf.Ln(10)
+
+		pdf.SetFillColor(240, 240, 240)
+		pdf.Rect(10, pdf.GetY()+2, 190, 8, "F")
+		pdf.SetTextColor(0, 0, 0)
+		pdf.CellFormat(0, 8, fmt.Sprintf("Kategorija: %s", vehicle.Category), "", 0, "", false, 0, "")
+		pdf.Ln(20) // Add extra space here between each vehicle's details
+	}
+
+	pdf.SetFooterFunc(func() {
+		// Footer
+		pdf.SetY(-15)
+		pdf.SetFont("Arial", "I", 10)
+		pdf.CellFormat(0, 10, "Generisano od strane eUprave", "", 0, "C", false, 0, "")
+	})
+
+	// Serve PDF as downloadable file
+	c.Writer.Header().Set("Content-Disposition", "attachment; filename=registered_vehicles_report.pdf")
+	c.Writer.Header().Set("Content-Type", "application/pdf")
+
+	err = pdf.Output(c.Writer)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating PDF"})
+		log.Println("Error generating PDF:", err)
+		return
+	}
+
+	log.Println("Generated PDF served successfully")
+}
 func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 	rw := c.Writer
 	h := c.Request
@@ -319,6 +517,13 @@ func (s *VehicleHandler) GetAllRegisteredVehicles(c *gin.Context) {
 		rw.Write(jsonResponse)
 		return
 	}
+
+	//go func() {
+	//	_, err := s.GenerateVehiclesReportPDF()
+	//	if err != nil {
+	//		log.Printf("Error generating PDF: %v", err)
+	//	}
+	//}()
 
 	jsonResponse, err := json.Marshal(vehicles)
 	if err != nil {

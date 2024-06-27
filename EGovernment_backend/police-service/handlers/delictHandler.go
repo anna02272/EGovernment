@@ -464,6 +464,8 @@ func (h *DelictHandler) ServeDelictPDF(c *gin.Context) {
 
 	pdfFile, err := os.Open(pdfFilePath)
 	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Here in error")
 		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
 		return
 	}

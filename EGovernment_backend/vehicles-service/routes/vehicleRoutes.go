@@ -26,6 +26,7 @@ func (vr *VehicleRouteHandler) VehicleRoute(rg *gin.RouterGroup) {
 	router.GET("/all/registered", vr.handler.GetAllRegisteredVehicles)
 	router.GET("/get/category/:category/year/:year", vr.handler.GetAllVehiclesByCategoryAndYear)
 	router.GET("/get/:id", vr.handler.GetVehicleByID)
+	router.GET("/registeredVehicles/pdf", vr.handler.GenerateAndServeVehiclesReportPDF)
 
 }
 

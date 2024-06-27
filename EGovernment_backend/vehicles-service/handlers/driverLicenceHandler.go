@@ -129,7 +129,7 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 		return
 	}
 
-	url = "http://police-service:8084/api/delict/get/delictType/DrivingUnderTheInfluenceOfAlcohol"
+	url = "http://police-service:8084/api/delict/get/delictType/Voznja pod uticajem alkohola"
 	delictResp, err := s.performAuthorizationRequestWithContext("GET", ctx, token, url)
 	if err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
@@ -170,7 +170,7 @@ func (s *DriverLicenceHandler) CreateDriverLicence(c *gin.Context) {
 				continue
 			}
 			if driverID == driverLicenceInsert.VehicleDriver {
-				errorMsg := map[string]string{"error": "Driver has a delict related to driving under alcoholism. Cannot issue driver licence."}
+				errorMsg := map[string]string{"Greska": "Vozac ima prekrsaj vezan za voznju pod dejstvom alkohola. Nije moguce izdati vozacku dozvolu!"}
 				errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 				return
 			}

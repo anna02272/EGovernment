@@ -82,7 +82,7 @@
 #lista{
     margin-bottom: 5px;
 }
-h3 {
+h3,li {
     text-align: center; font-size: 18px; text-transform: uppercase; color: #F26B68; letter-spacing:1px;
     font-family:"Playfair Display", serif; font-weight:400;
 	margin: 30px;
@@ -100,6 +100,9 @@ h3 {
     margin-right: auto;
 }
 
+ul {
+    list-style-type: none;
+  }
 .search-vehicles {
     text-align:center;
     display: flex;

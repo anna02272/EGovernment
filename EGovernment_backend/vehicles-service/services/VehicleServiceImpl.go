@@ -128,6 +128,22 @@ func (s *VehicleServiceImpl) GetAllVehiclesByCategoryAndYear(category domain.Cat
 	return vehicles, nil
 }
 
+func (s *VehicleServiceImpl) GetNumberOfRegisteredVehiclesByCategory(category domain.Category) (int64, error) {
+	cutoffDate := time.Now().AddDate(-1, 0, 0)
+
+	filter := bson.M{
+		"category":          category,
+		"registration_date": bson.M{"$gte": cutoffDate},
+	}
+
+	count, err := s.collection.CountDocuments(s.ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
 func (s *VehicleServiceImpl) GetVehicleByID(registrationPlate string, ctx context.Context) (*domain.Vehicle, error) {
 	var vehicle domain.Vehicle
 	filter := bson.M{"_registration_plate": registrationPlate}

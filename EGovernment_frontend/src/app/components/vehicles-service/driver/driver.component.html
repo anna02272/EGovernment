@@ -131,8 +131,30 @@
               class="app-form-control"
               disabled
             />
-
             </div>
+
+            <div class="app-form-row">
+              <div class="app-form-group">
+                <label for="name">Ima prekrsaj: </label>
+                <input
+                type="text"
+                [value]="vehicleDriver.has_delict"
+                class="app-form-control"
+                disabled
+              />
+  
+              </div>
+              <div class="app-form-row">
+                <div class="app-form-group">
+                  <label for="name">Kazneni poeni:</label>
+                  <input
+                  type="text"
+                  [value]="vehicleDriver.number_of_penalty_points"
+                  class="app-form-control"
+                  disabled
+                />
+    
+                </div>
 
             <div class="app-form-group">
               <label for="last_name">Prezime vozača</label>

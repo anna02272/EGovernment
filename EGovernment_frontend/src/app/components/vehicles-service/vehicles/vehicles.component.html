@@ -1,224 +1,238 @@
-<app-vehicles-header *ngIf="getRole() === 'Policeman'"></app-vehicles-header>
+  <app-vehicles-header *ngIf="getRole() === 'Policeman'"></app-vehicles-header>
 
-<div *ngIf="getRole() === 'Policeman'" class="title">
-    <h1>Kreiraj Vozilo</h1>
-  </div>
-  <div *ngIf="getRole() === 'Policeman'" class="app-form">
-    <form (ngSubmit)="onSubmit()" [formGroup]="vehicleForm">
-      <div class="app-form-group">
-        <label for="registration_plate">Registarska Tablica</label>
-        <input
-          type="text"
-          id="registration_plate"
-          formControlName="registration_plate"
-          class="app-form-control"
-          required
-        />
-        <div
-          *ngIf="
-            vehicleForm.controls['registration_plate'].invalid &&
-            vehicleForm.controls['registration_plate'].touched
-          "
-          class="text-danger"
-        >
-          Registarska tablica je obavezna.
-        </div>
-      </div>
-
-      <div class="app-form-row">
+  <div *ngIf="getRole() === 'Policeman'" class="title">
+      <h1>Kreiraj Vozilo</h1>
+    </div>
+    <div *ngIf="getRole() === 'Policeman'" class="app-form">
+      <form (ngSubmit)="onSubmit()" [formGroup]="vehicleForm">
         <div class="app-form-group">
-          <label for="vehicle_model">Model Vozila</label>
-          <select
-            class="app-form-control"
-            formControlName="vehicle_model"
-            required
-            id="vehicle_model"
-          >
-            <option value="" disabled>Model</option>
-            <option *ngFor="let model of vehicleModels" [value]="model">
-              {{ model }}
-            </option>
-          </select>
-          <div
-            *ngIf="
-              vehicleForm.controls['vehicle_model'].invalid &&
-              vehicleForm.controls['vehicle_model'].touched
-            "
-            class="text-danger"
-          >
-            Model vozila je obavezan.
-          </div>
-        </div>
-
-        <div class="app-form-group">
-          <label for="vehicle_owner">Vlasnik Vozila</label>
+          <label for="registration_plate">Registarska Tablica</label>
           <input
             type="text"
-            id="vehicle_owner"
-            formControlName="vehicle_owner"
+            id="registration_plate"
+            formControlName="registration_plate"
             class="app-form-control"
             required
           />
           <div
             *ngIf="
-              vehicleForm.controls['vehicle_owner'].invalid &&
-              vehicleForm.controls['vehicle_owner'].touched
+              vehicleForm.controls['registration_plate'].invalid &&
+              vehicleForm.controls['registration_plate'].touched
             "
             class="text-danger"
           >
-            Vlasnik vozila je obavezan.
+            Registarska tablica je obavezna.
           </div>
         </div>
 
-        <!-- <div class="app-form-group">
-          <label for="registration_date">Datum Registracije</label>
-          <input
-            type="date"
-            id="registration_date"
-            formControlName="registration_date"
-            class="app-form-control"
-            required
-          />
-          <div
-            *ngIf="
-              vehicleForm.controls['registration_date'].invalid &&
-              vehicleForm.controls['registration_date'].touched
-            "
-            class="text-danger"
-          >
-            Datum registracije je obavezan.
+        <div class="app-form-row">
+          <div class="app-form-group">
+            <label for="vehicle_model">Model Vozila</label>
+            <select
+              class="app-form-control"
+              formControlName="vehicle_model"
+              required
+              id="vehicle_model"
+            >
+              <option value="" disabled>Model</option>
+              <option *ngFor="let model of vehicleModels" [value]="model">
+                {{ model }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                vehicleForm.controls['vehicle_model'].invalid &&
+                vehicleForm.controls['vehicle_model'].touched
+              "
+              class="text-danger"
+            >
+              Model vozila je obavezan.
+            </div>
           </div>
-        </div> -->
 
-        <div class="app-form-group">
-          <label for="category">Kategorija</label>
-          <select
-            class="app-form-control"
-            formControlName="category"
-            required
-            id="category"
-          >
-            <option value="" disabled>Kategorija</option>
-            <option *ngFor="let category of categories" [value]="category">
-              {{ category }}
-            </option>
-          </select>
-          <div
-            *ngIf="
-              vehicleForm.controls['category'].invalid &&
-              vehicleForm.controls['category'].touched
-            "
-            class="text-danger"
-          >
-            Kategorija je obavezna.
+          <div class="app-form-group">
+            <label for="vehicle_owner">Vlasnik Vozila</label>
+            <input
+              type="text"
+              id="vehicle_owner"
+              formControlName="vehicle_owner"
+              class="app-form-control"
+              required
+            />
+            <div
+              *ngIf="
+                vehicleForm.controls['vehicle_owner'].invalid &&
+                vehicleForm.controls['vehicle_owner'].touched
+              "
+              class="text-danger"
+            >
+              Vlasnik vozila je obavezan.
+            </div>
+          </div>
+
+          <!-- <div class="app-form-group">
+            <label for="registration_date">Datum Registracije</label>
+            <input
+              type="date"
+              id="registration_date"
+              formControlName="registration_date"
+              class="app-form-control"
+              required
+            />
+            <div
+              *ngIf="
+                vehicleForm.controls['registration_date'].invalid &&
+                vehicleForm.controls['registration_date'].touched
+              "
+              class="text-danger"
+            >
+              Datum registracije je obavezan.
+            </div>
+          </div> -->
+
+          <div class="app-form-group">
+            <label for="category">Kategorija</label>
+            <select
+              class="app-form-control"
+              formControlName="category"
+              required
+              id="category"
+            >
+              <option value="" disabled>Kategorija</option>
+              <option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                vehicleForm.controls['category'].invalid &&
+                vehicleForm.controls['category'].touched
+              "
+              class="text-danger"
+            >
+              Kategorija je obavezna.
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="app-form-group buttons">
-        <button type="button" class="app-form-button" (click)="onCancel()">
-          ODUSTANI
-        </button>
-        <button type="submit" class="app-form-button">KREIRAJ</button>
+        <div class="app-form-group buttons">
+          <button type="button" class="app-form-button" (click)="onCancel()">
+            ODUSTANI
+          </button>
+          <button type="submit" class="app-form-button">KREIRAJ</button>
 
-        <div *ngIf="backendError" class="text-danger">
-            {{ backendError }}
-          </div>
-      </div>
-    </form>
+          <div *ngIf="backendError" class="text-danger">
+              {{ backendError }}
+            </div>
+        </div>
+      </form>
 
-  </div>
-
-    <h1 id="lista" class="title">LISTA SVIH VOZILA</h1>
-    <h3><a routerLink="/registrovanaVozila" class="no-link-style">Pregled svih registrovanih vozila (kliknite ovde)</a></h3>
-
-
-
-<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="search-vehicles">
-    <h3>Pretraži vozilo po registarskoj tablici:</h3>
-    <input type="text" class="searchPlate" [(ngModel)]="searchPlate">
-    <span class="searchSpan"><button type="button" class="search-btn" (click)="searchVehicleByPlate()">Pretraži</button>
-    <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button></span>
-  </div>
-
-  <div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
-    <h3>Pretraži vozila po kategoriji i godini:</h3>
-    <div class="search-inputs">
-        <select [(ngModel)]="searchCategory" class="search-dropdown">
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-        </select>
-
-        <select [(ngModel)]="searchYear" class="search-dropdown">
-            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-        </select>
-        <span class="searchSpan">
-            <button type="button" class="search-btn" (click)="searchVehiclesByCategoryAndYear()">Pretraži</button>
-            <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button>
-        </span>
     </div>
+
+      <h1 id="lista" class="title">LISTA SVIH VOZILA</h1>
+
+
+
+<!-- Display counts by category -->
+<div class="vehicle-counts">
+  <h3>Broj vozila po kategoriji:</h3>
+  <ul>
+    <li *ngFor="let category of categories">
+      {{ category }}: {{ vehicleCountsByCategory[category] }}
+    </li>
+  </ul>
 </div>
 
-  <br>
 
-<div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="parent-div">
-    <div *ngFor="let vehicle of vehicles" class="app-form">
-        <br>
-          <div class="app-form-group">
-            <label for="registration_plate">Registarska Tablica</label>
-            <input
-            type="text"
-            [value]="vehicle.registration_plate"
-            class="app-form-control"
-            disabled
-          />
-          </div>
+      <h3><a routerLink="/registrovanaVozila" class="no-link-style">Pregled svih registrovanih vozila (kliknite ovde)</a></h3>
 
-          <div class="app-form-row">
+
+
+  <div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="search-vehicles">
+      <h3>Pretraži vozilo po registarskoj tablici:</h3>
+      <input type="text" class="searchPlate" [(ngModel)]="searchPlate">
+      <span class="searchSpan"><button type="button" class="search-btn" (click)="searchVehicleByPlate()">Pretraži</button>
+      <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button></span>
+    </div>
+
+    <div *ngIf="getRole() === 'Policeman'" class="search-vehicles">
+      <h3>Pretraži vozila po kategoriji i godini:</h3>
+      <div class="search-inputs">
+          <select [(ngModel)]="searchCategory" class="search-dropdown">
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+
+          <select [(ngModel)]="searchYear" class="search-dropdown">
+              <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+          </select>
+          <span class="searchSpan">
+              <button type="button" class="search-btn" (click)="searchVehiclesByCategoryAndYear()">Pretraži</button>
+              <button type="button" class="search-btn-refresh" (click)="loadAllVehicles()">Osveži</button>
+          </span>
+      </div>
+  </div>
+
+    <br>
+
+  <div *ngIf="getRole() === 'TrafficPoliceman' || getRole() === 'Policeman'" class="parent-div">
+      <div *ngFor="let vehicle of vehicles" class="app-form">
+          <br>
             <div class="app-form-group">
-              <label for="vehicle_model">Model Vozila</label>
+              <label for="registration_plate">Registarska Tablica</label>
               <input
               type="text"
-              [value]="vehicle.vehicle_model"
-              class="app-form-control"
-              disabled
-            />
-
-            </div>
-
-            <div class="app-form-group">
-              <label for="vehicle_owner">Vlasnik Vozila</label>
-              <input
-              type="text"
-              [value]="vehicle.vehicle_owner"
+              [value]="vehicle.registration_plate"
               class="app-form-control"
               disabled
             />
             </div>
 
-             <div class="app-form-group">
-              <label for="registration_date">Datum Registracije</label>
-              <input
-              type="text"
-              [value]="vehicle.registration_date | date: 'yyyy-MM-dd'"
-              class="app-form-control"
-              disabled
-            />
+            <div class="app-form-row">
+              <div class="app-form-group">
+                <label for="vehicle_model">Model Vozila</label>
+                <input
+                type="text"
+                [value]="vehicle.vehicle_model"
+                class="app-form-control"
+                disabled
+              />
+
+              </div>
+
+              <div class="app-form-group">
+                <label for="vehicle_owner">Vlasnik Vozila</label>
+                <input
+                type="text"
+                [value]="vehicle.vehicle_owner"
+                class="app-form-control"
+                disabled
+              />
+              </div>
+
+              <div class="app-form-group">
+                <label for="registration_date">Datum Registracije</label>
+                <input
+                type="text"
+                [value]="vehicle.registration_date | date: 'yyyy-MM-dd'"
+                class="app-form-control"
+                disabled
+              />
+
+              </div>
+
+              <div class="app-form-group">
+                <label for="category">Kategorija</label>
+                <input
+                type="text"
+                [value]="vehicle.category"
+                class="app-form-control"
+                disabled
+              />
+              </div>
 
             </div>
 
-            <div class="app-form-group">
-              <label for="category">Kategorija</label>
-              <input
-              type="text"
-              [value]="vehicle.category"
-              class="app-form-control"
-              disabled
-            />
-            </div>
+        </div>
 
-          </div>
 
       </div>
-
-
-    </div>

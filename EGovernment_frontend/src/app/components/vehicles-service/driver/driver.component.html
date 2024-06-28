@@ -1,5 +1,14 @@
 <app-vehicles-header *ngIf="getRole() === 'Policeman'" ></app-vehicles-header>
+<nav>
+  <div class="nav-container">
+    <ul>
+      <li><a routerLink="/vozila" class="no-link-style">Vozila</a></li>
+      <li><a routerLink="/vozaci" class="no-link-style">Vozaci</a></li>
+      <li><a routerLink="/vozacke" class="no-link-style">Vozacke dozvole</a></li>
 
+    </ul>
+  </div>
+</nav>
 <div *ngIf="getRole() === 'Policeman'" class="title">
   <h1>Kreiraj Vozaca</h1>
 </div>

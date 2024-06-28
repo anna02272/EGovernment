@@ -1,0 +1,112 @@
+BEGIN:VCALENDAR
+METHOD:REQUEST
+PRODID:Microsoft Exchange Server 2010
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:Central Europe Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ORGANIZER;CN=Danni Goddard - Screening Call with Microsoft:mailto:DanniGodd
+ ardScreeningCallwithMicrosoft@bookings.microsoft.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=FALSE;CN=Anastasij
+ a Čukelj:mailto:anastasija.cukelj@gmail.com
+DESCRIPTION;LANGUAGE=en-US:Microsoft (Teams)\n\n\nManage Booking<https://em
+ ea.mail.microsoft.com:443/owa/calendar/DanniGoddardScreeningCallwithMicros
+ oft@bookings.microsoft.com/bookings/eU9Xistf_0y-K-oweP-1uA2>\n\nAdditional
+  Information\n-------------------------------------\nHello\,\n\nThank you 
+ for booking some time in my diary. There is nothing to prepare ahead of th
+ is Teams call.\n\nLooking forward to meeting with you!\n\nthanks\,\nDanni 
+ Goddard\nSenior Technical Recruiter\nGlobal Talent Acquisition\nv-dgoddard
+ @microsoft.com<mailto:v-dgoddard@microsoft.com>\n\nJoin the Teams Meeting 
+ from your mobile web browser:\n https://visit.teams.microsoft.com/webrtc-s
+ vc/api/route?tid=72f988bf-86f1-41af-91ab-2d7cd011db47&convId=211&oid=4b95b
+ c8f-d0f9-4c3e-bc5a-8e68723c8e9b&JoinWebUrl=https%3a%2f%2fteams.microsoft.c
+ om%2fl%2fmeetup-join%2f19%253ameeting_NmUwMWFhODAtNGY1Ni00Y2VhLWI0YTQtNTZm
+ Yzc5MzliMTQw%2540thread.v2%2f0%3fcontext%3d%257b%2522Tid%2522%253a%252272f
+ 988bf-86f1-41af-91ab-2d7cd011db47%2522%252c%2522Oid%2522%253a%25227c6a6ce3
+ -17c4-4c2e-90c9-c61cd9d57338%2522%257d%26webjoin%3dtrue%26unified%3dtrue&b
+ id=DanniGoddardScreeningCallwithMicrosoft@bookings.microsoft.com&biz=0&aE=
+ False&ssid=eU9Xistf_0y-K-oweP-1uA2\n If you're joining from another device
+ \, use the link below.\n\nMicrosoft Teams\n\nNeed help? https://aka.ms/Joi
+ nTeamsMeeting?omkt=en-GB\n\nJoin the meeting now: https://teams.microsoft.
+ com/l/meetup-join/19%3ameeting_NmUwMWFhODAtNGY1Ni00Y2VhLWI0YTQtNTZmYzc5Mzl
+ iMTQw%40thread.v2/0?context=%7b%22Tid%22%3a%2272f988bf-86f1-41af-91ab-2d7c
+ d011db47%22%2c%22Oid%22%3a%227c6a6ce3-17c4-4c2e-90c9-c61cd9d57338%22%7d\n\
+ nMeeting ID: 372 044 334 186\nPasscode: eVzmuS\n\nDial in by phone\n\n+1 3
+ 23-849-4874\,\,815893970#\n\n\nFind a local number: https://dialin.teams.m
+ icrosoft.com/8551f4c1-bea3-441a-8738-69aa517a91c5?id=815893970\n\nPhone Co
+ nference ID: 815 893 970#\n\n\n\nFor organisers:\n\nMeeting options: https
+ ://teams.microsoft.com/meetingOptions/?organizerId=7c6a6ce3-17c4-4c2e-90c9
+ -c61cd9d57338&tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&threadId=19_me
+ eting_NmUwMWFhODAtNGY1Ni00Y2VhLWI0YTQtNTZmYzc5MzliMTQw@thread.v2&messageId
+ =0&language=en-GB\n    <span style="color: #D1D1D1">|</span>\n    Reset di
+ al-in PIN: https://dialin.teams.microsoft.com/usp/pstnconferencing\n\n\n\n
+ \n
+UID:040000008200E00074C5B7101A82E008000000007F220DDECDBDDA01000000000000000
+ 0100000006B21A12A15E9D34D9B7A7FF124600C75
+SUMMARY;LANGUAGE=en-US:Microsoft screening call - Anastasija Čukelj
+DTSTART;TZID=Central Europe Standard Time:20240628T160000
+DTEND;TZID=Central Europe Standard Time:20240628T163000
+CLASS:PUBLIC
+PRIORITY:5
+DTSTAMP:20240613T201128Z
+TRANSP:OPAQUE
+STATUS:CONFIRMED
+SEQUENCE:1
+LOCATION;LANGUAGE=en-US:
+X-MICROSOFT-CDO-APPT-SEQUENCE:1
+X-MICROSOFT-CDO-OWNERAPPTID:2122739583
+X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-INSTTYPE:0
+X-MICROSOFT-ONLINEMEETINGINFORMATION:{"OnlineMeetingChannelId":null\,"Onlin
+ eMeetingProvider":3}
+X-MICROSOFT-ONLINEMEETINGTOLLNUMBER:+1 323-849-4874
+X-MICROSOFT-ONLINEMEETINGCONFERENCEID:815893970
+X-MICROSOFT-SKYPETEAMSMEETINGURL:https://teams.microsoft.com/l/meetup-join/
+ 19%3ameeting_NmUwMWFhODAtNGY1Ni00Y2VhLWI0YTQtNTZmYzc5MzliMTQw%40thread.v2/
+ 0?context=%7b%22Tid%22%3a%2272f988bf-86f1-41af-91ab-2d7cd011db47%22%2c%22O
+ id%22%3a%227c6a6ce3-17c4-4c2e-90c9-c61cd9d57338%22%7d
+X-MICROSOFT-SCHEDULINGSERVICEUPDATEURL:https://api.scheduler.teams.microsof
+ t.com/teams/72f988bf-86f1-41af-91ab-2d7cd011db47/7c6a6ce3-17c4-4c2e-90c9-c
+ 61cd9d57338/19_meeting_NmUwMWFhODAtNGY1Ni00Y2VhLWI0YTQtNTZmYzc5MzliMTQw@th
+ read.v2/0
+X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_NmUwMWFhODAtNGY1Ni00Y2V
+ hLWI0YTQtNTZmYzc5MzliMTQw@thread.v2"\,"rid":0\,"mid":0\,"uid":null\,"priva
+ te":true\,"type":0}
+X-MICROSOFT-DONOTFORWARDMEETING:FALSE
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MICROSOFT-REQUESTEDATTENDANCEMODE:DEFAULT
+X-MICROSOFT-ISRESPONSEREQUESTED:FALSE
+X-MICROSOFT-LOCATIONSOURCE:None
+X-MICROSOFT-LATITUDE:0
+X-MICROSOFT-LONGITUDE:0
+X-MICROSOFT-ACCURACY:0
+X-MICROSOFT-ALTITUDE:0
+X-MICROSOFT-ALTITUDEACCURACY:0
+X-MICROSOFT-LOCATIONS:[{"DisplayName":""\,"LocationAnnotation":""\,"Locatio
+ nUri":""\,"Latitude":0.0\,"Longitude":0.0\,"Accuracy":0.0\,"Altitude":0.0\
+ ,"AltitudeAccuracy":0.0\,"LocationStreet":""\,"LocationCity":""\,"Location
+ State":""\,"LocationCountry":""\,"LocationPostalCode":""\,"LocationFullAdd
+ ress":""}]
+BEGIN:VALARM
+DESCRIPTION:REMINDER
+TRIGGER;RELATED=START:-PT15M
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -1,8 +1,18 @@
 <app-vehicles-header></app-vehicles-header>
+<nav>
+  <div class="nav-container">
+    <ul>
+      <li><a routerLink="/vozila" class="no-link-style">Vozila</a></li>
+      <li><a routerLink="/vozaci" class="no-link-style">Vozaci</a></li>
+      <li><a routerLink="/vozacke" class="no-link-style">Vozacke dozvole</a></li>
+
+    </ul>
+  </div>
+</nav>
 
 <h1 id="lista" class="title">LISTA SVIH REGISTROVANIH VOZILA</h1>
 
-<button type="button" class="search-btn-refresh" (click)="downloadPdf ()">Preuzmi PDF izvestaj svih registrovanih vozila</button>
+<button type="button" class="search-btn-refresh" (click)="downloadPdf()">Preuzmi PDF izvestaj svih registrovanih vozila</button>
 
 
 <div *ngIf="getRole() === 'Policeman'" class="search-vehicles">

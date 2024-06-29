@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/auth/user.service';
 })
 export class HomeCourtComponent implements OnInit {
   subjects: Subject[] = [];
-  hearings: Hearing[] = []; 
+  hearings: Hearing[] = [];
 
   constructor(
     private userService: UserService,
@@ -37,6 +37,7 @@ export class HomeCourtComponent implements OnInit {
       (subjects) => {
         this.subjects = subjects.filter(
           (subject) => subject.status === 'WAITING',
+          console.log(subjects),
         );
       },
       (error) => {
@@ -81,5 +82,6 @@ export class HomeCourtComponent implements OnInit {
     console.log(hearing);
   }
   navigateToSubjectDetails(subjectId: string, id: any) {
-    this.router.navigate(['/subjectTab', subjectId,{ hearingId: id }]); }
+    this.router.navigate(['/subjectTab', subjectId, { hearingId: id }]);
+  }
 }

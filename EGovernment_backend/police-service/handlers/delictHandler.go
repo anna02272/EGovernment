@@ -130,11 +130,11 @@ func (s *DelictHandler) CreateDelict(c *gin.Context) {
 		return
 	}
 
-	/*err = s.sendDelictMail(delictInsertDB.Description, delictInsertDB.DriverEmail)
+	err = s.sendDelictMail(delictInsertDB.Description, delictInsertDB.DriverEmail)
 	if err != nil {
 		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
 		return
-	}*/
+	}
 
 	pdfFilePath, err := s.GenerateDelictPDF(delictInsertDB)
 	if err != nil {

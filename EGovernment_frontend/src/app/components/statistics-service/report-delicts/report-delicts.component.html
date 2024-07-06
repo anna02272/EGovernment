@@ -23,6 +23,7 @@
           <th>Nepravilna upotreba sigurnosnih pojaseva i dečijih sedišta</th>
           <th>Upotreba mobilnog telefona tokom vožnje</th>
           <th>Nepravilno rukovanje vozilom</th>
+          <th>Drugo</th>
           <th></th>
         </tr>
       </thead>
@@ -31,15 +32,17 @@
           <tr>
             <td class="row-header">{{ item.title }}</td>
             <td class="period-column">{{ item.year }}</td>
-            <td>{{ getTotalNumberByType(item, "Speeding") }}</td>
-            <td>{{ getTotalNumberByType(item, "DrivingUnderTheInfluenceOfAlcohol") }}</td>
-            <td>{{ getTotalNumberByType(item, "DrivingUnderTheInfluence") }}</td>
-            <td>{{ getTotalNumberByType(item, "ImproperOvertaking") }}</td>
-            <td>{{ getTotalNumberByType(item, "ImproperParking") }}</td>
-            <td>{{ getTotalNumberByType(item, "FailureTooComplyWithTrafficLightsAndSigns") }}</td>
-            <td>{{ getTotalNumberByType(item, "ImproperUseOfSeatBeltsAndChildSeats") }}</td>
-            <td>{{ getTotalNumberByType(item, "UsingMobilePhoneWhileDriving") }}</td>
-            <td>{{ getTotalNumberByType(item, "ImproperUseOfMotorVehicle") }}</td>
+            <td>{{ getTotalNumberByType(item, "Prekoracenje brzine") }}</td>
+            <td>{{ getTotalNumberByType(item, "Voznja pod uticajem narkotika") }}</td>
+            <td>{{ getTotalNumberByType(item, "Voznja pod uticajem alkohola") }}</td>
+            <td>{{ getTotalNumberByType(item, "Nepravilno preticanje") }}</td>
+            <td>{{ getTotalNumberByType(item, "Nepravilno parkiranje") }}</td>
+            <td>{{ getTotalNumberByType(item, "Nepostovanje saobracajnih znakova") }}</td>
+            <td>{{ getTotalNumberByType(item, "Nepravilna upotreba sigurnosnog pojasa i sedista za decu") }}</td>
+            <td>{{ getTotalNumberByType(item, "Koriscenje mobilnog telefona tokom voznje") }}</td>
+            <td>{{ getTotalNumberByType(item, "Nepravilna upotreba motornih vozila") }}</td>
+            <td>{{ getTotalNumberByType(item, "Drugo") }}</td>
+         
             <td class="date-column">{{ item.date | date }}</td>
           </tr>
         </ng-container>
@@ -88,7 +91,7 @@
         <div class="year-stats">
           <div *ngFor="let type of types" class="month-group">
             <div class="bar2" [ngStyle]="{'height': getBarHeight(type) + '%'}"></div>
-            <p class="month">{{ typeTranslation[type.name] }}</p>
+            <p class="month">{{ type.name }}</p>
           </div>
         </div>
   
@@ -96,7 +99,7 @@
           <div class="info">
             <p>
               Tip sa najvise prekršaja:<span>
-                {{ typeTranslation[getTypeWithMostDelicts()] }}</span
+                {{ getTypeWithMostDelicts() }}</span
               >
             </p>
           </div>

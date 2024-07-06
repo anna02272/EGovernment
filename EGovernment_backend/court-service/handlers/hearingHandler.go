@@ -137,7 +137,7 @@ func (hh *HearingHandler) CreateHearing(c *gin.Context) {
 	//}
 
 	// Dobavljanje emaila vozača iz prekršaja
-	violationID := "66801eadfc18584a829fa608"
+	violationID := "66895db22f5753983f9e9f75"
 	offense, err := hh.GetDelict(c, violationID)
 	if err != nil {
 		errorMsg := map[string]string{"error": "Failed to retrieve offense"}

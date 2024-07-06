@@ -12,17 +12,12 @@ import { ReportCarAccidentDegreeService } from 'src/app/services/statistics/repo
 export class ReportCarAccidentDegreeComponent implements OnInit {
   reportData: any[] = [];
   degrees = [
-    { name: 'NoHarm', total_number: 0 },
-    { name: 'WithMaterialDamage', total_number: 0 },
-    { name: 'WithInjuredPersons', total_number: 0 },
-    { name: 'WithDeadBodies', total_number: 0 },
+    { name: 'Bez stete', total_number: 0 },
+    { name: 'Sa materijalnom stetom', total_number: 0 },
+    { name: 'Sa povredjenim osobama', total_number: 0 },
+    { name: 'Sa poginulim osobama', total_number: 0 },
   ];
-  degreeTranslation: { [key: string]: string } = {
-    'NoHarm': 'Bez štete',
-    'WithMaterialDamage': 'Sa materijalnom štetom',
-    'WithInjuredPersons': 'Sa povređenim licima',
-    'WithDeadBodies': 'Sa poginulim licima'
-  };
+
   maxCarAccidents: number = 0;
 
   constructor(

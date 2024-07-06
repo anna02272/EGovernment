@@ -15,13 +15,7 @@ import { ReportCarAccidentDegreeService } from 'src/app/services/statistics/repo
 export class CreateReportCarAccidentDegreeComponent implements OnInit {
   reportForm: FormGroup;
   degrees: DegreeOfAccident[] = Object.values(DegreeOfAccident);
-  degreeTranslation: { [key: string]: string } = {
-    'NoHarm': 'Bez štete',
-    'WithMaterialDamage': 'Sa materijalnom štetom',
-    'WithInjuredPersons': 'Sa povređenim licima',
-    'WithDeadBodies': 'Sa poginulim licima'
-  };
-
+  
   constructor(
     private fb: FormBuilder,
     private reportService: ReportCarAccidentDegreeService,

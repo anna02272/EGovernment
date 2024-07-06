@@ -26,10 +26,10 @@
         <tr>
           <td class="row-header">{{ item.title }}</td>
           <td class="period-column">{{ item.year }}</td>
-          <td>{{ getTotalNumberByDegree(item, "NoHarm") }}</td>
-          <td>{{ getTotalNumberByDegree(item, "WithMaterialDamage") }}</td>
-          <td>{{ getTotalNumberByDegree(item, "WithInjuredPersons") }}</td>
-          <td>{{ getTotalNumberByDegree(item, "WithDeadBodies") }}</td>
+          <td>{{ getTotalNumberByDegree(item, "Bez stete") }}</td>
+          <td>{{ getTotalNumberByDegree(item, "Sa materijalnom stetom") }}</td>
+          <td>{{ getTotalNumberByDegree(item, "Sa povredjenim osobama") }}</td>
+          <td>{{ getTotalNumberByDegree(item, "Sa poginulim osobama") }}</td>
           <td class="date-column">{{ item.date | date }}</td>
         </tr>
       </ng-container>
@@ -84,7 +84,7 @@
             class="bar2"
             [ngStyle]="{ height: getBarHeight(degree) + '%' }"
           ></div>
-          <p class="month">{{ degreeTranslation[degree.name] }}</p>
+          <p class="month">{{ degree.name }}</p>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
         <div class="info">
           <p>
             Stepen sa najvise saobraćajnih nesreća:<span>
-              {{ degreeTranslation[getDegreeWithMostCarAccidents()] }}</span
+              {{ getDegreeWithMostCarAccidents() }}</span
             >
           </p>
         </div>

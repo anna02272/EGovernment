@@ -218,7 +218,7 @@ func (r *ReportDelicTypeHandler) GetCurrentUserFromAuthService(token string, rw 
 }
 
 func (r *ReportDelicTypeHandler) GetDelictsCountAndYearPoliceService(token string, delictType domain.DelictType, year int) (int, error) {
-	baseURL := fmt.Sprintf("http://police-service:8084/api/delict/get/delictType/%s/year/%d", url.QueryEscape(string(delictType)), year)
+	baseURL := fmt.Sprintf("http://police-service:8084/api/delict/get/delictType/%s/year/%d", url.PathEscape(string(delictType)), year)
 
 	timeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)

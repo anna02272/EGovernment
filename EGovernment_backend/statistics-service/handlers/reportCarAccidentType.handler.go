@@ -218,7 +218,7 @@ func (r *ReportCarAccidentTypeHandler) GetCurrentUserFromAuthService(token strin
 }
 
 func (r *ReportCarAccidentTypeHandler) GetCarAccidentCountAndYearPoliceService(token string, carAccidentType domain.CarAccidentType, year int) (int, error) {
-	baseURL := fmt.Sprintf("http://police-service:8084/api/carAccident/get/carAccidentType/%s/year/%d", url.QueryEscape(string(carAccidentType)), year)
+	baseURL := fmt.Sprintf("http://police-service:8084/api/carAccident/get/carAccidentType/%s/year/%d", url.PathEscape(string(carAccidentType)), year)
 
 	timeout := 5 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)

@@ -11,21 +11,15 @@ import { ReportCarAccidentTypeService } from 'src/app/services/statistics/report
 export class ReportCarAccidentTypeComponent implements OnInit {
   reportData: any[] = [];
   types = [
-    { name: 'KnockingDownPedestrians', total_number: 0 },
-    { name: 'VehicleLandingFromRoad', total_number: 0 },
-    { name: 'CollisionFromOppositeDirection', total_number: 0 },
-    { name: 'CollisionInSameDirection', total_number: 0 },
-    { name: 'SideCollision', total_number: 0 },
-    { name: 'Rollover', total_number: 0 },
+    { name: 'Obaranje pesaka', total_number: 0 },
+    { name: 'Sletanje vozila sa puta', total_number: 0 },
+    { name: 'Sudar iz suprotnog smera', total_number: 0 },
+    { name: 'Sudar u istom smeru', total_number: 0 },
+    { name: 'Bocni sudar', total_number: 0 },
+    { name: 'Prevrtanje vozila', total_number: 0 },
+    { name: 'Drugo', total_number: 0 },
+  
   ];
-  typeTranslation: { [key: string]: string } = {
-    'KnockingDownPedestrians': 'Obaranje pešaka',
-    'VehicleLandingFromRoad': 'Sletanje vozila sa puta',
-    'CollisionFromOppositeDirection': 'Sudar iz suprotnog smera',
-    'CollisionInSameDirection': 'Sudar u istom smeru',
-    'SideCollision': 'Bočni sudar',
-    'Rollover': 'Prevrtanje'
-  };
   maxCarAccidents: number = 0;
 
   constructor(private reportService: ReportCarAccidentTypeService,

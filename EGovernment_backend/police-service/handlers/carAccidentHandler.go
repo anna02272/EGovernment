@@ -155,11 +155,11 @@ func (s *CarAccidentHandler) CreateCarAccident(c *gin.Context) {
 		defer updatePointsResp.Body.Close()
 	}
 
-	/*err = s.sendCarAccidentMail(carAccidentInsertDB.Description, carAccidentInsertDB.DriverEmail)
+	err = s.sendCarAccidentMail(carAccidentInsertDB.Description, carAccidentInsertDB.DriverEmail)
 	if err != nil {
 		errorMessage.ReturnJSONError(rw, fmt.Sprintf("Error sending email: %s", err), http.StatusInternalServerError)
 		return
-	}*/
+	}
 
 	rw.WriteHeader(http.StatusCreated)
 	jsonResponse, err1 := json.Marshal(carAccidentInsertDB)
@@ -432,7 +432,9 @@ func (s *CarAccidentHandler) GetAllCarAccidentsByDegreeAndYear(c *gin.Context) {
 		errorMessage.ReturnJSONError(rw, errorMsg, http.StatusBadRequest)
 		return
 	}
+
 	defer resp.Body.Close()
+
 	statusCode := resp.StatusCode
 	if statusCode != 200 {
 		errorMsg := map[string]string{"error": "Unauthorized."}

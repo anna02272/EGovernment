@@ -1,11 +1,12 @@
 export enum DelictType {
-  Speeding = "Speeding",
-  DrivingUnderTheInfluence = "DrivingUnderTheInfluence",
-  DrivingUnderTheInfluenceOfAlcohol = "DrivingUnderTheInfluenceOfAlcohol",
-  ImproperOvertaking = "ImproperOvertaking",
-  ImproperParking = "ImproperParking",
-  FailureTooComplyWithTrafficLightsAndSigns = "FailureTooComplyWithTrafficLightsAndSigns",
-  ImproperUseOfSeatBeltsAndChildSeats = "ImproperUseOfSeatBeltsAndChildSeats",
-  UsingMobilePhoneWhileDriving = "UsingMobilePhoneWhileDriving",
-  ImproperUseOfMotorVehicle = "ImproperUseOfMotorVehicle"
+  Speeding = "Prekoracenje brzine",
+  DrivingUnderTheInfluence = "Voznja pod uticajem narkotika",
+  DrivingUnderTheInfluenceOfAlcohol = "Voznja pod uticajem alkohola",
+  ImproperOvertaking = "Nepravilno preticanje",
+  ImproperParking = "Nepravilno parkiranje",
+  FailureTooComplyWithTrafficLightsAndSigns = "Nepostovanje saobracajnih znakova",
+  ImproperUseOfSeatBeltsAndChildSeats = "Nepravilna upotreba sigurnosnog pojasa i sedista za decu",
+  UsingMobilePhoneWhileDriving = "Koriscenje mobilnog telefona tokom voznje",
+  ImproperUseOfMotorVehicle = "Nepravilna upotreba motornih vozila",
+  Other = "Drugo"
 }

@@ -23,5 +23,4 @@ const (
 	Researcher  = "Researcher"
 	Analyst     = "Analyst"
 	PrivateUser = "PrivateUser"
-	Other       = "Other"
 )

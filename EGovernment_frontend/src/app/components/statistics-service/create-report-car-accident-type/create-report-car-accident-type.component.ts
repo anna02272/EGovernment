@@ -14,14 +14,6 @@ import { ReportCarAccidentTypeService } from 'src/app/services/statistics/report
 export class CreateReportCarAccidentTypeComponent  implements OnInit {
   reportForm: FormGroup;
   types: CarAccidentType[] = Object.values(CarAccidentType);
-  typeTranslation: { [key: string]: string } = {
-    'KnockingDownPedestrians': 'Obaranje pešaka',
-    'VehicleLandingFromRoad': 'Sletanje vozila sa puta',
-    'CollisionFromOppositeDirection': 'Sudar iz suprotnog smera',
-    'CollisionInSameDirection': 'Sudar u istom smeru',
-    'SideCollision': 'Bočni sudar',
-    'Rollover': 'Prevrtanje'
-  };
 
   constructor(
     private fb: FormBuilder,

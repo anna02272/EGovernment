@@ -14,17 +14,7 @@ import { ReportDelicTypeService } from 'src/app/services/statistics/reportDelicT
 export class CreateReportDelictComponent implements OnInit {
     reportForm: FormGroup;
     types: DelictType[] = Object.values(DelictType);
-    typeTranslation: { [key: string]: string } = {
-      'Speeding': 'Prekoračenje brzine',
-      'DrivingUnderTheInfluenceOfAlcohol': 'Vožnja pod uticajem alkohola',
-      'DrivingUnderTheInfluence': 'Vožnja pod uticajem droge',
-      'ImproperOvertaking': 'Nepravilno preticanje',
-      'ImproperParking': 'Nepravilno parkiranje',
-      'FailureTooComplyWithTrafficLightsAndSigns': 'Nepridržavanje saobraćajnih znakova i svetlosnih signalizacija',
-      'ImproperUseOfSeatBeltsAndChildSeats': 'Nepravilna upotreba sigurnosnih pojaseva i dečijih sedišta',
-      'UsingMobilePhoneWhileDriving': 'Upotreba mobilnog telefona tokom vožnje',
-      'ImproperUseOfMotorVehicle': 'Nepravilno rukovanje vozilom',  
-    };
+
     constructor(
       private fb: FormBuilder,
       private reportService: ReportDelicTypeService,

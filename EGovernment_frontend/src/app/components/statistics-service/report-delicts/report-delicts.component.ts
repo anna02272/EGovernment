@@ -11,28 +11,18 @@ import { ReportDelicTypeService } from 'src/app/services/statistics/reportDelicT
 export class ReportDelictsComponent implements OnInit {
   reportData: any[] = [];
   types = [ 
-    { name: 'Speeding', total_number: 0 },
-    { name: 'DrivingUnderTheInfluenceOfAlcohol', total_number: 0 },
-    { name: 'DrivingUnderTheInfluence', total_number: 0 },
-    { name: 'ImproperOvertaking', total_number: 0 },
-    { name: 'ImproperParking', total_number: 0 },
-    { name: 'FailureTooComplyWithTrafficLightsAndSigns', total_number: 0 },
-    { name: 'ImproperUseOfSeatBeltsAndChildSeats', total_number: 0 },
-    { name: 'UsingMobilePhoneWhileDriving', total_number: 0 },
-    { name: 'ImproperUseOfMotorVehicle', total_number: 0 },
+    { name: 'Prekoracenje brzine', total_number: 0 },
+    { name: 'Voznja pod uticajem narkotika', total_number: 0 },
+    { name: 'Voznja pod uticajem alkohola', total_number: 0 },
+    { name: 'Nepravilno preticanje', total_number: 0 },
+    { name: 'Nepravilno parkiranje', total_number: 0 },
+    { name: 'Nepostovanje saobracajnih znakova', total_number: 0 },
+    { name: 'Nepravilna upotreba sigurnosnog pojasa i sedista za decu', total_number: 0 },
+    { name: 'Koriscenje mobilnog telefona tokom voznje', total_number: 0 },
+    { name: 'Nepravilna upotreba motornih vozila', total_number: 0 },
+    { name: 'Drugo', total_number: 0 },
+
   ];
-  typeTranslation: { [key: string]: string } = {
-    'Speeding': 'Prekoračenje brzine',
-    'DrivingUnderTheInfluenceOfAlcohol': 'Vožnja pod uticajem alkohola',
-    'DrivingUnderTheInfluence': 'Vožnja pod uticajem droge',
-    'ImproperOvertaking': 'Nepravilno preticanje',
-    'ImproperParking': 'Nepravilno parkiranje',
-    'FailureTooComplyWithTrafficLightsAndSigns': 'Nepridržavanje saobraćajnih znakova i svetlosnih signalizacija',
-    'ImproperUseOfSeatBeltsAndChildSeats': 'Nepravilna upotreba sigurnosnih pojaseva i dečijih sedišta',
-    'UsingMobilePhoneWhileDriving': 'Upotreba mobilnog telefona tokom vožnje',
-    'ImproperUseOfMotorVehicle': 'Nepravilno rukovanje vozilom',
-    
-  };
   maxDelicts: number = 0;
 
   constructor(private reportService: ReportDelicTypeService,
